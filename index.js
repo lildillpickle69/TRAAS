@@ -1,1 +1,0 @@
-import '../semantic/dist/semantic.min.css';
