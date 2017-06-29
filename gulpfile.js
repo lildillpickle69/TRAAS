@@ -20,8 +20,13 @@ var gulp = require('gulp'),
   source = require('vinyl-source-stream'),
   buffer = require('vinyl-buffer'),
   gutil = require('gulp-util'),
-  glob = require('glob');
+  glob = require('glob'),
+  embedlr = require("gulp-embedlr");
 
+//html
+gulp.src('src/html/**/*.html')
+	.pipe(embedlr())
+	.pipe(gulp.dest("./dist/html"));
 
 // Styles
 gulp.task('styles', function() {
@@ -33,12 +38,7 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('dist/styles/'))
     .pipe(notify({ message: 'Styles task complete' }));
 });
-/*
-gulp.task('build',function() {
-  return gulp.src('src/scripts/*.jsx')
-    .pipe(jsx())
-    .pipe(gulp.dest(''))
-}) */
+
 // Scripts
 
 
@@ -89,7 +89,7 @@ gulp.task('images', function() {
 
 // Clean
 gulp.task('clean', function() {
-  return del(['dist/styles', 'dist/scripts', 'dist/images']);
+  return del(['dist/styles', 'dist/scripts', 'dist/images', 'dist/html']);
 });
 
 // Default task
@@ -104,10 +104,10 @@ gulp.task('watch', function() {
   gulp.watch('src/styles/**/*.scss', ['styles']);
 
   // Watch .js files
-  gulp.watch('src/scripts/**/*.jsx', ['scripts', 'minscripts']);
+  // gulp.watch('src/scripts/**/*.jsx', ['scripts', 'minscripts']);
 
-  // Watch image files
-  gulp.watch('src/images/*', ['images']);
+  // // Watch image files
+  // gulp.watch('src/images/*', ['images']);
 
   // Create LiveReload server
   livereload.listen();

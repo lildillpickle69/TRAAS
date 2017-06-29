@@ -58735,6 +58735,10 @@ var _Search = require('./Search');
 
 var _Search2 = _interopRequireDefault(_Search);
 
+var _NotificationButton = require('./NotificationButton');
+
+var _NotificationButton2 = _interopRequireDefault(_NotificationButton);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -58768,19 +58772,31 @@ var App = function (_Component) {
     value: function render() {
       var activeItem = this.state.activeItem;
 
-
+      var buttonstyle = { marginLeft: 20 };
+      // const dividerstyle = {fontFamily: Quicksand, fontSize: 10 };
       return _react2.default.createElement(
         'div',
         null,
+        _react2.default.createElement('br', null),
         _react2.default.createElement(
           'h1',
           null,
           'TRAAS'
         ),
         _react2.default.createElement(
-          _semanticUiReact.Button,
-          { primary: true },
-          'New Addendum'
+          'div',
+          null,
+          _react2.default.createElement(
+            _semanticUiReact.Button,
+            { style: buttonstyle, primary: true },
+            'New Addendum'
+          ),
+          _react2.default.createElement(_NotificationButton2.default, { content: 'Notifications', icon: 'alarm', onClick: this.handleItemClick, floated: 'right', rightmargin: 20 })
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'Technical Reports Addendum Asset Summary'
         ),
         _react2.default.createElement(
           _semanticUiReact.Menu,
@@ -58810,7 +58826,77 @@ var App = function (_Component) {
 
 exports.default = App;
 
-},{"./Search":851,"react":301,"semantic-ui-react":403}],851:[function(require,module,exports){
+},{"./NotificationButton":851,"./Search":852,"react":301,"semantic-ui-react":403}],851:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _semanticUiReact = require('semantic-ui-react');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NotificationButton = function (_React$Component) {
+    _inherits(NotificationButton, _React$Component);
+
+    function NotificationButton(props) {
+        _classCallCheck(this, NotificationButton);
+
+        var _this = _possibleConstructorReturn(this, (NotificationButton.__proto__ || Object.getPrototypeOf(NotificationButton)).call(this, props));
+
+        _this.handleItemClick = _this.handleItemClick.bind(_this);
+        _this.buttonstyle = { display: 'inline-block', verticalAlign: 'top', marginRight: _this.props.rightmargin, marginLeft: _this.props.leftmargin };
+        return _this;
+    }
+
+    _createClass(NotificationButton, [{
+        key: 'handleItemClick',
+        value: function handleItemClick(e, _ref) {
+            var name = _ref.name;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(_semanticUiReact.Button, { style: this.buttonstyle, content: this.props.content, icon: this.props.icon, labelPosition: this.props.labelPosition, floated: this.props.floated });
+        }
+    }]);
+
+    return NotificationButton;
+}(_react2.default.Component);
+
+NotificationButton.propTypes = {
+    content: _react2.default.PropTypes.string,
+    icon: _react2.default.PropTypes.string,
+    labelPosition: _react2.default.PropTypes.string,
+    floated: _react2.default.PropTypes.string,
+    leftmargin: _react2.default.PropTypes.number,
+    rightmargin: _react2.default.PropTypes.number
+};
+NotificationButton.defaultprops = {
+    content: '',
+    icon: '',
+    labelPosition: 'left',
+    floated: 'left',
+    leftmargin: 0,
+    rightmargin: 0
+};
+
+exports.default = NotificationButton;
+
+},{"react":301,"semantic-ui-react":403}],852:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -58869,7 +58955,7 @@ var AddendumSearch = function (_Component) {
 
 exports.default = AddendumSearch;
 
-},{"react":301,"semantic-ui-react":403}],852:[function(require,module,exports){
+},{"react":301,"semantic-ui-react":403}],853:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -58886,12 +58972,6 @@ var _App2 = _interopRequireDefault(_App);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var test1 = _react2.default.createElement(
-  'div',
-  null,
-  'Hello'
-);
-
 _reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById('main'));
 
-},{"./App":850,"react":301,"react-dom":149}]},{},[850,851,852]);
+},{"./App":850,"react":301,"react-dom":149}]},{},[850,851,852,853]);
