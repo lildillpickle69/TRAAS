@@ -1,0 +1,1 @@
+.CalendarMonthGrid{background:#fff;z-index:0;text-align:left}.CalendarMonthGrid--animating{transition:transform .2s ease-in-out;z-index:1}.CalendarMonthGrid--horizontal{position:absolute;left:9px}.CalendarMonthGrid--vertical{margin:0 auto}.CalendarMonthGrid--vertical-scrollable{margin:0 auto;overflow-y:scroll}

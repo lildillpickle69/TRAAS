@@ -1,0 +1,95 @@
+.CalendarDay {
+  border: 1px solid #e4e7e7;
+  padding: 0;
+  box-sizing: border-box;
+  color: #565a5c;
+  cursor: pointer; }
+
+.CalendarDay__button {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  overflow: visible;
+  cursor: pointer;
+  box-sizing: border-box; }
+  .CalendarDay__button:active {
+    outline: 0; }
+
+.CalendarDay--highlighted-calendar {
+  background: #ffe8bc;
+  color: #565a5c;
+  cursor: default; }
+  .CalendarDay--highlighted-calendar:active {
+    background: #007a87; }
+
+.CalendarDay--outside {
+  border: 0;
+  cursor: default; }
+  .CalendarDay--outside:active {
+    background: #fff; }
+
+.CalendarDay--hovered {
+  background: #e4e7e7;
+  border: 1px double #d4d9d9;
+  color: inherit; }
+
+.CalendarDay--blocked-minimum-nights {
+  color: #cacccd;
+  background: #fff;
+  border: 1px solid #e4e7e7;
+  cursor: default; }
+  .CalendarDay--blocked-minimum-nights:active {
+    background: #fff; }
+
+.CalendarDay--selected-span {
+  background: #66e2da;
+  border: 1px double #33dacd;
+  color: #fff; }
+  .CalendarDay--selected-span.CalendarDay--hovered, .CalendarDay--selected-span:active {
+    background: #33dacd;
+    border: 1px double #00a699; }
+  .CalendarDay--selected-span.CalendarDay--last-in-range {
+    border-right: #00a699; }
+
+.CalendarDay--hovered-span,
+.CalendarDay--after-hovered-start {
+  background: #b2f1ec;
+  border: 1px double #80e8e0;
+  color: #007a87; }
+  .CalendarDay--hovered-span:active,
+  .CalendarDay--after-hovered-start:active {
+    background: #80e8e0; }
+
+.CalendarDay--selected-start,
+.CalendarDay--selected-end,
+.CalendarDay--selected {
+  background: #00a699;
+  border: 1px double #00a699;
+  color: #fff; }
+  .CalendarDay--selected-start:active,
+  .CalendarDay--selected-end:active,
+  .CalendarDay--selected:active {
+    background: #00a699; }
+
+.CalendarDay--blocked-calendar {
+  background: #cacccd;
+  color: #82888a;
+  cursor: default; }
+  .CalendarDay--blocked-calendar:active {
+    background: #cacccd; }
+
+.CalendarDay--blocked-out-of-range {
+  color: #cacccd;
+  background: #fff;
+  border: 1px solid #e4e7e7;
+  cursor: default; }
+  .CalendarDay--blocked-out-of-range:active {
+    background: #fff; }

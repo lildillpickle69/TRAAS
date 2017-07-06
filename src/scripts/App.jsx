@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Label, Menu, Divider, Button} from 'semantic-ui-react';
-import AddendumSearch from './Search';
-import NotificationButton from './NotificationButton';
- 
+import { Divider, Grid } from 'semantic-ui-react';
+import NotificationPopup from './NotificationPopup';
+import NewAddendumButton from './NewAddendumButton';
+import SearchAddendums from './SearchAddendums';
+import MainMenu from './MainMenu';
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -16,31 +18,27 @@ export default class App extends Component {
   }
 
   render() {
-    const { activeItem } = this.state;
-    const buttonstyle = {marginLeft: 20};
-    // const dividerstyle = {fontFamily: Quicksand, fontSize: 10 };
     return (
       <div>
-        <br></br>
-        <h1>TRAAS</h1>
+        <br />
+        <Grid>
+          <Grid.Column width={2}>
+            <h1>TRAAS</h1>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <SearchAddendums />
+          </Grid.Column>
+          <Grid.Column width={2}>
+            <h3>Badge Number</h3>
+          </Grid.Column>
+        </Grid>
+        <br />
         <div>
-        <Button style={buttonstyle} primary>New Addendum</Button>
-        <NotificationButton content="Notifications" icon = "alarm" onClick={this.handleItemClick} floated='right' rightmargin={20}/>
+          <NewAddendumButton />
+          <NotificationPopup />
         </div>
         <Divider horizontal>Technical Reports Addendum Asset Summary</Divider>
-        <Menu vertical>
-          <Menu.Item name="All Addendums" active={activeItem === 'All Addendums'} onClick={this.handleItemClick}>
-            All Addendums
-          </Menu.Item>
-
-          <Menu.Item name="Out-of-Tolerance Reports" active={activeItem === 'Out-of-Tolerance Reports'} onClick={this.handleItemClick}>
-            Out-of-Tolerance Reports
-          </Menu.Item>
-
-          <Menu.Item name="User Guide" active={activeItem === 'User Guide'} onClick={this.handleItemClick}>
-            User Guide
-          </Menu.Item>
-        </Menu>
+        <MainMenu />
       </div>
     );
   }

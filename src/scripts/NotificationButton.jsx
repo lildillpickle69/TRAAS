@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Popup } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 
 class NotificationButton extends React.Component {
     constructor(props) {
         super(props);
-        this.handleItemClick = this.handleItemClick.bind(this);
         this.buttonstyle = {display: 'inline-block', verticalAlign: 'top', marginRight: this.props.rightmargin, marginLeft: this.props.leftmargin};
-    }
-    handleItemClick(e, { name }) {
     }
     
     render() {    

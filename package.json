@@ -9,8 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
     "react": "^15.6.1",
+    "react-addons-shallow-compare": "^15.6.0",
+    "react-dates": "^12.2.2",
+    "react-day-picker": "^6.0.4",
     "react-dom": "^15.6.1",
+    "require-resolve": "0.0.2",
     "semantic-ui-react": "^0.70.0"
   },
   "devDependencies": {
@@ -19,6 +25,11 @@
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "del": "^3.0.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-jsx-a11y": "^5.0.1",
+    "eslint-plugin-react": "^7.1.0",
     "glob": "^7.1.2",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
