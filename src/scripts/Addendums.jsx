@@ -7,8 +7,8 @@ export default class Addendums extends Component {
   render() {
     const stateoptions = [{ key: 'AL', value: 'AL', text: 'Alabama' }];
     return (
+      <div>
       <Form>
-        <AuthorsDropdown /> 
         <Divider horizontal>Addendum #SOMETHING</Divider>
         <br />
         <Form.Group width="equal">
@@ -85,6 +85,7 @@ export default class Addendums extends Component {
       HTML Button
         </Form.Field>
       </Form>
+      </div>
     );
   }
 }
