@@ -18,7 +18,7 @@ DateRange {
 
 div {
     h1 {
-    font : {
+    font : { 
     family: Quicksand;
     size: 40px;
   }
@@ -30,6 +30,9 @@ div {
     padding: 0;
     display: inline-block;  
     }
+}
+a {
+  color: inherit;
 }
 
 

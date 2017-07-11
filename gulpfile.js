@@ -26,7 +26,7 @@ var gulp = require('gulp'),
 //html
 gulp.src('src/html/**/*.html')
 	.pipe(embedlr())
-	.pipe(gulp.dest("./dist/html"));
+	.pipe(gulp.dest('./dist/html'));
 
 // Styles
 gulp.task('styles', function() {
@@ -36,14 +36,15 @@ gulp.task('styles', function() {
     .pipe(rename({ suffix: '.min' }))
     .pipe(cssnano())
     .pipe(gulp.dest('dist/styles/'))
-    .pipe(notify({ message: 'Styles task complete' }));
+    .pipe(notify({ message: 'Styles task complete' }))
+    .pipe(livereload());
 });
 
 // Scripts
 
 
 var testFiles = glob.sync('src/scripts/**/*.jsx');
-var browserwatch = watchify(browserify({ entries: testFiles, extensions: ['.jsx'], cache: {}, packageCache: {} }));
+var browserwatch = watchify(browserify({ entries: testFiles, extensions: ['.jsx'], cache: {}, packageCache: {} }), { delay: 500 });
 browserwatch.transform(babelify, { presets: ['es2015', 'react'] });
 
 
@@ -55,8 +56,8 @@ function bundle() {
     })
     .pipe(source('bundle.js'))
     .pipe(gulp.dest('dist/scripts/'))
-    .pipe(livereload())
-    .pipe(notify({ message: 'Scripts task complete' }));
+    .pipe(notify({ message: 'Scripts task complete' }))
+    .pipe(livereload());
 }
 
 function minbundle() {

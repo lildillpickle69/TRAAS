@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Form, Divider, Input, Grid } from 'semantic-ui-react';
+import { Form, Divider, Grid, Dropdown } from 'semantic-ui-react';
 import DateRange from './DateRange';
+import AssetsDropdown from './AssetsDropdown';
 
 export default class NewAddendum extends Component {
   render() {
+    const stateoptions = [{ key: 'AL', value: 'AL', text: 'Alabama' }];
     return (
       <Form>
-        <h1><a href="index.html" target="_blank">TRAAS</a></h1>
         <Divider horizontal>Addendum #SOMETHING</Divider>
         <br />
         <Form.Group width="equal">
@@ -17,16 +18,22 @@ export default class NewAddendum extends Component {
                   id="dates"
                   label="Select or type the dates in the format MM/DD/YYYY."
                   control={DateRange}
+                /> 
+              </Grid.Column>
+              <Grid.Column width={4}>
+                <Form.Input required id="title" label="Report Title" placeholder="Report Title" />
+              </Grid.Column>
+              <Grid.Column width={4}>
+                <Form.Field
+                  control={Dropdown}
+                  required
+                  id="authors"
+                  label="Aerospace Authors/PIs"
+                  placeholder="Search Authors"
                 />
               </Grid.Column>
-              <Grid.Column width={4}>
-                <Form.Field required control={Input} id="title" label="Report Title" placeholder="Report Title" />
-              </Grid.Column>
-              <Grid.Column width={4}>
-                <Form.Field required control={Input} id="authors" label="Aerospace Authors/PIs" placeholder="Search Authors" />
-              </Grid.Column>
               <Grid.Column width={3}>
-                <Form.Field control={Input} id="jo" label="JO" placeholder="JO" />
+                <Form.Input id="jo" label="JO" placeholder="JO" />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -36,16 +43,16 @@ export default class NewAddendum extends Component {
           <Grid centered celled="internally" verticalAlign="middle" stackable>
             <Grid.Row>
               <Grid.Column width={4}>
-                <Form.Field control={Input} id="reportnumber" label="Report Number" placeholder="Report Number" />
+                <Form.Input id="reportnumber" label="Report Number" placeholder="Report Number" />
               </Grid.Column>
               <Grid.Column width={4}>
-                <Form.Field control={Input} id="assets" label="Assets" placeholder="Search assets" />
+                <Form.Dropdown fluid search selection multiple options={stateoptions} id="assets" label="Assets" placeholder="Search assets" />
               </Grid.Column>
               <Grid.Column width={4}>
-                <Form.Field control={Input} id="keywords" label="Keywords" placeholder="Search keywords or add your own" />
+                <Form.Field control={AssetsDropdown} label="Keywords" />
               </Grid.Column>
               <Grid.Column width={3}>
-                <Form.Field control={Input} id="program" label="Program" placeholder="Program" />
+                <Form.Input id="program" label="Program" placeholder="Program" />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -55,7 +62,7 @@ export default class NewAddendum extends Component {
           <Grid centered celled="internally" verticalAlign="middle" stackable>
             <Grid.Row>
               <Grid.Column width={12} >
-                <Form.Field id="description" label="Description" control="textarea" rows="4" />
+                <Form.TextArea id="description" label="Description" rows={4} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -64,11 +71,10 @@ export default class NewAddendum extends Component {
           <Grid centered celled="internally" verticalAlign="middle" stackable>
             <Grid.Row>
               <Grid.Column width={12} >
-                <Form.Field
+                <Form.TextArea
                   id="nonaerospace"
                   label="NON Aerospace MTE: Provide Agency, Property Identification Number, Manufacturer, Model and Calibration Date."
-                  control="textarea"
-                  rows="4"
+                  rows={4}
                 />
               </Grid.Column>
             </Grid.Row>

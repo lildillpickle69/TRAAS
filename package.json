@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.16.2",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "react": "^15.6.1",
@@ -16,6 +17,9 @@
     "react-dates": "^12.2.2",
     "react-day-picker": "^6.0.4",
     "react-dom": "^15.6.1",
+    "react-router-dom": "^4.1.1",
+    "react-select-fast-filter-options": "^0.2.2",
+    "react-virtualized-select": "^3.1.0",
     "require-resolve": "0.0.2",
     "semantic-ui-react": "^0.70.0"
   },
