@@ -91790,6 +91790,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _semanticUiReact = require('semantic-ui-react');
 
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _DateRange = require('./DateRange');
 
 var _DateRange2 = _interopRequireDefault(_DateRange);
@@ -91798,7 +91802,21 @@ var _AuthorsDropdown = require('./AuthorsDropdown');
 
 var _AuthorsDropdown2 = _interopRequireDefault(_AuthorsDropdown);
 
+var _AssetsDropdown = require('./AssetsDropdown');
+
+var _AssetsDropdown2 = _interopRequireDefault(_AssetsDropdown);
+
+var _KeywordsDropdown = require('./KeywordsDropdown');
+
+var _KeywordsDropdown2 = _interopRequireDefault(_KeywordsDropdown);
+
+var _PiDropdown = require('./PiDropdown');
+
+var _PiDropdown2 = _interopRequireDefault(_PiDropdown);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -91806,146 +91824,272 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Addendums = function (_Component) {
-  _inherits(Addendums, _Component);
+var Addendums = function (_PureComponent) {
+  _inherits(Addendums, _PureComponent);
 
-  function Addendums() {
+  function Addendums(props) {
     _classCallCheck(this, Addendums);
 
-    return _possibleConstructorReturn(this, (Addendums.__proto__ || Object.getPrototypeOf(Addendums)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Addendums.__proto__ || Object.getPrototypeOf(Addendums)).call(this, props));
+
+    _this.state = {
+      startDate: '',
+      endDate: '',
+      authors: [],
+      keywords: [],
+      assets: [],
+      title: '',
+      jo: '',
+      reportnumber: '',
+      program: '',
+      description: '',
+      nonaerospace: '',
+      pi: '',
+      submittedJO: '',
+      submittedPi: '',
+      submittedNonAerospace: '',
+      submittedDescription: '',
+      submittedProgram: '',
+      submittedReportNumber: '',
+      submittedTitle: '',
+      submittedAuthors: [],
+      submittedKeywords: [],
+      submittedAssets: []
+    };
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.handleElementChange = _this.handleElementChange.bind(_this);
+    return _this;
   }
 
   _createClass(Addendums, [{
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      var _this2 = this;
+
+      var _state = this.state,
+          pi = _state.pi,
+          title = _state.title,
+          jo = _state.jo,
+          reportnumber = _state.reportnumber,
+          program = _state.program,
+          description = _state.description,
+          nonaerospace = _state.nonaerospace,
+          authors = _state.authors,
+          keywords = _state.keywords,
+          assets = _state.assets,
+          startDate = _state.startDate,
+          endDate = _state.endDate;
+
+      var submittedKeywords = [];
+      var submittedAssets = [];
+      var submittedAuthors = [];
+      var querystring = 'https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?';
+      keywords.forEach(function (element) {
+        return submittedKeywords.push(element.value);
+      });
+      authors.forEach(function (element) {
+        return submittedAuthors.push(element.value);
+      });
+      assets.forEach(function (element, index) {
+        if (index === assets.length - 1) {
+          querystring += 'asset=' + element.value;
+        } else {
+          querystring += 'asset=' + element.value + '&';
+        }
+        return submittedAssets.push(element.value);
+      });
+      // querystring += 'startdate=' + startDate + '&enddate=' + endDate;
+      console.log(querystring);
+      _axios2.default.get(querystring).then(function (response) {
+        return console.log(response);
+      }).catch(function (err) {
+        return console.log(err);
+      });
+      this.setState({ submittedPi: pi.value,
+        submittedTitle: title,
+        submittedJO: jo,
+        submittedReportNumber: reportnumber,
+        submittedProgram: program,
+        submittedDescription: description,
+        submittedNonAerospace: nonaerospace,
+        submittedStartDate: startDate,
+        submittedEndDate: endDate,
+        submittedAssets: submittedAssets,
+        submittedAuthors: submittedAuthors,
+        submittedKeywords: submittedKeywords }, function () {
+        return _axios2.default.post('https://agoquality-tmpw.aero.org/secure/TRAASweb/TRAAS.pl', _this2.state).then(function (response) {
+          return console.log(response);
+        }).catch(function (errors) {
+          return console.log(errors);
+        });
+      });
+    }
+  }, {
+    key: 'handleChange',
+    value: function handleChange(e, _ref) {
+      var name = _ref.name,
+          value = _ref.value;
+
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: 'handleElementChange',
+    value: function handleElementChange(name, value) {
+      this.setState(_defineProperty({}, name, value));
+    }
+    // generateDraft() {
+    //   const win = window.open('https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=' + ID, '_blank');
+    //   win.focus();
+    // }
+
+  }, {
     key: 'render',
     value: function render() {
-      var stateoptions = [{ key: 'AL', value: 'AL', text: 'Alabama' }];
+      var center = { position: 'relative', left: '40%' };
       return _react2.default.createElement(
-        'div',
+        _semanticUiReact.Form,
         null,
-        _react2.default.createElement(_AuthorsDropdown2.default, null),
         _react2.default.createElement(
-          _semanticUiReact.Form,
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'Addendum #SOMETHING'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _semanticUiReact.Form.Group,
+          { width: 'equal' },
+          _react2.default.createElement(
+            _semanticUiReact.Grid,
+            { celled: 'internally', verticalAlign: 'middle', stackable: true, centered: true },
+            _react2.default.createElement(
+              _semanticUiReact.Grid.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 4 },
+                _react2.default.createElement(_semanticUiReact.Form.Field, {
+                  id: 'dates',
+                  label: 'Select or type the dates in the format YYYY/MM/DD.',
+                  control: _DateRange2.default,
+                  name: 'dates',
+                  getdates: this.handleElementChange
+                })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 2 },
+                _react2.default.createElement(_semanticUiReact.Form.Input, { required: true, id: 'title', label: 'Report Title', placeholder: 'Report Title', name: 'title', onChange: this.handleChange })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 3 },
+                _react2.default.createElement(_semanticUiReact.Form.Field, { required: true, id: 'pi', label: 'PI name', control: _PiDropdown2.default, getpi: this.handleElementChange, name: 'pi' })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 3 },
+                _react2.default.createElement(_semanticUiReact.Form.Field, { id: 'authors', label: 'Additional Authors', control: _AuthorsDropdown2.default, getauthors: this.handleElementChange, name: 'authors' })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 2 },
+                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'jo', label: 'JO', placeholder: 'JO', name: 'jo', onChange: this.handleChange })
+              )
+            )
+          )
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _semanticUiReact.Form.Group,
           null,
           _react2.default.createElement(
-            _semanticUiReact.Divider,
-            { horizontal: true },
-            'Addendum #SOMETHING'
-          ),
-          _react2.default.createElement('br', null),
-          _react2.default.createElement(
-            _semanticUiReact.Form.Group,
-            { width: 'equal' },
+            _semanticUiReact.Grid,
+            { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
             _react2.default.createElement(
-              _semanticUiReact.Grid,
-              { celled: 'internally', verticalAlign: 'middle', stackable: true, centered: true },
+              _semanticUiReact.Grid.Row,
+              null,
               _react2.default.createElement(
-                _semanticUiReact.Grid.Row,
-                null,
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 4 },
-                  _react2.default.createElement(_semanticUiReact.Form.Field, {
-                    id: 'dates',
-                    label: 'Select or type the dates in the format MM/DD/YYYY.',
-                    control: _DateRange2.default
-                  })
-                ),
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 4 },
-                  _react2.default.createElement(_semanticUiReact.Form.Input, { required: true, id: 'title', label: 'Report Title', placeholder: 'Report Title' })
-                ),
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 4 },
-                  _react2.default.createElement(_semanticUiReact.Form.Field, {
-                    control: _AuthorsDropdown2.default,
-                    required: true,
-                    id: 'authors',
-                    label: 'Aerospace Authors/PIs',
-                    placeholder: 'Search Authors'
-                  })
-                ),
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 3 },
-                  _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'jo', label: 'JO', placeholder: 'JO' })
-                )
+                _semanticUiReact.Grid.Column,
+                { width: 4 },
+                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'reportnumber', label: 'Report Number', placeholder: 'Report Number', name: 'reportnumber', onChange: this.handleChange })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 4 },
+                _react2.default.createElement(_semanticUiReact.Form.Field, { required: true, control: _AssetsDropdown2.default, label: 'Assets', id: 'assets', name: 'assets', getassets: this.handleElementChange })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 4 },
+                _react2.default.createElement(_semanticUiReact.Form.Field, { control: _KeywordsDropdown2.default, label: 'Keywords', id: 'keywords', name: 'keywords', getkeywords: this.handleElementChange })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 3 },
+                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'program', label: 'Program', placeholder: 'Program', name: 'program', onChange: this.handleChange })
               )
             )
-          ),
-          _react2.default.createElement('br', null),
+          )
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _semanticUiReact.Form.Group,
+          { width: 'equal' },
           _react2.default.createElement(
-            _semanticUiReact.Form.Group,
+            _semanticUiReact.Grid,
+            { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
+            _react2.default.createElement(
+              _semanticUiReact.Grid.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 12 },
+                _react2.default.createElement(_semanticUiReact.Form.TextArea, { id: 'description', label: 'Description', rows: 4, onChange: this.handleChange, name: 'description' })
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Form.Group,
+          { width: 'equal' },
+          _react2.default.createElement(
+            _semanticUiReact.Grid,
+            { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
+            _react2.default.createElement(
+              _semanticUiReact.Grid.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 12 },
+                _react2.default.createElement(_semanticUiReact.Form.TextArea, {
+                  id: 'nonaerospace',
+                  label: 'NON Aerospace MTE: Provide Agency, Property Identification Number, Manufacturer, Model and Calibration Date.',
+                  rows: 4,
+                  onChange: this.handleChange,
+                  name: 'nonaerospace'
+                })
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Form.Group,
+          { inline: true, style: center },
+          _react2.default.createElement(
+            _semanticUiReact.Form.Button,
+            { primary: true, onClick: this.handleSubmit },
+            'Save'
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Form.Button,
             null,
-            _react2.default.createElement(
-              _semanticUiReact.Grid,
-              { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Row,
-                null,
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 4 },
-                  _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'reportnumber', label: 'Report Number', placeholder: 'Report Number' })
-                ),
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 4 },
-                  _react2.default.createElement(_semanticUiReact.Form.Dropdown, { fluid: true, search: true, selection: true, multiple: true, options: stateoptions, id: 'assets', label: 'Assets', placeholder: 'Search assets' })
-                ),
-                _react2.default.createElement(_semanticUiReact.Grid.Column, { width: 4 }),
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 3 },
-                  _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'program', label: 'Program', placeholder: 'Program' })
-                )
-              )
-            )
-          ),
-          _react2.default.createElement('br', null),
-          _react2.default.createElement(
-            _semanticUiReact.Form.Group,
-            { width: 'equal' },
-            _react2.default.createElement(
-              _semanticUiReact.Grid,
-              { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Row,
-                null,
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 12 },
-                  _react2.default.createElement(_semanticUiReact.Form.TextArea, { id: 'description', label: 'Description', rows: 4 })
-                )
-              )
-            )
+            'Generate Draft'
           ),
           _react2.default.createElement(
-            _semanticUiReact.Form.Group,
-            { width: 'equal' },
-            _react2.default.createElement(
-              _semanticUiReact.Grid,
-              { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Row,
-                null,
-                _react2.default.createElement(
-                  _semanticUiReact.Grid.Column,
-                  { width: 12 },
-                  _react2.default.createElement(_semanticUiReact.Form.TextArea, {
-                    id: 'nonaerospace',
-                    label: 'NON Aerospace MTE: Provide Agency, Property Identification Number, Manufacturer, Model and Calibration Date.',
-                    rows: 4
-                  })
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            _semanticUiReact.Form.Field,
-            { label: 'An HTML <button>', control: 'button' },
-            'HTML Button'
+            _semanticUiReact.Form.Button,
+            null,
+            'Finalize'
           )
         )
       );
@@ -91953,11 +92097,11 @@ var Addendums = function (_Component) {
   }]);
 
   return Addendums;
-}(_react.Component);
+}(_react.PureComponent);
 
 exports.default = Addendums;
 
-},{"./AuthorsDropdown":1126,"./DateRange":1127,"react":570,"semantic-ui-react":673}],1123:[function(require,module,exports){
+},{"./AssetsDropdown":1125,"./AuthorsDropdown":1126,"./DateRange":1127,"./KeywordsDropdown":1130,"./PiDropdown":1136,"axios":42,"react":570,"semantic-ui-react":673}],1123:[function(require,module,exports){
 "use strict";
 
 },{}],1124:[function(require,module,exports){
@@ -91992,7 +92136,111 @@ var App = function App() {
 
 exports.default = App;
 
-},{"./Header":1129,"./Main":1130,"react":570}],1125:[function(require,module,exports){
+},{"./Header":1129,"./Main":1131,"react":570}],1125:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactVirtualizedSelect = require('react-virtualized-select');
+
+var _reactVirtualizedSelect2 = _interopRequireDefault(_reactVirtualizedSelect);
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AssetsDropdown = function (_PureComponent) {
+  _inherits(AssetsDropdown, _PureComponent);
+
+  function AssetsDropdown(props) {
+    _classCallCheck(this, AssetsDropdown);
+
+    var _this = _possibleConstructorReturn(this, (AssetsDropdown.__proto__ || Object.getPrototypeOf(AssetsDropdown)).call(this, props));
+
+    _this.state = {};
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.getOptions = _this.getOptions.bind(_this);
+    return _this;
+  }
+
+  // componentDidMount() {
+  //   axios
+  //     .get('https://agoquality-tmpw.aero.org/secure/TRAASweb/assets.pl?query=')
+  //     .then((response) => {
+  //       this.setState({
+  //         options: response.data.results,
+  //       });
+  //     })
+  //     .catch((err) => { console.log(err); });
+  // }
+
+
+  _createClass(AssetsDropdown, [{
+    key: 'getOptions',
+    value: function getOptions(input) {
+      return _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/assets.pl?query=' + input).then(function (response) {
+        return { options: response.data.results };
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //   if (this.state.selectedAssets !== nextState.selectedAssets) {
+    //     return true;
+    //   }
+    //   return false;
+    // }
+
+  }, {
+    key: 'handleChange',
+    value: function handleChange(selectedAssets) {
+      var _this2 = this;
+
+      this.setState({ selectedAssets: selectedAssets }, function () {
+        return _this2.props.getassets('assets', selectedAssets);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      // const options = this.state.options;
+      // const filterOptions = createFilterOptions({ options });        
+      return _react2.default.createElement(_reactVirtualizedSelect2.default, {
+        async: true,
+        autofocus: true,
+        clearable: true,
+        labelKey: 'label',
+        loadOptions: this.getOptions,
+        multi: true,
+        onChange: this.handleChange,
+        value: this.state.selectedAssets,
+        valueKey: 'value'
+      });
+    }
+  }]);
+
+  return AssetsDropdown;
+}(_react.PureComponent);
+
+exports.default = AssetsDropdown;
+
+},{"axios":42,"react":570,"react-virtualized-select":529}],1126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -92013,10 +92261,6 @@ var _reactVirtualizedSelect = require('react-virtualized-select');
 
 var _reactVirtualizedSelect2 = _interopRequireDefault(_reactVirtualizedSelect);
 
-var _reactSelectFastFilterOptions = require('react-select-fast-filter-options');
-
-var _reactSelectFastFilterOptions2 = _interopRequireDefault(_reactSelectFastFilterOptions);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -92025,8 +92269,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var AuthorsDropdown = function (_Component) {
-  _inherits(AuthorsDropdown, _Component);
+var AuthorsDropdown = function (_PureComponent) {
+  _inherits(AuthorsDropdown, _PureComponent);
 
   function AuthorsDropdown(props) {
     _classCallCheck(this, AuthorsDropdown);
@@ -92034,120 +92278,67 @@ var AuthorsDropdown = function (_Component) {
     var _this = _possibleConstructorReturn(this, (AuthorsDropdown.__proto__ || Object.getPrototypeOf(AuthorsDropdown)).call(this, props));
 
     _this.state = {};
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.getOptions = _this.getOptions.bind(_this);
     return _this;
   }
 
   _createClass(AuthorsDropdown, [{
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      var options = {};
-      _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/authors.pl?=').then(function (response) {
-        options = response.data.results;
-      });
-      var filterOptions = (0, _reactSelectFastFilterOptions2.default)({ options: options });
-      return _react2.default.createElement(_reactVirtualizedSelect2.default, {
-        name: 'authors',
-        options: options,
-        onChange: function onChange(selectValue) {
-          return _this2.setState({ selectValue: selectValue });
-        },
-        value: this.state.selectValue,
-        filterOptions: filterOptions,
-        multi: true
-      });
-    }
-  }]);
-
-  return AuthorsDropdown;
-}(_react.Component);
-
-exports.default = AuthorsDropdown;
-
-},{"axios":42,"react":570,"react-select-fast-filter-options":515,"react-virtualized-select":529}],1126:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _axios = require('axios');
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _reactVirtualizedSelect = require('react-virtualized-select');
-
-var _reactVirtualizedSelect2 = _interopRequireDefault(_reactVirtualizedSelect);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// import createFilterOptions from 'react-select-fast-filter-options';
-
-var AuthorsDropdown = function (_Component) {
-  _inherits(AuthorsDropdown, _Component);
-
-  function AuthorsDropdown(props) {
-    _classCallCheck(this, AuthorsDropdown);
-
-    var _this = _possibleConstructorReturn(this, (AuthorsDropdown.__proto__ || Object.getPrototypeOf(AuthorsDropdown)).call(this, props));
-
-    _this.state = {
-      selectedAuthor: null,
-      options: null
-    };
-    return _this;
-  }
-
-  _createClass(AuthorsDropdown, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/authors.pl?=').then(function (response) {
-        _this2.setState({
-          options: response.data.results
-        });
+    key: 'getOptions',
+    value: function getOptions(input) {
+      return _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/authors.pl?query=' + input).then(function (response) {
+        return { options: response.data.results };
       }).catch(function (err) {
         console.log(err);
+      });
+    }
+    // componentDidMount() {
+    //   axios
+    //     .get('https://agoquality-tmpw.aero.org/secure/TRAASweb/authors.pl?query=')
+    //     .then((response) => {
+    //       this.setState({
+    //         options: response.data.results,
+    //       });
+    //     })
+    //     .catch((err) => { console.log(err); });
+    // }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //   if (this.state.selectedAuthors !== nextState.selectedAuthors) {
+    //     return true;
+    //   }
+    //   return false;
+    // }
+
+  }, {
+    key: 'handleChange',
+    value: function handleChange(selectedAuthors) {
+      var _this2 = this;
+
+      this.setState({ selectedAuthors: selectedAuthors }, function () {
+        return _this2.props.getauthors('authors', selectedAuthors);
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
-
+      // const options = this.state.options;
+      // const filterOptions = createFilterOptions({ options });
       return _react2.default.createElement(_reactVirtualizedSelect2.default, {
-        autofocus: true,
+        async: true,
         clearable: true,
-        labelKey: 'label',
+        autofocus: true,
         multi: true,
-        onChange: function onChange(selectedAuthor) {
-          return _this3.setState({ selectedAuthor: selectedAuthor });
-        },
-        options: this.state.options,
-        searchable: true,
-        simpleValue: true,
-        value: this.state.selectedAuthor,
+        loadOptions: this.getOptions,
+        labelKey: 'label',
+        onChange: this.handleChange,
+        value: this.state.selectedAuthors,
         valueKey: 'value'
       });
     }
   }]);
 
   return AuthorsDropdown;
-}(_react.Component);
+}(_react.PureComponent);
 
 exports.default = AuthorsDropdown;
 
@@ -92196,10 +92387,19 @@ var DateRange = function (_React$Component) {
   _createClass(DateRange, [{
     key: 'onDatesChange',
     value: function onDatesChange(_ref) {
+      var _this2 = this;
+
       var startDate = _ref.startDate,
           endDate = _ref.endDate;
 
-      this.setState({ startDate: startDate, endDate: endDate });
+      this.setState({ startDate: startDate }, function () {
+        var date = startDate.toISOString().substring(0, 10);
+        return _this2.props.getdates('startDate', date);
+      });
+      this.setState({ endDate: endDate }, function () {
+        var date = endDate.toISOString().substring(0, 10);
+        return _this2.props.getdates('endDate', date);
+      });
     }
   }, {
     key: 'onFocusChange',
@@ -92318,7 +92518,109 @@ var Main = function Main() {
 
 exports.default = Main;
 
-},{"./Addendums":1122,"./MainMenu":1131,"./NotificationPopup":1133,"./SearchAddendums":1135,"react":570,"react-router-dom":502,"semantic-ui-react":673}],1130:[function(require,module,exports){
+},{"./Addendums":1122,"./MainMenu":1132,"./NotificationPopup":1134,"./SearchAddendums":1137,"react":570,"react-router-dom":502,"semantic-ui-react":673}],1130:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactVirtualizedSelect = require('react-virtualized-select');
+
+var _reactVirtualizedSelect2 = _interopRequireDefault(_reactVirtualizedSelect);
+
+var _reactSelect = require('react-select');
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _reactSelectFastFilterOptions = require('react-select-fast-filter-options');
+
+var _reactSelectFastFilterOptions2 = _interopRequireDefault(_reactSelectFastFilterOptions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var KeywordsDropdown = function (_PureComponent) {
+  _inherits(KeywordsDropdown, _PureComponent);
+
+  function KeywordsDropdown(props) {
+    _classCallCheck(this, KeywordsDropdown);
+
+    var _this = _possibleConstructorReturn(this, (KeywordsDropdown.__proto__ || Object.getPrototypeOf(KeywordsDropdown)).call(this, props));
+
+    _this.state = {};
+    _this.handleChange = _this.handleChange.bind(_this);
+    return _this;
+  }
+
+  _createClass(KeywordsDropdown, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/keywords.pl?query=').then(function (response) {
+        _this2.setState({
+          options: response.data.results
+        });
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //   if (this.state.selectedKeywords !== nextState.selectedKeywords) {
+    //     return true;
+    //   }
+    //   return false;
+    // }
+
+  }, {
+    key: 'handleChange',
+    value: function handleChange(selectedKeywords) {
+      var _this3 = this;
+
+      this.setState({ selectedKeywords: selectedKeywords }, function () {
+        return _this3.props.getkeywords('keywords', selectedKeywords);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var options = this.state.options;
+      var filterOptions = (0, _reactSelectFastFilterOptions2.default)({ options: options });
+      return _react2.default.createElement(_reactVirtualizedSelect2.default, {
+        autofocus: true,
+        clearable: true,
+        filterOptions: filterOptions,
+        labelKey: 'label',
+        multi: true,
+        onChange: this.handleChange,
+        options: options,
+        value: this.state.selectedKeywords,
+        selectComponent: _reactSelect.Creatable,
+        valueKey: 'value'
+      });
+    }
+  }]);
+
+  return KeywordsDropdown;
+}(_react.PureComponent);
+
+exports.default = KeywordsDropdown;
+
+},{"axios":42,"react":570,"react-select":520,"react-select-fast-filter-options":515,"react-virtualized-select":529}],1131:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -92339,6 +92641,10 @@ var _MainMenu = require('./MainMenu');
 
 var _MainMenu2 = _interopRequireDefault(_MainMenu);
 
+var _NewAddendum = require('./NewAddendum');
+
+var _NewAddendum2 = _interopRequireDefault(_NewAddendum);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import FinalizedAddendums from './FinalizedAddendums';
@@ -92352,14 +92658,15 @@ var Main = function Main() {
       'div',
       null,
       _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _MainMenu2.default }),
-      _react2.default.createElement(_reactRouterDom.Route, { path: '/Addendums', component: _Addendums2.default })
+      _react2.default.createElement(_reactRouterDom.Route, { path: '/Addendums', component: _Addendums2.default }),
+      _react2.default.createElement(_reactRouterDom.Route, { path: '/NewAddendum', component: _NewAddendum2.default })
     )
   );
 };
 
 exports.default = Main;
 
-},{"./Addendums":1122,"./MainMenu":1131,"react":570,"react-router-dom":502}],1131:[function(require,module,exports){
+},{"./Addendums":1122,"./MainMenu":1132,"./NewAddendum":1133,"react":570,"react-router-dom":502}],1132:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -92400,8 +92707,9 @@ var MainMenu = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (MainMenu.__proto__ || Object.getPrototypeOf(MainMenu)).call(this, props));
 
-    _this.state = {};
+    _this.state = { badge: document.getElementById('badge').value };
     _this.handleItemClick = _this.handleItemClick.bind(_this);
+
     return _this;
   }
 
@@ -92412,6 +92720,9 @@ var MainMenu = function (_Component) {
 
       this.setState({ activeItem: name });
     }
+  }, {
+    key: 'handleOOTC',
+    value: function handleOOTC() {}
   }, {
     key: 'render',
     value: function render() {
@@ -92449,14 +92760,14 @@ var MainMenu = function (_Component) {
             _react2.default.createElement(
               'h3',
               null,
-              'Badge Number'
+              this.state.badge
             )
           )
         ),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
           _semanticUiReact.Menu.Item,
-          { as: _reactRouterDom.Link, to: '/Addendums', active: activeItem === 'My Addendums In Progress', onClick: this.handleItemClick },
+          { as: _reactRouterDom.Link, to: '/NewAddendums', active: activeItem === 'My Addendums In Progress', onClick: this.handleItemClick },
           _react2.default.createElement(
             _semanticUiReact.Button,
             { style: buttonstyle, primary: true },
@@ -92521,7 +92832,7 @@ var MainMenu = function (_Component) {
 
 exports.default = MainMenu;
 
-},{"./NotificationPopup":1133,"./SearchAddendums":1135,"react":570,"react-router-dom":502,"semantic-ui-react":673}],1132:[function(require,module,exports){
+},{"./NotificationPopup":1134,"./SearchAddendums":1137,"react":570,"react-router-dom":502,"semantic-ui-react":673}],1133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -92536,15 +92847,33 @@ var _react2 = _interopRequireDefault(_react);
 
 var _semanticUiReact = require('semantic-ui-react');
 
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _DateRange = require('./DateRange');
 
 var _DateRange2 = _interopRequireDefault(_DateRange);
+
+var _AuthorsDropdown = require('./AuthorsDropdown');
+
+var _AuthorsDropdown2 = _interopRequireDefault(_AuthorsDropdown);
 
 var _AssetsDropdown = require('./AssetsDropdown');
 
 var _AssetsDropdown2 = _interopRequireDefault(_AssetsDropdown);
 
+var _KeywordsDropdown = require('./KeywordsDropdown');
+
+var _KeywordsDropdown2 = _interopRequireDefault(_KeywordsDropdown);
+
+var _PiDropdown = require('./PiDropdown');
+
+var _PiDropdown2 = _interopRequireDefault(_PiDropdown);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -92552,19 +92881,129 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var NewAddendum = function (_Component) {
-  _inherits(NewAddendum, _Component);
+var Addendums = function (_PureComponent) {
+  _inherits(Addendums, _PureComponent);
 
-  function NewAddendum() {
-    _classCallCheck(this, NewAddendum);
+  function Addendums(props) {
+    _classCallCheck(this, Addendums);
 
-    return _possibleConstructorReturn(this, (NewAddendum.__proto__ || Object.getPrototypeOf(NewAddendum)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Addendums.__proto__ || Object.getPrototypeOf(Addendums)).call(this, props));
+
+    _this.state = {
+      startDate: '',
+      endDate: '',
+      authors: [],
+      keywords: [],
+      assets: [],
+      title: '',
+      jo: '',
+      reportnumber: '',
+      program: '',
+      description: '',
+      nonaerospace: '',
+      pi: '',
+      submittedJO: '',
+      submittedPi: '',
+      submittedNonAerospace: '',
+      submittedDescription: '',
+      submittedProgram: '',
+      submittedReportNumber: '',
+      submittedTitle: '',
+      submittedAuthors: [],
+      submittedKeywords: [],
+      submittedAssets: []
+    };
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.handleElementChange = _this.handleElementChange.bind(_this);
+    return _this;
   }
 
-  _createClass(NewAddendum, [{
+  _createClass(Addendums, [{
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      var _this2 = this;
+
+      var _state = this.state,
+          pi = _state.pi,
+          title = _state.title,
+          jo = _state.jo,
+          reportnumber = _state.reportnumber,
+          program = _state.program,
+          description = _state.description,
+          nonaerospace = _state.nonaerospace,
+          authors = _state.authors,
+          keywords = _state.keywords,
+          assets = _state.assets,
+          startDate = _state.startDate,
+          endDate = _state.endDate;
+
+      var submittedKeywords = [];
+      var submittedAssets = [];
+      var submittedAuthors = [];
+      var querystring = 'https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?';
+      keywords.forEach(function (element) {
+        return submittedKeywords.push(element.value);
+      });
+      authors.forEach(function (element) {
+        return submittedAuthors.push(element.value);
+      });
+      assets.forEach(function (element, index) {
+        if (index === assets.length - 1) {
+          querystring += 'asset=' + element.value;
+        } else {
+          querystring += 'asset=' + element.value + '&';
+        }
+        return submittedAssets.push(element.value);
+      });
+      // querystring += 'startdate=' + startDate + '&enddate=' + endDate;
+      console.log(querystring);
+      _axios2.default.get(querystring).then(function (response) {
+        return console.log(response);
+      }).catch(function (err) {
+        return console.log(err);
+      });
+      this.setState({ submittedPi: pi.value,
+        submittedTitle: title,
+        submittedJO: jo,
+        submittedReportNumber: reportnumber,
+        submittedProgram: program,
+        submittedDescription: description,
+        submittedNonAerospace: nonaerospace,
+        submittedStartDate: startDate,
+        submittedEndDate: endDate,
+        submittedAssets: submittedAssets,
+        submittedAuthors: submittedAuthors,
+        submittedKeywords: submittedKeywords }, function () {
+        return _axios2.default.post('https://agoquality-tmpw.aero.org/secure/TRAASweb/TRAAS.pl', _this2.state).then(function (response) {
+          return console.log(response);
+        }).catch(function (errors) {
+          return console.log(errors);
+        });
+      });
+    }
+  }, {
+    key: 'handleChange',
+    value: function handleChange(e, _ref) {
+      var name = _ref.name,
+          value = _ref.value;
+
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: 'handleElementChange',
+    value: function handleElementChange(name, value) {
+      this.setState(_defineProperty({}, name, value));
+    }
+    // generateDraft() {
+    //   const win = window.open('https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=' + ID, '_blank');
+    //   win.focus();
+    // }
+
+  }, {
     key: 'render',
     value: function render() {
-      var stateoptions = [{ key: 'AL', value: 'AL', text: 'Alabama' }];
+      var center = { position: 'relative', left: '40%' };
       return _react2.default.createElement(
         _semanticUiReact.Form,
         null,
@@ -92588,30 +93027,31 @@ var NewAddendum = function (_Component) {
                 { width: 4 },
                 _react2.default.createElement(_semanticUiReact.Form.Field, {
                   id: 'dates',
-                  label: 'Select or type the dates in the format MM/DD/YYYY.',
-                  control: _DateRange2.default
+                  label: 'Select or type the dates in the format YYYY/MM/DD.',
+                  control: _DateRange2.default,
+                  name: 'dates',
+                  getdates: this.handleElementChange
                 })
               ),
               _react2.default.createElement(
                 _semanticUiReact.Grid.Column,
-                { width: 4 },
-                _react2.default.createElement(_semanticUiReact.Form.Input, { required: true, id: 'title', label: 'Report Title', placeholder: 'Report Title' })
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 4 },
-                _react2.default.createElement(_semanticUiReact.Form.Field, {
-                  control: _semanticUiReact.Dropdown,
-                  required: true,
-                  id: 'authors',
-                  label: 'Aerospace Authors/PIs',
-                  placeholder: 'Search Authors'
-                })
+                { width: 2 },
+                _react2.default.createElement(_semanticUiReact.Form.Input, { required: true, id: 'title', label: 'Report Title', placeholder: 'Report Title', name: 'title', onChange: this.handleChange })
               ),
               _react2.default.createElement(
                 _semanticUiReact.Grid.Column,
                 { width: 3 },
-                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'jo', label: 'JO', placeholder: 'JO' })
+                _react2.default.createElement(_semanticUiReact.Form.Field, { required: true, id: 'pi', label: 'PI name', control: _PiDropdown2.default, getpi: this.handleElementChange, name: 'pi' })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 3 },
+                _react2.default.createElement(_semanticUiReact.Form.Field, { id: 'authors', label: 'Additional Authors', control: _AuthorsDropdown2.default, getauthors: this.handleElementChange, name: 'authors' })
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Grid.Column,
+                { width: 2 },
+                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'jo', label: 'JO', placeholder: 'JO', name: 'jo', onChange: this.handleChange })
               )
             )
           )
@@ -92629,22 +93069,22 @@ var NewAddendum = function (_Component) {
               _react2.default.createElement(
                 _semanticUiReact.Grid.Column,
                 { width: 4 },
-                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'reportnumber', label: 'Report Number', placeholder: 'Report Number' })
+                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'reportnumber', label: 'Report Number', placeholder: 'Report Number', name: 'reportnumber', onChange: this.handleChange })
               ),
               _react2.default.createElement(
                 _semanticUiReact.Grid.Column,
                 { width: 4 },
-                _react2.default.createElement(_semanticUiReact.Form.Dropdown, { fluid: true, search: true, selection: true, multiple: true, options: stateoptions, id: 'assets', label: 'Assets', placeholder: 'Search assets' })
+                _react2.default.createElement(_semanticUiReact.Form.Field, { required: true, control: _AssetsDropdown2.default, label: 'Assets', id: 'assets', name: 'assets', getassets: this.handleElementChange })
               ),
               _react2.default.createElement(
                 _semanticUiReact.Grid.Column,
                 { width: 4 },
-                _react2.default.createElement(_semanticUiReact.Form.Field, { control: _AssetsDropdown2.default, label: 'Keywords' })
+                _react2.default.createElement(_semanticUiReact.Form.Field, { control: _KeywordsDropdown2.default, label: 'Keywords', id: 'keywords', name: 'keywords', getkeywords: this.handleElementChange })
               ),
               _react2.default.createElement(
                 _semanticUiReact.Grid.Column,
                 { width: 3 },
-                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'program', label: 'Program', placeholder: 'Program' })
+                _react2.default.createElement(_semanticUiReact.Form.Input, { id: 'program', label: 'Program', placeholder: 'Program', name: 'program', onChange: this.handleChange })
               )
             )
           )
@@ -92662,7 +93102,7 @@ var NewAddendum = function (_Component) {
               _react2.default.createElement(
                 _semanticUiReact.Grid.Column,
                 { width: 12 },
-                _react2.default.createElement(_semanticUiReact.Form.TextArea, { id: 'description', label: 'Description', rows: 4 })
+                _react2.default.createElement(_semanticUiReact.Form.TextArea, { id: 'description', label: 'Description', rows: 4, onChange: this.handleChange, name: 'description' })
               )
             )
           )
@@ -92682,27 +93122,43 @@ var NewAddendum = function (_Component) {
                 _react2.default.createElement(_semanticUiReact.Form.TextArea, {
                   id: 'nonaerospace',
                   label: 'NON Aerospace MTE: Provide Agency, Property Identification Number, Manufacturer, Model and Calibration Date.',
-                  rows: 4
+                  rows: 4,
+                  onChange: this.handleChange,
+                  name: 'nonaerospace'
                 })
               )
             )
           )
         ),
         _react2.default.createElement(
-          _semanticUiReact.Form.Field,
-          { label: 'An HTML <button>', control: 'button' },
-          'HTML Button'
+          _semanticUiReact.Form.Group,
+          { inline: true, style: center },
+          _react2.default.createElement(
+            _semanticUiReact.Form.Button,
+            { primary: true, onClick: this.handleSubmit },
+            'Save'
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Form.Button,
+            null,
+            'Generate Draft'
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Form.Button,
+            null,
+            'Finalize'
+          )
         )
       );
     }
   }]);
 
-  return NewAddendum;
-}(_react.Component);
+  return Addendums;
+}(_react.PureComponent);
 
-exports.default = NewAddendum;
+exports.default = Addendums;
 
-},{"./AssetsDropdown":1125,"./DateRange":1127,"react":570,"semantic-ui-react":673}],1133:[function(require,module,exports){
+},{"./AssetsDropdown":1125,"./AuthorsDropdown":1126,"./DateRange":1127,"./KeywordsDropdown":1130,"./PiDropdown":1136,"axios":42,"react":570,"semantic-ui-react":673}],1134:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -92760,10 +93216,117 @@ var NotificationPopup = function (_Component) {
 
 exports.default = NotificationPopup;
 
-},{"react":570,"semantic-ui-react":673}],1134:[function(require,module,exports){
+},{"react":570,"semantic-ui-react":673}],1135:[function(require,module,exports){
 "use strict";
 
-},{}],1135:[function(require,module,exports){
+},{}],1136:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _reactVirtualizedSelect = require('react-virtualized-select');
+
+var _reactVirtualizedSelect2 = _interopRequireDefault(_reactVirtualizedSelect);
+
+var _reactSelectFastFilterOptions = require('react-select-fast-filter-options');
+
+var _reactSelectFastFilterOptions2 = _interopRequireDefault(_reactSelectFastFilterOptions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PiDropdown = function (_PureComponent) {
+  _inherits(PiDropdown, _PureComponent);
+
+  function PiDropdown(props) {
+    _classCallCheck(this, PiDropdown);
+
+    var _this = _possibleConstructorReturn(this, (PiDropdown.__proto__ || Object.getPrototypeOf(PiDropdown)).call(this, props));
+
+    _this.state = {};
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.getOptions = _this.getOptions.bind(_this);
+    return _this;
+  }
+
+  _createClass(PiDropdown, [{
+    key: 'getOptions',
+    value: function getOptions(input) {
+      return _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/authors.pl?query=' + input).then(function (response) {
+        return { options: response.data.results };
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+    // componentDidMount() {
+    //   axios
+    //     .get('https://agoquality-tmpw.aero.org/secure/TRAASweb/authors.pl?query=')
+    //     .then((response) => {
+    //       this.setState({
+    //         options: response.data.results,
+    //       });
+    //     })
+    //     .catch((err) => { console.log(err); });
+    // }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //   if (this.state.selectedAuthors !== nextState.selectedAuthors) {
+    //     return true;
+    //   }
+    //   return false;
+    // }
+
+  }, {
+    key: 'handleChange',
+    value: function handleChange(selectedPi) {
+      var _this2 = this;
+
+      console.log([selectedPi].value);
+      this.setState({ selectedPi: selectedPi }, function () {
+        return console.log(_this2.state.selectedPi);
+      });
+      this.props.getpi('pi', this.state.selectedPi);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      // const options = this.state.options;
+      // const filterOptions = createFilterOptions({ options });
+      return _react2.default.createElement(_reactVirtualizedSelect2.default, {
+        async: true,
+        clearable: true,
+        autofocus: true,
+        loadOptions: this.getOptions,
+        labelKey: 'label',
+        onChange: this.handleChange,
+        value: this.state.selectedPi,
+        valueKey: 'value'
+      });
+    }
+  }]);
+
+  return PiDropdown;
+}(_react.PureComponent);
+
+exports.default = PiDropdown;
+
+},{"axios":42,"react":570,"react-select-fast-filter-options":515,"react-virtualized-select":529}],1137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -92856,7 +93419,7 @@ var SearchAddendums = function (_Component) {
 
 exports.default = SearchAddendums;
 
-},{"react":570,"semantic-ui-react":673}],1136:[function(require,module,exports){
+},{"react":570,"semantic-ui-react":673}],1138:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -92883,7 +93446,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _reactDom2.default.render(_react2.default.createElement(_Main2.default, null), document.getElementById('main'));
 
-},{"./Main":1130,"react":570,"react-dom":359}]},{},[1122,1123,1124,1125,1126,1127,1128,1129,1130,1131,1132,1133,1134,1135,1136]);
-('main'));
-
-},{"./Main":1130,"react":570,"react-dom":359}]},{},[1122,1123,1124,1125,1126,1127,1128,1129,1130,1131,1132,1133,1134,1135,1136]);
+},{"./Main":1131,"react":570,"react-dom":359}]},{},[1122,1123,1124,1125,1126,1127,1128,1129,1130,1131,1132,1133,1134,1135,1136,1137,1138]);

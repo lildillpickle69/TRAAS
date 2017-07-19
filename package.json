@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.16.2",
+    "js-search": "^1.4.2",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "react": "^15.6.1",
@@ -18,6 +19,7 @@
     "react-day-picker": "^6.0.4",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.1",
+    "react-select": "^1.0.0-rc.5",
     "react-select-fast-filter-options": "^0.2.2",
     "react-virtualized-select": "^3.1.0",
     "require-resolve": "0.0.2",
@@ -51,6 +53,7 @@
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
+    "run-sequence": "^1.2.2",
     "semantic-ui": "^2.2.10",
     "style-loader": "^0.18.2",
     "vinyl-buffer": "^1.0.0",

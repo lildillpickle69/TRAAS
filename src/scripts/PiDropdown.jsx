@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import axios from 'axios';
 import VirtualizedSelect from 'react-virtualized-select';
+import createFilterOptions from 'react-select-fast-filter-options';
 
-export default class AuthorsDropdown extends PureComponent {
+export default class PiDropdown extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -33,10 +34,12 @@ export default class AuthorsDropdown extends PureComponent {
   //   }
   //   return false;
   // }
-  handleChange(selectedAuthors) {
-    this.setState({ selectedAuthors }, () => this.props.getauthors('authors', selectedAuthors));
+  handleChange(selectedPi) {
+    console.log([selectedPi].value);
+    this.setState({ selectedPi }, () => console.log(this.state.selectedPi));
+    this.props.getpi('pi', this.state.selectedPi);
   }
-  render() {
+  render() {  
     // const options = this.state.options;
     // const filterOptions = createFilterOptions({ options });
     return (
@@ -44,11 +47,10 @@ export default class AuthorsDropdown extends PureComponent {
         async
         clearable
         autofocus
-        multi
         loadOptions={this.getOptions}
         labelKey="label"
         onChange={this.handleChange}
-        value={this.state.selectedAuthors}
+        value={this.state.selectedPi}
         valueKey="value"
       />
     );

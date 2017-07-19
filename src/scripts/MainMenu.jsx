@@ -8,12 +8,16 @@ import NotificationPopup from './NotificationPopup';
 export default class MainMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { badge: document.getElementById('badge').value };
     this.handleItemClick = this.handleItemClick.bind(this);
+    
   }
 
   handleItemClick(e, { name }) {
     this.setState({ activeItem: name });
+  }
+  handleOOTC() {
+
   }
 
   render() {
@@ -30,11 +34,11 @@ export default class MainMenu extends Component {
             <SearchAddendums />
           </Grid.Column>
           <Grid.Column width={2}>
-            <h3>Badge Number</h3>
+            <h3>{this.state.badge}</h3>
           </Grid.Column>
         </Grid>
         <br />
-        <Menu.Item as={Link} to="/Addendums" active={activeItem === 'My Addendums In Progress'} onClick={this.handleItemClick}><Button style={buttonstyle} primary>New Addendum</Button>
+        <Menu.Item as={Link} to="/NewAddendum" active={activeItem === 'My Addendums In Progress'} onClick={this.handleItemClick}><Button style={buttonstyle} primary>New Addendum</Button>
         </Menu.Item>
         <NotificationPopup />
         <br />

@@ -21,12 +21,13 @@ var gulp = require('gulp'),
   buffer = require('vinyl-buffer'),
   gutil = require('gulp-util'),
   glob = require('glob'),
-  embedlr = require("gulp-embedlr");
+  embedlr = require("gulp-embedlr"),
+  runSequence = require("run-sequence");
 
 //html
-gulp.src('src/html/**/*.html')
-	.pipe(embedlr())
-	.pipe(gulp.dest('./dist/html'));
+// gulp.src('src/html/**/*.html')
+// 	.pipe(embedlr())
+// 	.pipe(gulp.dest('./dist/html'));
 
 // Styles
 gulp.task('styles', function() {
@@ -77,8 +78,7 @@ function minbundle() {
 gulp.task('scripts', bundle);
 gulp.task('minscripts', minbundle);
 browserwatch.on('update', bundle);
-/*
-browserwatch.on('update', minbundle); */
+// browserwatch.on('update', minbundle); 
 
 // Images
 gulp.task('images', function() {
@@ -92,10 +92,13 @@ gulp.task('images', function() {
 gulp.task('clean', function() {
   return del(['dist/styles', 'dist/scripts', 'dist/images', 'dist/html']);
 });
-
+gulp.task('apply-prod-environment', function() {
+  process.env.NODE_ENV = 'production';
+});
 // Default task
-gulp.task('default', ['clean'], function() {
-  gulp.start('styles', 'scripts', /*'minscripts', */ 'images');
+gulp.task('default', ['clean'/*, 'apply-prod-environment'*/], function() {
+  runSequence('styles', ['scripts', 'watch']);
+  // gulp.start(/*'scripts',*/ 'minscripts', 'watch');
 });
 
 // Watch

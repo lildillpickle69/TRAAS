@@ -15,7 +15,14 @@ class DateRange extends React.Component {
   }
 
   onDatesChange({ startDate, endDate }) {
-    this.setState({ startDate, endDate });
+    this.setState({ startDate }, () => {
+      const date = startDate.toISOString().substring(0, 10);
+      return this.props.getdates('startDate', date);
+    });
+    this.setState({ endDate }, () => {
+      const date = endDate.toISOString().substring(0, 10);
+      return this.props.getdates('endDate', date);
+    });
   }
 
   onFocusChange(focusedInput) {
