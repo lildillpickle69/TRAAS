@@ -46,7 +46,7 @@ gulp.task('styles', function() {
 
 var testFiles = glob.sync('src/scripts/**/*.jsx');
 var browserwatch = watchify(browserify({ entries: testFiles, extensions: ['.jsx'], cache: {}, packageCache: {} }), { delay: 500 });
-browserwatch.transform(babelify, { presets: ['es2015', 'react'] });
+browserwatch.transform(babelify, { presets: ['env', 'react', 'stage-0'] });
 
 
 function bundle() {
