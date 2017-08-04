@@ -1,6 +1,7 @@
 import TabBar from './TabBar';
 import AddendumGroup from './AddendumGroup';
 import SearchBar from './SearchBar';
-import DateComponent from './DateComponent';
+import DropdownComponent from './DropdownComponent';
+import ModalComponent from './ModalComponent';
 
-export { TabBar, AddendumGroup, SearchBar, DateComponent };
+export { TabBar, AddendumGroup, SearchBar, DropdownComponent, ModalComponent };

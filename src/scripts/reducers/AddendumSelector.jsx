@@ -1,18 +1,8 @@
 import { createSelector } from 'reselect';
 
-export const selectForm = state => state.form;
+export const selectform = state => state.form.addendum.values;
 
-export const selectStartDate = createSelector(
-  selectForm,
-  form => form.startDate,
-);
-
-export const selectEndDate = createSelector(
-  selectForm,
-  form => form.endDate,
-);
-
-export const selectFocusedInput = createSelector(
-  selectForm,
-  form => form.focusedInput,
+export const selectFormValues = createSelector(
+  selectform,
+  values => values,
 );

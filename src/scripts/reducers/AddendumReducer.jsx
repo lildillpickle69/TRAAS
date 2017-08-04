@@ -1,22 +1,22 @@
-import { SELECT_DATES, SELECT_FOCUS } from '../constants/ActionTypes';
+import { LOAD_REQUEST, LOAD_RECEIVE, LOAD_FAILURE } from '../constants/ActionTypes';
 
-const initialstate = {
-  startDate: null,
-  endDate: null,
-  focusedInput: null,
-};
-export default function AddendumReducer(state = initialstate, action) {
+export default function AddendumReducer(state = {}, action) {
   switch (action.type) {
-    case SELECT_DATES:
+    case LOAD_REQUEST:
       return {
         ...state,
-        startDate: action.payload.startDate,
-        endDate: action.payload.endDate,
+        loading: true,
       };
-    case SELECT_FOCUS:
+    case LOAD_RECEIVE:
       return {
         ...state,
-        focusedInput: action.payload.focusedInput,
+        data: action.payload.results,
+        loading: false,
+      };
+    case LOAD_FAILURE:
+      console.log('API failed');
+      return {
+        state,
       };
     default:
       return state;

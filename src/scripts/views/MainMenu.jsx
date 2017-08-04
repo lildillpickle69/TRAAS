@@ -9,8 +9,6 @@ import FinalizedAddendums from './FinalizedAddendums';
 
 const buttonstyle = { marginLeft: 20 };
 const badge = document.getElementById('badge').value;
-const date = new Date();
-
 
 const tabs = [
   { name: 'inprogress', label: 'My Addendums In Progress', linkname: '/home/inprogress' },
@@ -21,8 +19,6 @@ const tabs = [
 
 export default class MainMenu extends Component {
   render() {
-    const datestring = date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) + ('0' + date.getHours()).slice(-2) + ('0' + date.getMinutes()).slice(-2) + ('0' + date.getSeconds()).slice(-2) + badge;
-    const newaddendumlink = `index.php#/Addendums/${datestring}`;
     return (
       <div>
         <br />
@@ -38,7 +34,17 @@ export default class MainMenu extends Component {
           </Grid.Column>
         </Grid>
         <br />
-        <a href={newaddendumlink} target="_blank"><Button style={buttonstyle} primary>New Addendum</Button></a>
+        <Button
+          onClick={() => {
+            const date = new Date();
+            const datestring = date.getFullYear() + (`0${date.getMonth() + 1}`).slice(-2) + (`0${date.getDate()}`).slice(-2) + (`0${date.getHours()}`).slice(-2) + (`0${date.getMinutes()}`).slice(-2) + (`0${date.getSeconds()}`).slice(-2) + badge;
+            const newaddendumlink = `#/Addendums/${datestring}`;  
+            window.open(newaddendumlink);
+          }}
+          style={buttonstyle}
+          primary
+          content="New Addendum"
+        />
         <NotificationPopup />
         <br />
         <Divider horizontal>Technical Reports Addendum Asset Summary</Divider>

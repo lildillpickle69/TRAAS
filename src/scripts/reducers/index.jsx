@@ -4,17 +4,22 @@ import tabReducer from './TabReducer';
 import FetchAddendums from './FetchAddendums';
 import SearchReducer from './SearchReducer';
 import AddendumReducer from './AddendumReducer';
-import { reduceReducers } from '../utils';
+import modalReducer from './ModalReducer';
+// import { reduceReducers } from '../utils';
 
-const reducedform = reduceReducers(formReducer, AddendumReducer);
+
+// const reducedform = reduceReducers(formReducer, combineReducers({ addendumform: combineReducers({ values: AddendumReducer }) }));
 const RootReducer = combineReducers({ tabs: tabReducer,
   cards: FetchAddendums,
   results: SearchReducer,
-  form: reducedform });
+  modal: modalReducer,
+  database: AddendumReducer,
+  form: formReducer });
 export { FetchAddendums } from './FetchAddendums';
+export { AddendumReducer } from './AddendumReducer';
 export * from './TabSelector';
 export * from './SearchSelector';
 export * from './AddendumSelector';
+export * from './ModalSelector';
 export { SearchReducer } from './SearchReducer';
-export { AddendumReducer } from './AddendumReducer';
 export default RootReducer;

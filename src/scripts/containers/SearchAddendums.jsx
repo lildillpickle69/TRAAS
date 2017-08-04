@@ -16,6 +16,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(searchAddendums(query));
     },
   };
-}
+};
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
 
