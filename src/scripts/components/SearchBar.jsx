@@ -1,21 +1,25 @@
 import React from 'react';
 import { Search, Label } from 'semantic-ui-react';
 
+const style = { color: 'inherit' };
 const SearchAddendums = (props) => {
   const { searchloading, results, value, onSearchChange, ...otherProps } = props;
-  const categoryRenderer = ({ name }) =>
-    (<a href={`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${name}`} target="_blank">
-      <Label as={'span'} content={name} />
+  // const categoryRenderer = ({ name }) =>
+  //   (<a href={`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${name}`} target="_blank">
+  //     <Label as={'span'} content={name} />
+  //   </a>);
+  const resultRenderer = ({ name, title, description, ID }) => {
+    const formatted = title.split('\n').map(i => (
+      <div>{i}</div>));
+    const formatteddesc = description.split('\n').map(i => (
+      <div>{i}</div>));
+    return (<a style={style} href={name === 'Addendums' ? `https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${ID}` : `https://agoquality-tmpw.aero.org/TRAAS/index.php#/OOTC/${ID}`} target="_blank" key={title}>
+      <div style={style}>
+        <strong>{formatted}</strong>
+        {formatteddesc}
+      </div>
     </a>);
-  // const resultRenderer = ({ name, title, description }) => (
-  //   <a href={`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${name}`} target="_blank">
-  //     <p>
-  //       {title}
-  //       <br />
-  //       {description}
-  //     </p>
-  //   </a>
-  // );
+  };
   return (
     <Search
       category
@@ -23,8 +27,8 @@ const SearchAddendums = (props) => {
       loading={searchloading}
       results={results}
       onSearchChange={e => setInterval(onSearchChange(e.target.value), 500)}
-      /*resultRenderer={resultRenderer}*/ 
-      categoryRenderer={categoryRenderer}
+      resultRenderer={resultRenderer}
+      /*categoryRenderer={categoryRenderer}*/
       {...otherProps}
     />
   );

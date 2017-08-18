@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Grid, Divider, Button } from 'semantic-ui-react';
 import { Link, Switch, Route } from 'react-router-dom';
 import SearchAddendums from '../containers/SearchAddendums';
@@ -6,6 +7,7 @@ import TabBarContainer from '../containers/TabBarContainer';
 import NotificationPopup from '../containers/NotificationPopup';
 import Addendums from './Addendums';
 import FinalizedAddendums from './FinalizedAddendums';
+import { selectTab } from '../actions';
 
 const buttonstyle = { marginLeft: 20 };
 const badge = document.getElementById('badge').value;
@@ -17,14 +19,14 @@ const tabs = [
 ];
 
 
-export default class MainMenu extends Component {
+class MainMenu extends Component {
   render() {
     return (
       <div>
         <br />
         <Grid>
           <Grid.Column width={2}>
-            <h1><Link to="/home/inprogress">TRAAS</Link></h1>
+            <h1><Link to="/home/inprogress" onClick={() => { this.props.dispatch(selectTab('inprogress')); }}>TRAAS</Link></h1>
           </Grid.Column>
           <Grid.Column width={12}>
             <SearchAddendums />
@@ -38,7 +40,7 @@ export default class MainMenu extends Component {
           onClick={() => {
             const date = new Date();
             const datestring = date.getFullYear() + (`0${date.getMonth() + 1}`).slice(-2) + (`0${date.getDate()}`).slice(-2) + (`0${date.getHours()}`).slice(-2) + (`0${date.getMinutes()}`).slice(-2) + (`0${date.getSeconds()}`).slice(-2) + badge;
-            const newaddendumlink = `#/Addendums/${datestring}`;  
+            const newaddendumlink = `#/Addendums/${datestring}`;
             window.open(newaddendumlink);
           }}
           style={buttonstyle}
@@ -58,3 +60,4 @@ export default class MainMenu extends Component {
   }
 }
 
+export default connect()(MainMenu);

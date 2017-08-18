@@ -8,7 +8,6 @@ const DropdownComponent = ({ loadOptions, input, onChange, multi, creatable, ...
       <VirtualizedSelect
         async
         clearable
-        autofocus
         loadOptions={loadOptions}
         {...input}
         onChange={input.onChange}
@@ -26,7 +25,6 @@ const DropdownComponent = ({ loadOptions, input, onChange, multi, creatable, ...
     <VirtualizedSelect
       async
       clearable
-      autofocus
       loadOptions={loadOptions}
       {...input}
       onChange={input.onChange}

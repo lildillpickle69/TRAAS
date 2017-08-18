@@ -1,3 +1,5 @@
+// @flow
+
 import React, { PureComponent } from 'react';
 import { Modal, Button, Form } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
@@ -30,7 +32,6 @@ class ModalComponent extends PureComponent {
           <Form.Field>
             <Button type="submit" onClick={handleSubmit} content={isfinalized ? 'Submit' : 'Save'} primary />
           </Form.Field>
-          <Form.Button type="submit" onClick={() => { handleSubmit();/*generateDraft();*/ }}>Generate Draft</Form.Button>
         </Form.Group>
       </div>
     );

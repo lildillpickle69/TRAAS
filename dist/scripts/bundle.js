@@ -103132,7 +103132,6 @@ var DropdownComponent = function DropdownComponent(_ref) {
     return _react2.default.createElement(_reactVirtualizedSelect2.default, _extends({
       async: true,
       clearable: true,
-      autofocus: true,
       loadOptions: loadOptions
     }, input, {
       onChange: input.onChange,
@@ -103149,7 +103148,6 @@ var DropdownComponent = function DropdownComponent(_ref) {
   return _react2.default.createElement(_reactVirtualizedSelect2.default, _extends({
     async: true,
     clearable: true,
-    autofocus: true,
     loadOptions: loadOptions
   }, input, {
     onChange: input.onChange,
@@ -103244,13 +103242,6 @@ var ModalComponent = function (_PureComponent) {
             _semanticUiReact.Form.Field,
             null,
             _react2.default.createElement(_semanticUiReact.Button, { type: 'submit', onClick: handleSubmit, content: isfinalized ? 'Submit' : 'Save', primary: true })
-          ),
-          _react2.default.createElement(
-            _semanticUiReact.Form.Button,
-            { type: 'submit', onClick: function onClick() {
-                handleSubmit(); /*generateDraft();*/
-              } },
-            'Generate Draft'
           )
         )
       );
@@ -103281,30 +103272,54 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
+var style = { color: 'inherit' };
 var SearchAddendums = function SearchAddendums(props) {
   var searchloading = props.searchloading,
       results = props.results,
       value = props.value,
       _onSearchChange = props.onSearchChange,
       otherProps = _objectWithoutProperties(props, ['searchloading', 'results', 'value', 'onSearchChange']);
+  // const categoryRenderer = ({ name }) =>
+  //   (<a href={`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${name}`} target="_blank">
+  //     <Label as={'span'} content={name} />
+  //   </a>);
 
-  var categoryRenderer = function categoryRenderer(_ref) {
-    var name = _ref.name;
+
+  var resultRenderer = function resultRenderer(_ref) {
+    var name = _ref.name,
+        title = _ref.title,
+        description = _ref.description,
+        ID = _ref.ID;
+
+    var formatted = title.split('\n').map(function (i) {
+      return _react2.default.createElement(
+        'div',
+        null,
+        i
+      );
+    });
+    var formatteddesc = description.split('\n').map(function (i) {
+      return _react2.default.createElement(
+        'div',
+        null,
+        i
+      );
+    });
     return _react2.default.createElement(
       'a',
-      { href: 'https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=' + name, target: '_blank' },
-      _react2.default.createElement(_semanticUiReact.Label, { as: 'span', content: name })
+      { style: style, href: name === 'Addendums' ? 'https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=' + ID : 'https://agoquality-tmpw.aero.org/TRAAS/index.php#/OOTC/' + ID, target: '_blank', key: title },
+      _react2.default.createElement(
+        'div',
+        { style: style },
+        _react2.default.createElement(
+          'strong',
+          null,
+          formatted
+        ),
+        formatteddesc
+      )
     );
   };
-  // const resultRenderer = ({ name, title, description }) => (
-  //   <a href={`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${name}`} target="_blank">
-  //     <p>
-  //       {title}
-  //       <br />
-  //       {description}
-  //     </p>
-  //   </a>
-  // );
   return _react2.default.createElement(_semanticUiReact.Search, _extends({
     category: true,
     fluid: true,
@@ -103312,9 +103327,9 @@ var SearchAddendums = function SearchAddendums(props) {
     results: results,
     onSearchChange: function onSearchChange(e) {
       return setInterval(_onSearchChange(e.target.value), 500);
-    }
-    /*resultRenderer={resultRenderer}*/
-    , categoryRenderer: categoryRenderer
+    },
+    resultRenderer: resultRenderer
+    /*categoryRenderer={categoryRenderer}*/
   }, otherProps));
 };
 
@@ -103563,7 +103578,7 @@ var App = function App() {
 
 exports.default = App;
 
-},{"../reducers":1492,"./Main":1476,"react":789,"react-redux":705,"redux":897,"redux-api-middleware":792,"redux-thunk":891}],1470:[function(require,module,exports){
+},{"../reducers":1492,"./Main":1475,"react":789,"react-redux":705,"redux":897,"redux-api-middleware":792,"redux-thunk":891}],1470:[function(require,module,exports){
 // import React, { PureComponent } from 'react';
 // import VirtualizedSelect from 'react-virtualized-select';
 // import axios from 'axios';
@@ -103823,8 +103838,8 @@ var DropdownContainer = function (_PureComponent) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_semanticUiReact.Form.Field, _extends({ error: this.props.meta.error, loadOptions: this.getOptions }, this.props, { control: _components.DropdownComponent, onChange: this.onChange })),
-        _react2.default.createElement(_semanticUiReact.Message, { error: true, visible: this.props.meta.error, header: 'Field Required', content: 'Please fill out this field.' })
+        _react2.default.createElement(_semanticUiReact.Form.Field, _extends({ error: this.props.meta.error && this.props.meta.touched, loadOptions: this.getOptions }, this.props, { control: _components.DropdownComponent, onChange: this.onChange })),
+        _react2.default.createElement(_semanticUiReact.Message, { error: true, visible: this.props.meta.error && this.props.meta.touched, header: 'Field Required', content: 'Please fill out this field.' })
       );
     }
   }]);
@@ -103871,6 +103886,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _react = require('react');
@@ -103884,6 +103901,12 @@ var _semanticUiReact = require('semantic-ui-react');
 var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _reactRouterDom = require('react-router-dom');
 
 var _reduxForm = require('redux-form');
 
@@ -103902,6 +103925,12 @@ var _ModalContainer2 = _interopRequireDefault(_ModalContainer);
 var _actions = require('../actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
@@ -103950,8 +103979,8 @@ var renderTextField = function renderTextField(_ref2) {
   return _react2.default.createElement(
     'div',
     null,
-    _react2.default.createElement(_semanticUiReact.Form.Input, _extends({ error: error, placeholder: label, label: label }, input, custom)),
-    _react2.default.createElement(_semanticUiReact.Message, { error: true, visible: error, header: 'Field Required', content: 'Please fill out this field.' })
+    _react2.default.createElement(_semanticUiReact.Form.Input, _extends({ error: error && touched, placeholder: label, label: label }, input, custom)),
+    _react2.default.createElement(_semanticUiReact.Message, { error: true, visible: touched && error, header: 'Field Required', content: 'Please fill out this field.' })
   );
 };
 var renderTextArea = function renderTextArea(_ref3) {
@@ -103965,168 +103994,215 @@ var renderTextArea = function renderTextArea(_ref3) {
 
   return _react2.default.createElement(_semanticUiReact.Form.TextArea, _extends({ rows: 4, label: label }, input, custom, { error: touched && error }));
 };
-var FormContainer = function FormContainer(props) {
-  var handleSubmit = props.handleSubmit,
-      generateDraft = props.generateDraft,
-      exists = props.exists,
-      permission = props.permission,
-      number = props.number,
-      ID = props.ID,
-      isfinalized = props.isfinalized;
 
-  var center = { position: 'relative', left: '40%' };
-  if (exists == null || false || exists && permission) {
-    return _react2.default.createElement(
-      _semanticUiReact.Segment,
-      null,
-      _react2.default.createElement(
-        _semanticUiReact.Dimmer,
-        { active: exists === null },
-        _react2.default.createElement(_semanticUiReact.Loader, null)
-      ),
-      _react2.default.createElement(
-        _semanticUiReact.Form,
-        { onSubmit: handleSubmit },
-        _react2.default.createElement(
-          _semanticUiReact.Divider,
-          { horizontal: true },
-          'Addendum ',
-          number
-        ),
-        _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          _semanticUiReact.Form.Group,
-          { width: 'equal' },
-          _react2.default.createElement(
-            _semanticUiReact.Grid,
-            { celled: 'internally', verticalAlign: 'middle', stackable: true, centered: true },
-            _react2.default.createElement(
-              _semanticUiReact.Grid.Row,
-              null,
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 4 },
-                _react2.default.createElement(_reduxForm.Fields, {
-                  names: ['interval_start', 'interval_end'],
-                  component: renderDates,
-                  normalize: normalizeDates,
-                  format: formatDates,
-                  label: 'Select or type the dates in the format MM/DD/YYYY.'
-                })
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 2 },
-                _react2.default.createElement(_reduxForm.Field, { validate: required, name: 'report_name', type: 'text', component: renderTextField, label: 'Report Title', id: 'title' })
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 3 },
-                _react2.default.createElement(_reduxForm.Field, { validate: required, component: _DropdownContainer2.default, query: 'authors', name: 'PI', label: 'PI Name', id: 'pi' })
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 3 },
-                _react2.default.createElement(_reduxForm.Field, { component: _DropdownContainer2.default, query: 'authors', label: 'Additional Authors', name: 'OtherAuthors', multi: true })
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 2 },
-                _react2.default.createElement(_reduxForm.Field, { label: 'JO', name: 'JO', type: 'text', component: renderTextField, id: 'JO' })
-              )
-            )
-          )
-        ),
-        _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          _semanticUiReact.Form.Group,
+var FormContainer = function (_Component) {
+  _inherits(FormContainer, _Component);
+
+  function FormContainer(props) {
+    _classCallCheck(this, FormContainer);
+
+    var _this = _possibleConstructorReturn(this, (FormContainer.__proto__ || Object.getPrototypeOf(FormContainer)).call(this, props));
+
+    _this.id = _this.props.url.substring(11);
+    _this.state = {
+      exists: null,
+      permission: _this.id.length === 19
+    };
+    return _this;
+  }
+
+  _createClass(FormContainer, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/data.pl?query=' + this.id).then(function (response) {
+        _this2.setState({
+          exists: response.data.results[0].exists === 'true',
+          permission: response.data.results[0].permission === "true"
+        }, function () {
+          return _this2.forceUpdate();
+        });
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          handleSubmit = _props.handleSubmit,
+          number = _props.number,
+          ID = _props.ID,
+          isfinalized = _props.isfinalized;
+
+      var center = { position: 'relative', left: '50%' };
+      var checkboxcenter = { position: 'relative', left: '45%' };
+      if (this.state.exists === null || this.state.exists === false || this.state.exists && this.state.permission) {
+        return _react2.default.createElement(
+          _semanticUiReact.Segment,
           null,
           _react2.default.createElement(
-            _semanticUiReact.Grid,
-            { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
-            _react2.default.createElement(
-              _semanticUiReact.Grid.Row,
-              null,
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 4 },
-                _react2.default.createElement(_reduxForm.Field, { type: 'text', component: renderTextField, id: 'report_number', label: 'Report Number', name: 'report_number' })
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 4 },
-                _react2.default.createElement(_reduxForm.Field, { validate: required, component: _DropdownContainer2.default, label: 'Assets', id: 'assets', name: 'Assets', multi: true, query: 'assets' })
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 4 },
-                _react2.default.createElement(_reduxForm.Field, { component: _DropdownContainer2.default, label: 'Keywords', id: 'keywords', name: 'Keywords', query: 'keywords', multi: true, creatable: true })
-              ),
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 3 },
-                _react2.default.createElement(_reduxForm.Field, { type: 'text', component: renderTextField, id: 'program', label: 'Program', name: 'Program' })
-              )
-            )
-          )
-        ),
-        _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          _semanticUiReact.Form.Group,
-          { width: 'equal' },
+            _semanticUiReact.Dimmer,
+            { active: this.state.exists === null },
+            _react2.default.createElement(_semanticUiReact.Loader, null)
+          ),
           _react2.default.createElement(
-            _semanticUiReact.Grid,
-            { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
+            'h1',
+            null,
             _react2.default.createElement(
-              _semanticUiReact.Grid.Row,
-              null,
-              _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 12 },
-                _react2.default.createElement(_reduxForm.Field, { id: 'description', label: 'Description', name: 'Comment', component: renderTextArea })
-              )
+              _reactRouterDom.Link,
+              { to: '/home/inprogress' },
+              'TRAAS'
             )
-          )
-        ),
-        _react2.default.createElement(
-          _semanticUiReact.Form.Group,
-          { width: 'equal' },
+          ),
           _react2.default.createElement(
-            _semanticUiReact.Grid,
-            { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
+            _semanticUiReact.Form,
+            { onSubmit: handleSubmit },
             _react2.default.createElement(
-              _semanticUiReact.Grid.Row,
+              _semanticUiReact.Divider,
+              { horizontal: true },
+              'Addendum ',
+              number
+            ),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(
+              _semanticUiReact.Form.Group,
+              { width: 'equal' },
+              _react2.default.createElement(
+                _semanticUiReact.Grid,
+                { celled: 'internally', verticalAlign: 'middle', stackable: true, centered: true },
+                _react2.default.createElement(
+                  _semanticUiReact.Grid.Row,
+                  null,
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 4 },
+                    _react2.default.createElement(_reduxForm.Fields, {
+                      names: ['interval_start', 'interval_end'],
+                      component: renderDates,
+                      normalize: normalizeDates,
+                      format: formatDates,
+                      label: 'Select or type the dates in the format MM/DD/YYYY.'
+                    })
+                  ),
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 2 },
+                    _react2.default.createElement(_reduxForm.Field, { validate: required, name: 'report_name', type: 'text', component: renderTextField, label: 'Report Title', id: 'title' })
+                  ),
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 3 },
+                    _react2.default.createElement(_reduxForm.Field, { validate: required, component: _DropdownContainer2.default, query: 'authors', name: 'PI', label: 'PI Name', id: 'pi' })
+                  ),
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 3 },
+                    _react2.default.createElement(_reduxForm.Field, { component: _DropdownContainer2.default, query: 'authors', label: 'Additional Authors', name: 'OtherAuthors', multi: true })
+                  ),
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 2 },
+                    _react2.default.createElement(_reduxForm.Field, { label: 'JO', name: 'JO', type: 'text', component: renderTextField, id: 'JO' })
+                  )
+                )
+              )
+            ),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(
+              _semanticUiReact.Form.Group,
               null,
               _react2.default.createElement(
-                _semanticUiReact.Grid.Column,
-                { width: 12 },
-                _react2.default.createElement(_reduxForm.Field, {
-                  id: 'nonaerospace',
-                  label: 'NON Aerospace MTE: Provide Agency, Property Identification Number, Manufacturer, Model and Calibration Date.',
-                  name: 'TRAAS_non_MTE',
-                  component: renderTextArea
-                })
+                _semanticUiReact.Grid,
+                { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
+                _react2.default.createElement(
+                  _semanticUiReact.Grid.Row,
+                  null,
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 4 },
+                    _react2.default.createElement(_reduxForm.Field, { type: 'text', component: renderTextField, id: 'report_number', label: 'Report Number', name: 'report_number' })
+                  ),
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 4 },
+                    _react2.default.createElement(_reduxForm.Field, { validate: required, component: _DropdownContainer2.default, label: 'Assets', id: 'assets', name: 'Assets', multi: true, query: 'assets' })
+                  ),
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 4 },
+                    _react2.default.createElement(_reduxForm.Field, { component: _DropdownContainer2.default, label: 'Keywords', id: 'keywords', name: 'Keywords', query: 'keywords', multi: true, creatable: true })
+                  ),
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 3 },
+                    _react2.default.createElement(_reduxForm.Field, { type: 'text', component: renderTextField, id: 'program', label: 'Program', name: 'Program' })
+                  )
+                )
               )
-            )
+            ),
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(
+              _semanticUiReact.Form.Group,
+              { width: 'equal' },
+              _react2.default.createElement(
+                _semanticUiReact.Grid,
+                { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
+                _react2.default.createElement(
+                  _semanticUiReact.Grid.Row,
+                  null,
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 12 },
+                    _react2.default.createElement(_reduxForm.Field, { id: 'description', label: 'Description', name: 'Comment', component: renderTextArea })
+                  )
+                )
+              )
+            ),
+            _react2.default.createElement(
+              _semanticUiReact.Form.Group,
+              { width: 'equal' },
+              _react2.default.createElement(
+                _semanticUiReact.Grid,
+                { centered: true, celled: 'internally', verticalAlign: 'middle', stackable: true },
+                _react2.default.createElement(
+                  _semanticUiReact.Grid.Row,
+                  null,
+                  _react2.default.createElement(
+                    _semanticUiReact.Grid.Column,
+                    { width: 12 },
+                    _react2.default.createElement(_reduxForm.Field, {
+                      id: 'nonaerospace',
+                      label: 'NON Aerospace MTE: Provide Agency, Property Identification Number, Manufacturer, Model and Calibration Date.',
+                      name: 'TRAAS_non_MTE',
+                      component: renderTextArea
+                    })
+                  )
+                )
+              )
+            ),
+            _react2.default.createElement(_reduxForm.Field, {
+              style: checkboxcenter,
+              component: renderCheckbox,
+              label: 'Do you want to finalize this addendum?',
+              name: 'Complete',
+              id: 'finalized'
+            }),
+            _react2.default.createElement(_ModalContainer2.default, { center: center, isfinalized: isfinalized, handleSubmit: handleSubmit })
           )
-        ),
-        _react2.default.createElement(_reduxForm.Field, {
-          style: center,
-          component: renderCheckbox,
-          label: 'Do you want to finalize this addendum?',
-          name: 'Complete',
-          id: 'finalized'
-        }),
-        _react2.default.createElement(_ModalContainer2.default, { center: center, isfinalized: isfinalized, handleSubmit: handleSubmit })
-      )
-    );
-  }
-  return _react2.default.createElement(
-    'h1',
-    null,
-    'You do not have permission to edit this addendum'
-  );
-};
+        );
+      }
+      return _react2.default.createElement(
+        'h1',
+        null,
+        'You do not have permission to edit this addendum'
+      );
+    }
+  }]);
+
+  return FormContainer;
+}(_react.Component);
 
 var reduxFormDecorator = (0, _reduxForm.reduxForm)({
   form: 'addendumform'
@@ -104147,61 +104223,7 @@ var reduxConnector = (0, _reactRedux.connect)(function (state) {
 
 exports.default = reduxConnector(reduxFormDecorator(FormContainer));
 
-},{"../actions":1457,"./DateRange":1471,"./DropdownContainer":1472,"./ModalContainer":1477,"moment":478,"react":789,"react-redux":705,"redux-form":853,"semantic-ui-react":1002}],1475:[function(require,module,exports){
-// import React, { PureComponent } from 'react';
-// import VirtualizedSelect from 'react-virtualized-select';
-// import { Creatable } from 'react-select';
-// import axios from 'axios';
-// import createFilterOptions from 'react-select-fast-filter-options';
-
-// export default class KeywordsDropdown extends PureComponent { 
-//   constructor(props) {
-//     super(props);
-//     this.state = {};
-//     this.handleChange = this.handleChange.bind(this);
-//   }
-
-//   componentDidMount() {
-//     axios
-//       .get('https://agoquality-tmpw.aero.org/secure/TRAASweb/keywords.pl?query=')
-//       .then((response) => {
-//         this.setState({
-//           options: response.data.results,
-//         });
-//       })
-//       .catch((err) => { console.log(err); });
-//   }
-//   // shouldComponentUpdate(nextProps, nextState) {
-//   //   if (this.state.selectedKeywords !== nextState.selectedKeywords) {
-//   //     return true;
-//   //   }
-//   //   return false;
-//   // }
-//   handleChange(selectedKeywords) {
-//     this.setState({ selectedKeywords }, () => this.props.getkeywords('keywords', selectedKeywords));
-//   }
-//   render() {
-//     const options = this.state.options;
-//     const filterOptions = createFilterOptions({ options });
-//     return (
-//       <VirtualizedSelect
-//         autofocus
-//         clearable
-//         filterOptions={filterOptions}
-//         labelKey="label"
-//         multi
-//         onChange={this.handleChange}
-//         options={options}
-//         value={this.state.selectedKeywords}
-//         selectComponent={Creatable}
-//         valueKey="value"
-//       />
-//     );
-//   }
-// }
-"use strict";
-
-},{}],1476:[function(require,module,exports){
+},{"../actions":1457,"./DateRange":1471,"./DropdownContainer":1472,"./ModalContainer":1476,"axios":42,"moment":478,"react":789,"react-redux":705,"react-router-dom":722,"redux-form":853,"semantic-ui-react":1002}],1475:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -104234,7 +104256,8 @@ var Main = function Main() {
             return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/home/inprogress' });
           } }),
         _react2.default.createElement(_reactRouterDom.Route, { path: '/home', component: _views.MainMenu }),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/Addendums/:number', component: _views.NewAddendum })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/Addendums/:number', component: _views.NewAddendum }),
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/OOTC/:number', component: _views.OOTCReports })
       )
     )
   );
@@ -104242,7 +104265,7 @@ var Main = function Main() {
 
 exports.default = Main;
 
-},{"../views":1501,"react":789,"react-router-dom":722}],1477:[function(require,module,exports){
+},{"../views":1501,"react":789,"react-router-dom":722}],1476:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -104272,7 +104295,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 exports.default = (0, _reactRedux.connect)(mapState, mapDispatchToProps)(_components.ModalComponent);
 
-},{"../actions/":1457,"../components":1465,"../reducers":1492,"react-redux":705}],1478:[function(require,module,exports){
+},{"../actions/":1457,"../components":1465,"../reducers":1492,"react-redux":705}],1477:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -104306,7 +104329,284 @@ var NotificationPopup = function NotificationPopup() {
 
 exports.default = NotificationPopup;
 
-},{"react":789,"semantic-ui-react":1002}],1479:[function(require,module,exports){
+},{"react":789,"semantic-ui-react":1002}],1478:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _reactRedux = require('react-redux');
+
+var _reactRouterDom = require('react-router-dom');
+
+var _semanticUiReact = require('semantic-ui-react');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var style = { textAlign: 'center' };
+
+var OOTCContainer = function (_PureComponent) {
+  _inherits(OOTCContainer, _PureComponent);
+
+  function OOTCContainer(props) {
+    _classCallCheck(this, OOTCContainer);
+
+    var _this = _possibleConstructorReturn(this, (OOTCContainer.__proto__ || Object.getPrototypeOf(OOTCContainer)).call(this, props));
+
+    _this.id = window.location.pathname;
+    console.log(_this.id);
+    console.log(_this.props);
+    return _this;
+  }
+
+  _createClass(OOTCContainer, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC?query=' + this.id).then(function (response) {
+        return console.log(response);
+      }).catch(function (err) {
+        return console.log(err);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'h1',
+          null,
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/home/inprogress' },
+            'TRAAS'
+          )
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'Out-of-Tolerance Condition # Something'
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _semanticUiReact.Table,
+          { celled: true, padded: true, color: 'purple' },
+          _react2.default.createElement(
+            _semanticUiReact.Table.Header,
+            null,
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Reported By'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Affected Dates'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Date Reported'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Asset'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Manufacturer'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Model'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Description'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Serial'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Body,
+            null,
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                'Cherae Highsmith'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                '2016-01-04 to 2016-01-04'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                '2017-08-11 09:24:35'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                'AAG087'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                'AGILENT'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                '34401A'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                'MULTIMETER'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                'SG41007195'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Footer,
+            { fullWidth: true },
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { colSpan: '8', style: style },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  'Disposition:'
+                ),
+                '  Repaired and Calibrated'
+              )
+            ),
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { colSpan: '8', style: style },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  'Comment:'
+                ),
+                '  Unit received, following repair performed: Replaced K701-K703 (intermittent attenuator relays- most likely cause of amplitude accuracy measurement failure by the customer).'
+              )
+            )
+          )
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'TRAAS Addendums Affected'
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'Emails and Responses'
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Table,
+          { celled: true, padded: true, color: 'blue' },
+          _react2.default.createElement(
+            _semanticUiReact.Table.Header,
+            null,
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { collapsing: true },
+                'Badge'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { collapsing: true },
+                'Username'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { collapsing: true },
+                'Email'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Reason for Sending'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { collapsing: true },
+                'PI Disposition'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { collapsing: true },
+                'Comment'
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'OOTC Attachments'
+        )
+      );
+    }
+  }]);
+
+  return OOTCContainer;
+}(_react.PureComponent);
+
+exports.default = (0, _reactRedux.connect)()(OOTCContainer);
+
+},{"axios":42,"react":789,"react-redux":705,"react-router-dom":722,"semantic-ui-react":1002}],1479:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -104397,7 +104697,7 @@ exports.TabBarContainer = _TabBarContainer2.default;
 exports.FinalizedContainer = _FinalizedContainer2.default;
 exports.AddendumsContainer = _AddendumsContainer2.default;
 
-},{"./AddendumsContainer":1468,"./App":1469,"./FinalizedContainer":1473,"./NotificationPopup":1478,"./TabBarContainer":1480}],1482:[function(require,module,exports){
+},{"./AddendumsContainer":1468,"./App":1469,"./FinalizedContainer":1473,"./NotificationPopup":1477,"./TabBarContainer":1480}],1482:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -104944,6 +105244,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = require('react-redux');
+
 var _semanticUiReact = require('semantic-ui-react');
 
 var _reactRouterDom = require('react-router-dom');
@@ -104967,6 +105269,8 @@ var _Addendums2 = _interopRequireDefault(_Addendums);
 var _FinalizedAddendums = require('./FinalizedAddendums');
 
 var _FinalizedAddendums2 = _interopRequireDefault(_FinalizedAddendums);
+
+var _actions = require('../actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -104993,6 +105297,8 @@ var MainMenu = function (_Component) {
   _createClass(MainMenu, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
@@ -105008,7 +105314,9 @@ var MainMenu = function (_Component) {
               null,
               _react2.default.createElement(
                 _reactRouterDom.Link,
-                { to: '/home/inprogress' },
+                { to: '/home/inprogress', onClick: function onClick() {
+                    _this2.props.dispatch((0, _actions.selectTab)('inprogress'));
+                  } },
                 'TRAAS'
               )
             )
@@ -105061,9 +105369,9 @@ var MainMenu = function (_Component) {
   return MainMenu;
 }(_react.Component);
 
-exports.default = MainMenu;
+exports.default = (0, _reactRedux.connect)()(MainMenu);
 
-},{"../containers/NotificationPopup":1478,"../containers/SearchAddendums":1479,"../containers/TabBarContainer":1480,"./Addendums":1495,"./FinalizedAddendums":1496,"react":789,"react-router-dom":722,"semantic-ui-react":1002}],1499:[function(require,module,exports){
+},{"../actions":1457,"../containers/NotificationPopup":1477,"../containers/SearchAddendums":1479,"../containers/TabBarContainer":1480,"./Addendums":1495,"./FinalizedAddendums":1496,"react":789,"react-redux":705,"react-router-dom":722,"semantic-ui-react":1002}],1499:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -105082,6 +105390,10 @@ var _axios2 = _interopRequireDefault(_axios);
 
 var _reactRedux = require('react-redux');
 
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
 var _FormContainer = require('../containers/FormContainer');
 
 var _FormContainer2 = _interopRequireDefault(_FormContainer);
@@ -105096,21 +105408,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// import DateRange from './DateRange';
-// import AuthorsDropdown from './AuthorsDropdown';
-// import AssetsDropdown from './AssetsDropdown';
-// import KeywordsDropdown from './KeywordsDropdown';
-// import PiDropdown from './PiDropdown';
-
-
-/* 
-Load data -> if data is blank, just generate empty form.
-If data is not blank, check if user is authorized. 
-If not authorized, put a user is not authorized message.
-Otherwise, load data normally;
-
-*/
-
 var NewAddendum = function (_PureComponent) {
   _inherits(NewAddendum, _PureComponent);
 
@@ -105120,10 +105417,6 @@ var NewAddendum = function (_PureComponent) {
     var _this = _possibleConstructorReturn(this, (NewAddendum.__proto__ || Object.getPrototypeOf(NewAddendum)).call(this, props));
 
     _this.id = _this.props.location.pathname.substring(11);
-    _this.state = {
-      exists: null,
-      permission: _this.id.length === 19
-    };
     _this.submit = _this.submit.bind(_this);
     return _this;
   }
@@ -105134,30 +105427,22 @@ var NewAddendum = function (_PureComponent) {
       var _this2 = this;
 
       console.log(values);
+      var now = (0, _moment2.default)().format('YYYY-MM-DD HH:mm:ss');
+      var create = this.props.location.pathname.substring(11, 25);
+      create = create.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
       (0, _axios2.default)({
         method: 'post',
         url: 'https://agoquality-tmpw.aero.org/secure/TRAASweb/TRAAS.pl',
         data: {
           values: values,
-          ID: this.id
+          ID: this.id,
+          Last_Modified: now,
+          Create_Date: create
         }
       }).then(function (response) {
         _this2.props.dispatch((0, _actions.toggleModal)(true));
         console.log(response);
-      }).catch(function (err) {
-        console.log(err);
-      });
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this3 = this;
-
-      _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/data.pl?query=' + this.id).then(function (response) {
-        _this3.setState({
-          exists: response.data.results[0].exists === 'true',
-          permission: response.data.results[0].permission === 'true'
-        });
+        window.open('https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=' + _this2.id);
       }).catch(function (err) {
         console.log(err);
       });
@@ -105165,7 +105450,7 @@ var NewAddendum = function (_PureComponent) {
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(_FormContainer2.default, { exists: this.state.exists, onSubmit: this.submit, number: this.id, ID: this.id, permission: this.state.permission });
+      return _react2.default.createElement(_FormContainer2.default, { onSubmit: this.submit, number: this.id, ID: this.id, url: this.props.location.pathname });
     }
   }]);
 
@@ -105174,16 +105459,517 @@ var NewAddendum = function (_PureComponent) {
 
 exports.default = (0, _reactRedux.connect)()(NewAddendum);
 
-},{"../actions":1457,"../containers/FormContainer":1474,"axios":42,"react":789,"react-redux":705}],1500:[function(require,module,exports){
-"use strict";
-
-},{}],1501:[function(require,module,exports){
+},{"../actions":1457,"../containers/FormContainer":1474,"axios":42,"moment":478,"react":789,"react-redux":705}],1500:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.NewAddendum = exports.Addendums = exports.MainMenu = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _reactRedux = require('react-redux');
+
+var _reactRouterDom = require('react-router-dom');
+
+var _semanticUiReact = require('semantic-ui-react');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var style = { textAlign: 'center' };
+var style1 = { left: '45%', textAlign: 'center' };
+var style2 = { left: '43%', textAlign: 'center' };
+
+var OOTCReports = function (_PureComponent) {
+  _inherits(OOTCReports, _PureComponent);
+
+  function OOTCReports(props) {
+    _classCallCheck(this, OOTCReports);
+
+    var _this = _possibleConstructorReturn(this, (OOTCReports.__proto__ || Object.getPrototypeOf(OOTCReports)).call(this, props));
+
+    _this.id = _this.props.location.pathname.substring(6);
+    _this.state = {
+      ReportedBy: '',
+      startdate: null,
+      enddate: null,
+      Asset: '',
+      Manufacturer: '',
+      Model: '',
+      Description: '',
+      Serial: '',
+      Disposition: '',
+      Comment: '',
+      Date: null,
+      emaildata: [],
+      loading: true,
+      attachments: [],
+      parameters: [],
+      reports: []
+    };
+    return _this;
+  }
+
+  _createClass(OOTCReports, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      _axios2.default.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?query=' + this.id).then(function (response) {
+        var data = response.data.results[0];
+        _this2.setState({
+          ReportedBy: data.ReportedBy,
+          Comment: data.Comment,
+          startdate: data.startdate,
+          enddate: data.enddate,
+          Asset: data.Asset,
+          Date: data.Date,
+          Description: data.Description,
+          Manufacturer: data.Manufacturer,
+          Serial: data.Serial,
+          Model: data.Model,
+          Disposition: data.Disposition,
+          emaildata: response.data.emails,
+          loading: false,
+          attachments: response.data.attachments,
+          parameters: response.data.parameters,
+          reports: response.data.reports
+        });
+      }).catch(function (err) {
+        return console.log(err);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var emailstate = this.state.emaildata;
+      var emails = emailstate.map(function (emailInfo) {
+        var badge = emailInfo.badge,
+            email = emailInfo.email,
+            username = emailInfo.username,
+            comment = emailInfo.comment,
+            reason = emailInfo.reason,
+            disposition = emailInfo.disposition;
+
+        return _react2.default.createElement(
+          _semanticUiReact.Table.Row,
+          { key: reason },
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: badge },
+            badge
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: username },
+            username
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: email },
+            email
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: reason },
+            reason
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: 'Disposition' },
+            disposition
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: 'Comment' },
+            comment
+          )
+        );
+      });
+      var reportstate = this.state.reports;
+      var reports = reportstate.map(function (reportInfo) {
+        var link = reportInfo.link,
+            name = reportInfo.name;
+
+        return _react2.default.createElement(
+          'div',
+          { style: style1, key: name },
+          _react2.default.createElement(_semanticUiReact.Button, {
+            as: 'a',
+            target: '_blank',
+            style: style1,
+            href: link,
+            key: name,
+            content: name,
+            icon: 'download',
+            labelPosition: 'left',
+            label: { /*href: (JSON.stringify(link)).replace(/\"/g, ''), */basic: true, color: 'green', content: 'Download' }
+          })
+        );
+      });
+      var parameterstate = this.state.parameters;
+      var parameters = parameterstate.map(function (parameterinfo) {
+        var parameter = parameterinfo.parameter,
+            value = parameterinfo.value,
+            adjust = parameterinfo.adjust,
+            accuracy = parameterinfo.accuracy;
+
+        return _react2.default.createElement(
+          _semanticUiReact.Table.Row,
+          { key: parameter },
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: parameter },
+            parameter
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: value },
+            value
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: adjust },
+            adjust
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Cell,
+            { key: accuracy },
+            accuracy
+          )
+        );
+      });
+      var attachstate = this.state.attachments;
+      var attachments = attachstate.map(function (attachInfo) {
+        var link = attachInfo.link,
+            filename = attachInfo.filename;
+
+        return _react2.default.createElement(
+          'div',
+          { style: style1, key: filename },
+          _react2.default.createElement(_semanticUiReact.Button, {
+            as: 'a',
+            style: style1,
+            href: link,
+            key: filename,
+            content: filename,
+            icon: 'download',
+            labelPosition: 'left',
+            label: { /*href: (JSON.stringify(link)).replace(/\"/g, ''),*/basic: true, color: 'green', content: 'Download' }
+          })
+        );
+      });
+      return _react2.default.createElement(
+        _semanticUiReact.Segment,
+        null,
+        _react2.default.createElement(
+          _semanticUiReact.Dimmer,
+          { active: this.state.loading, inverted: true },
+          _react2.default.createElement(_semanticUiReact.Loader, null)
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'h1',
+          null,
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/home/inprogress' },
+            'TRAAS'
+          )
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'Out-of-Tolerance Condition #',
+          this.id
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _semanticUiReact.Table,
+          { celled: true, padded: true, color: 'purple' },
+          _react2.default.createElement(
+            _semanticUiReact.Table.Header,
+            null,
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Reported By'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Affected Dates'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Date Reported'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Asset'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Manufacturer'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Model'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Description'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Serial'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Body,
+            null,
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                this.state.ReportedBy
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                this.state.startdate,
+                ' to ',
+                this.state.enddate
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                this.state.Date
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                this.state.Asset
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                this.state.Manufacturer
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                this.state.Model
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                this.state.Description
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.Cell,
+                null,
+                this.state.Serial
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Footer,
+            { fullWidth: true },
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { colSpan: '8', style: style },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  'Disposition:'
+                ),
+                ' ',
+                this.state.Disposition
+              )
+            ),
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { colSpan: '8', style: style },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  'Comment:'
+                ),
+                ' ',
+                this.state.Comment
+              )
+            )
+          )
+        ),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'TRAAS Addendums Affected'
+        ),
+        this.state.reports.length === 0 && _react2.default.createElement(
+          _semanticUiReact.Message,
+          { compact: true, positive: true, style: style2 },
+          _react2.default.createElement(
+            _semanticUiReact.Message.Header,
+            { style: style },
+            'No Addendums Affected'
+          )
+        ),
+        reports,
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'OOTC Data'
+        ),
+        this.state.attachments.length === 0 && this.state.parameters.length === 0 && _react2.default.createElement(
+          _semanticUiReact.Message,
+          { compact: true, positive: true, style: style2 },
+          _react2.default.createElement(
+            _semanticUiReact.Message.Header,
+            { style: style },
+            'No OOTC Data Available'
+          )
+        ),
+        attachments,
+        this.state.parameters.length > 0 && _react2.default.createElement(
+          _semanticUiReact.Table,
+          { celled: true, compact: true, color: 'green' },
+          _react2.default.createElement(
+            _semanticUiReact.Table.Header,
+            null,
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Parameter'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'MFG Accuracy'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Measured Value'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Adjusted OK'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Body,
+            null,
+            parameters
+          )
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Divider,
+          { horizontal: true },
+          'Emails and Responses'
+        ),
+        _react2.default.createElement(
+          _semanticUiReact.Table,
+          { celled: true, compact: true, color: 'blue' },
+          _react2.default.createElement(
+            _semanticUiReact.Table.Header,
+            null,
+            _react2.default.createElement(
+              _semanticUiReact.Table.Row,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Badge'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Username'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { collapsing: true },
+                'Email'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Reason for Sending'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                { collapsing: true },
+                'PI Disposition'
+              ),
+              _react2.default.createElement(
+                _semanticUiReact.Table.HeaderCell,
+                null,
+                'Comment'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Table.Body,
+            null,
+            emails
+          )
+        )
+      );
+    }
+  }]);
+
+  return OOTCReports;
+}(_react.PureComponent);
+
+exports.default = (0, _reactRedux.connect)()(OOTCReports);
+
+},{"axios":42,"react":789,"react-redux":705,"react-router-dom":722,"semantic-ui-react":1002}],1501:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.OOTCReports = exports.NewAddendum = exports.Addendums = exports.MainMenu = undefined;
 
 var _MainMenu = require('./MainMenu');
 
@@ -105197,10 +105983,15 @@ var _NewAddendum = require('./NewAddendum');
 
 var _NewAddendum2 = _interopRequireDefault(_NewAddendum);
 
+var _OOTCReports = require('./OOTCReports');
+
+var _OOTCReports2 = _interopRequireDefault(_OOTCReports);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.MainMenu = _MainMenu2.default;
 exports.Addendums = _Addendums2.default;
 exports.NewAddendum = _NewAddendum2.default;
+exports.OOTCReports = _OOTCReports2.default;
 
-},{"./Addendums":1495,"./MainMenu":1498,"./NewAddendum":1499}]},{},[1455,1457,1456,1458,1459,1460,1465,1461,1462,1463,1464,1466,1467,1468,1469,1470,1471,1472,1473,1474,1481,1475,1476,1477,1478,1479,1480,1482,1483,1484,1485,1492,1486,1487,1488,1489,1490,1491,1493,1494,1495,1496,1497,1501,1498,1499,1500]);
+},{"./Addendums":1495,"./MainMenu":1498,"./NewAddendum":1499,"./OOTCReports":1500}]},{},[1455,1457,1456,1458,1459,1460,1465,1461,1462,1463,1464,1466,1467,1468,1469,1470,1471,1472,1473,1474,1481,1475,1476,1477,1478,1479,1480,1482,1483,1484,1485,1492,1486,1487,1488,1489,1490,1491,1493,1494,1495,1496,1497,1501,1498,1499,1500]);

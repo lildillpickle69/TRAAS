@@ -31,8 +31,8 @@ export default class DropdownContainer extends PureComponent {
   render() {
     return (
       <div>
-        <Form.Field error={this.props.meta.error} loadOptions={this.getOptions} {...this.props} control={DropdownComponent} onChange={this.onChange} />
-        <Message error visible={this.props.meta.error} header="Field Required" content="Please fill out this field." />
+        <Form.Field error={this.props.meta.error && this.props.meta.touched} loadOptions={this.getOptions} {...this.props} control={DropdownComponent} onChange={this.onChange} />
+        <Message error visible={this.props.meta.error && this.props.meta.touched} header="Field Required" content="Please fill out this field." />
       </div>
     );
   }
