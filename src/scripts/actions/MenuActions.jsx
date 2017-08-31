@@ -55,7 +55,7 @@ function error(message) {
   };
 }
 
-export function fetchAddendums(badge, inprogress) {
+export function fetchAddendums(badge, inprogress) { // function called to fetch all addendums related to the user
   return function (dispatch) {
     dispatch(request());
     return axios
@@ -64,11 +64,9 @@ export function fetchAddendums(badge, inprogress) {
         if (response.status >= 400) {
           dispatch(failure('Bad response from server'));
         }
-        return response.data.results;
+        return dispatch(receive(response.data.results));
       })
-      .then(results =>
-        dispatch(receive(results)))
-      .catch((err) => { console.log(err); });
+      .catch((err) => { console.log(err); }); 
   };
 }
 

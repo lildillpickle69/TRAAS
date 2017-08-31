@@ -4,7 +4,7 @@ import * as types from '../constants/ActionTypes';
 export function addAsset(name) {
   return {
     type: types.ADD_ASSET,
-    name,
+    payload: { name },
   };
 }
 
@@ -52,8 +52,7 @@ function loadFailure(message) {
     },
   };
 }
-
-export function loadData(id) {
+export function loadData(id) { // Function called to load addendum data from database
   return function (dispatch) {
     dispatch(loadRequest());
     return axios

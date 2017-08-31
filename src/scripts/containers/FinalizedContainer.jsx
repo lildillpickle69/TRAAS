@@ -4,6 +4,7 @@ import { AddendumGroup } from '../components';
 import { fetchAddendums } from '../actions/';
 
 const badge = document.getElementById('badge').value;
+// const badge = 28479;
 const inprogress = 1;
 const mapStateToProps = (state) => {
   return {

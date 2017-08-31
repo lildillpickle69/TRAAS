@@ -6,6 +6,8 @@ import thunk from 'redux-thunk';
 import Main from './Main';
 import RootReducer from '../reducers';
 
+require('es6-promise').polyfill();
+
 const store = createStore(RootReducer,
   compose(applyMiddleware(apiMiddleware, thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f));

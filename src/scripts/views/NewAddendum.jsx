@@ -31,11 +31,10 @@ class NewAddendum extends PureComponent {
       .then((response) => {
         this.props.dispatch(toggleModal(true));
         console.log(response);
-        window.open(`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${this.id}`);
+        window.open(`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAASDummy.php?ID=${this.id}`);
       })
       .catch((err) => { console.log(err); });
   }
-  
   render() {
     return (
       <FormContainer onSubmit={this.submit} number={this.id} ID={this.id} url={this.props.location.pathname} />

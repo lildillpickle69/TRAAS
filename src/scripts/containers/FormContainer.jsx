@@ -12,7 +12,7 @@ import DropdownContainer from './DropdownContainer';
 import ModalContainer from './ModalContainer';
 import { loadData } from '../actions';
 
-const required = value => (value ? undefined : true); 
+const required = value => (value ? undefined : true);
 
 const renderDates = fields => (
   <Form.Field
@@ -28,11 +28,10 @@ const formatDates = (value, name) => (
 const normalizeDates = (name, value) => (
   value.format()
 );
-const renderCheckbox = ({input, label, meta: { touched, error },...custom }) => {
-  return (
-    <Form.Checkbox defaultChecked={!!input.value} value={1} {...input} {...custom} label={label} onChange={(e, data) => input.onChange(data.checked)} />
-  );
-};
+const renderCheckbox = ({ input, label, meta: { touched, error }, ...custom }) =>
+(
+  <Form.Checkbox defaultChecked={!!input.value} value={1} {...input} {...custom} label={label} onChange={(e, data) => input.onChange(data.checked)} />
+);
         {/*<Message
           error
           header="Field Required"
@@ -49,7 +48,7 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
 const renderTextArea = ({ input, required, label, meta: { touched, error }, ...custom }) => (
   <Form.TextArea rows={4} label={label} {...input} {...custom} error={touched && error} />
 );
-class FormContainer extends Component { 
+class FormContainer extends Component {
   constructor(props) {
     super(props);
     this.id = (this.props.url).substring(11);
@@ -63,7 +62,7 @@ class FormContainer extends Component {
       .then((response) => {
         this.setState({
           exists: response.data.results[0].exists === 'true',
-          permission: response.data.results[0].permission === "true",
+          permission: response.data.results[0].permission === 'true',
         }, () => this.forceUpdate());
       })
       .catch((err) => { console.log(err); });
@@ -71,8 +70,6 @@ class FormContainer extends Component {
 
   render() {
     const { handleSubmit, number, ID, isfinalized } = this.props;
-    const center = { position: 'relative', left: '50%' };
-    const checkboxcenter = { position: 'relative', left: '45%' };
     if (this.state.exists === null || this.state.exists === false || (this.state.exists && this.state.permission)) {
       return (
         <Segment>
@@ -95,14 +92,11 @@ class FormContainer extends Component {
                       label="Select or type the dates in the format MM/DD/YYYY."
                     />
                   </Grid.Column>
-                  <Grid.Column width={2}>
+                  <Grid.Column width={5}>
                     <Field validate={required} name="report_name" type="text" component={renderTextField} label="Report Title" id="title" />
                   </Grid.Column>
                   <Grid.Column width={3}>
                     <Field validate={required} component={DropdownContainer} query="authors" name="PI" label="PI Name" id="pi" />
-                  </Grid.Column>
-                  <Grid.Column width={3}>
-                    <Field component={DropdownContainer} query="authors" label="Additional Authors" name="OtherAuthors" multi />
                   </Grid.Column>
                   <Grid.Column width={2}>
                     <Field label="JO" name="JO" type="text" component={renderTextField} id="JO" />
@@ -111,29 +105,29 @@ class FormContainer extends Component {
               </Grid>
             </Form.Group>
             <br />
-            <Form.Group>
+            <Form.Group width="equal">
               <Grid centered celled="internally" verticalAlign="middle" stackable>
                 <Grid.Row>
-                  <Grid.Column width={4}>
+                  <Grid.Column width={3}>
                     <Field type="text" component={renderTextField} id="report_number" label="Report Number" name="report_number" />
                   </Grid.Column>
-                  <Grid.Column width={4}>
-                    <Field validate={required} component={DropdownContainer} label="Assets" id="assets" name="Assets" multi query="assets" />
-                  </Grid.Column>
-                  <Grid.Column width={4}>
+                  <Grid.Column width={3}>
                     <Field component={DropdownContainer} label="Keywords" id="keywords" name="Keywords" query="keywords" multi creatable />
                   </Grid.Column>
                   <Grid.Column width={3}>
                     <Field type="text" component={renderTextField} id="program" label="Program" name="Program" />
+                  </Grid.Column>
+                  <Grid.Column width={3}>
+                    <Field component={DropdownContainer} query="authors" label="Additional Authors" name="OtherAuthors" multi />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
             </Form.Group>
             <br />
             <Form.Group width="equal">
-              <Grid centered celled="internally" verticalAlign="middle" stackable> 
+              <Grid centered celled="internally" verticalAlign="middle" stackable>
                 <Grid.Row>
-                  <Grid.Column width={12} >
+                  <Grid.Column width={10} >
                     <Field id="description" label="Description" name="Comment" component={renderTextArea} />
                   </Grid.Column>
                 </Grid.Row>
@@ -142,7 +136,7 @@ class FormContainer extends Component {
             <Form.Group width="equal">
               <Grid centered celled="internally" verticalAlign="middle" stackable>
                 <Grid.Row>
-                  <Grid.Column width={12} >
+                  <Grid.Column width={10} >
                     <Field
                       id="nonaerospace"
                       label="NON Aerospace MTE: Provide Agency, Property Identification Number, Manufacturer, Model and Calibration Date."
@@ -153,14 +147,25 @@ class FormContainer extends Component {
                 </Grid.Row>
               </Grid>
             </Form.Group>
-            <Field
-              style={checkboxcenter}
-              component={renderCheckbox}
-              label="Do you want to finalize this addendum?"
-              name="Complete"
-              id="finalized"
-            />
-            <ModalContainer center={center} isfinalized={isfinalized} handleSubmit={handleSubmit}  />
+            <Grid centered stackable>
+              <Grid.Column width={6} >
+                <Field validate={required} component={DropdownContainer} label="Assets" id="assets" name="Assets" multi query="assets" />
+              </Grid.Column>
+            </Grid>
+            <br />
+            <Grid centered columns={2}>
+              <Grid.Row>
+                <Grid.Column textAlign="center">
+                  <Field
+                    component={renderCheckbox}
+                    label="Do you want to finalize this addendum?"
+                    name="Complete"
+                    id="finalized"
+                  />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+            <ModalContainer isfinalized={isfinalized} handleSubmit={handleSubmit} />
           </Form>
         </Segment>
       );

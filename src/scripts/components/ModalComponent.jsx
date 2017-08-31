@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { Modal, Button, Form } from 'semantic-ui-react';
+import { Modal, Button, Form, Grid } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 
 class ModalComponent extends PureComponent {
@@ -18,7 +18,7 @@ class ModalComponent extends PureComponent {
     });
   }
   render() {
-    const { center, modalvisible, isfinalized, handleSubmit, onClick } = this.props;
+    const { modalvisible, isfinalized, handleSubmit, onClick } = this.props;
     return (
       <div>
         {this.state.redirect ? <Redirect to="/home/inprogress" /> : null}
@@ -28,11 +28,15 @@ class ModalComponent extends PureComponent {
             <Button icon="check" content="All Done" onClick={onClick} />
           </Modal.Actions>
         </Modal>
-        <Form.Group inline style={center}>
-          <Form.Field>
-            <Button type="submit" onClick={handleSubmit} content={isfinalized ? 'Submit' : 'Save'} primary />
-          </Form.Field>
-        </Form.Group>
+        <Grid centered columns={2}>
+          <Grid.Row>
+            <Grid.Column textAlign="center">
+              <Form.Field>
+                <Button type="submit" onClick={handleSubmit} content={isfinalized ? 'Submit' : 'Save'} primary />
+              </Form.Field>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
     );
   }

@@ -9,8 +9,6 @@ class OOTCContainer extends PureComponent {
   constructor(props) {
     super(props);
     this.id = (window.location.pathname);
-    console.log(this.id);
-    console.log(this.props);
   }
   componentDidMount() {
     axios
@@ -23,7 +21,7 @@ class OOTCContainer extends PureComponent {
       <div>
         <br />
         <h1><Link to="/home/inprogress">TRAAS</Link></h1>
-        <Divider horizontal>Out-of-Tolerance Condition # Something</Divider>
+        <Divider horizontal>Out-of-Tolerance Condition #{this.id}</Divider>
         <br />
         <Table celled padded color="purple" >
           <Table.Header>
