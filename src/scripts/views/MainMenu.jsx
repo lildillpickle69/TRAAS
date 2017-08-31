@@ -1,16 +1,34 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Grid, Divider, Button, Message } from 'semantic-ui-react';
+import { Grid, Divider, Button, Message, Form, Modal } from 'semantic-ui-react';
+import VirtualizedSelect from 'react-virtualized-select';
+import axios from 'axios';
 import { Link, Switch, Route } from 'react-router-dom';
 import SearchAddendums from '../containers/SearchAddendums';
 import TabBarContainer from '../containers/TabBarContainer';
 import Addendums from './Addendums';
 import FinalizedAddendums from './FinalizedAddendums';
-import { selectTab } from '../actions';
+import { selectTab, fetchAddendums } from '../actions';
 import OOTCNotifications from './OOTCNotifications';
 
 const buttonstyle = { marginLeft: 20 };
 const badge = document.getElementById('badge').value;
+
+const mapStateToProps = (state) => {
+  return {
+    templates: state.cards.finalized.concat(state.cards.inprogress) };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchInprogress: (
+      dispatch(fetchAddendums(badge, 0))
+    ),
+    fetchFinalized: (
+      dispatch(fetchAddendums(badge, 1))
+    ),
+  };
+};
 
 const tabs = [
   { name: 'inprogress', label: 'My Addendums In Progress', linkname: '/home/inprogress' },
@@ -18,10 +36,42 @@ const tabs = [
   { name: 'OOTCNotifications', label: 'Out-of-Tolerance Reports', linkname: '/home/OOTCNotifications' },
 ];
 
-// const style2 = { left: '43%', textAlign: 'center' };
+const style2 = { left: '43%', textAlign: 'center' };
 const style = { textAlign: 'center' };
 class MainMenu extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      template: null,
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleSubmit() {
+    const date = new Date();
+    const datestring = date.getFullYear() + (`0${date.getMonth() + 1}`).slice(-2) + (`0${date.getDate()}`).slice(-2) + (`0${date.getHours()}`).slice(-2) + (`0${date.getMinutes()}`).slice(-2) + (`0${date.getSeconds()}`).slice(-2) + badge;
+    const newaddendumlink = `#/Addendums/${datestring}`;
+    axios({
+      method: 'post',
+      url: 'https://agoquality-tmpw.aero.org/secure/TRAASweb/templates.pl',
+      data: {
+        ID: datestring,
+        template: this.state.template.value,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        window.open(newaddendumlink);
+      })
+      .catch((err) => { console.log(err); });
+  }
   render() {
+    const options = this.props.templates.map((reportinfo) => {
+      const { ID, name } = reportinfo;
+      return ({
+        label: `${name}: ${ID}`,
+        value: ID,
+      });
+    });
     return (
       <div>
         <br />
@@ -48,6 +98,19 @@ class MainMenu extends PureComponent {
           primary
           content="New Addendum"
         />
+        <Modal closeIcon="close" trigger={<Button color="green" content="New Addendum from existing" />}>
+          <Modal.Header style={style}>Choose an existing addendum to generate a new addendum from.</Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+              <Form onSubmit={this.handleSubmit} >
+                <Form.Field>
+                  <VirtualizedSelect options={options} onChange={template => this.setState({ template })} value={this.state.template} />
+                </Form.Field>
+                <Button content="Submit" type="submit" />
+              </Form>
+            </Modal.Description>
+          </Modal.Content>
+        </Modal>
         <br />
         <Divider horizontal>Technical Reports Addendum Asset Summary and Out-Of-Tolerance Condition Database</Divider>
         <Grid centered columns={2}>
@@ -66,4 +129,4 @@ class MainMenu extends PureComponent {
   }
 }
 
-export default connect()(MainMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);

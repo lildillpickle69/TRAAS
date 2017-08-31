@@ -7,7 +7,7 @@ const style = { textAlign: 'center' };
 
 const AddendumGroup = (props) => {
   const { cards, loading, ...otherprops } = props;
-  const cardItems = cards.cards.map((cardInfo) => {
+  const cardItems = cards.map((cardInfo) => {
     const { link, name, program, ID, modified, description } = cardInfo;
     return (
       <AddendumCard

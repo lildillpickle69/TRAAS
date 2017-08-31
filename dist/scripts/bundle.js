@@ -104050,9 +104050,18 @@ function request() {
   };
 }
 
-function receive(results) {
+function inprogressreceive(results) {
   return {
-    type: _ActionTypes.RECEIVE,
+    type: _ActionTypes.INPROGRESS_RECEIVE,
+    payload: {
+      results: results
+    }
+  };
+}
+
+function finalizedreceive(results) {
+  return {
+    type: _ActionTypes.FINALIZED_RECEIVE,
     payload: {
       results: results
     }
@@ -104098,7 +104107,11 @@ function fetchAddendums(badge, inprogress) {
       if (response.status >= 400) {
         dispatch(failure('Bad response from server'));
       }
-      return dispatch(receive(response.data.results));
+      if (inprogress === 0) {
+        return dispatch(inprogressreceive(response.data.results));
+      }
+
+      return dispatch(finalizedreceive(response.data.results));
     }).catch(function (err) {
       console.log(err);
     });
@@ -104219,7 +104232,7 @@ var AddendumGroup = function AddendumGroup(props) {
       loading = props.loading,
       otherprops = _objectWithoutProperties(props, ['cards', 'loading']);
 
-  var cardItems = cards.cards.map(function (cardInfo) {
+  var cardItems = cards.map(function (cardInfo) {
     var link = cardInfo.link,
         name = cardInfo.name,
         program = cardInfo.program,
@@ -104832,6 +104845,8 @@ var SET_MENU = exports.SET_MENU = 'SET_MENU';
 var TAB_SELECTED = exports.TAB_SELECTED = 'TAB_SELECTED';
 var REQUEST = exports.REQUEST = 'REQUEST';
 var RECEIVE = exports.RECEIVE = 'RECEIVE';
+var INPROGRESS_RECEIVE = exports.INPROGRESS_RECEIVE = 'INPROGRESS_RECEIVE';
+var FINALIZED_RECEIVE = exports.FINALIZED_RECEIVE = 'FINALIZED_RECEIVE';
 var FAILURE = exports.FAILURE = 'FAILURE';
 var SEARCH = exports.SEARCH = 'SEARCH';
 var RETURN = exports.RETURN = 'RETURN';
@@ -104862,19 +104877,14 @@ var _actions = require('../actions/');
 
 var badge = document.getElementById('badge').value;
 // const badge = 28479;
-var inprogress = 0;
+
 var mapStateToProps = function mapStateToProps(state) {
   return {
     loading: state.cards.loading,
-    cards: state.cards };
+    cards: state.cards.inprogress };
 };
 
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    fetchInprogress: dispatch((0, _actions.fetchAddendums)(badge, inprogress))
-  };
-};
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_components.AddendumGroup);
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(_components.AddendumGroup);
 
 },{"../actions/":1458,"../components":1468,"react-redux":706}],1472:[function(require,module,exports){
 'use strict';
@@ -104927,7 +104937,7 @@ var App = function App() {
 
 exports.default = App;
 
-},{"../reducers":1495,"./Main":1477,"es6-promise":277,"react":790,"react-redux":706,"redux":898,"redux-api-middleware":793,"redux-thunk":892}],1473:[function(require,module,exports){
+},{"../reducers":1494,"./Main":1477,"es6-promise":277,"react":790,"react-redux":706,"redux":898,"redux-api-middleware":793,"redux-thunk":892}],1473:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -105174,19 +105184,13 @@ var badge = document.getElementById('badge').value;
 // const badge = 28479;
 
 // import { FetchAddendums } from '../reducers';
-var inprogress = 1;
 var mapStateToProps = function mapStateToProps(state) {
   return {
     loading: state.cards.loading,
-    cards: state.cards };
+    cards: state.cards.finalized };
 };
 
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    fetchInprogress: dispatch((0, _actions.fetchAddendums)(badge, inprogress))
-  };
-};
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_components.AddendumGroup);
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(_components.AddendumGroup);
 
 },{"../actions/":1458,"../components":1468,"react-redux":706}],1476:[function(require,module,exports){
 'use strict';
@@ -105591,7 +105595,7 @@ var Main = function Main() {
 
 exports.default = Main;
 
-},{"../views":1504,"react":790,"react-router-dom":723}],1478:[function(require,module,exports){
+},{"../views":1503,"react":790,"react-router-dom":723}],1478:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -105621,7 +105625,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 exports.default = (0, _reactRedux.connect)(mapState, mapDispatchToProps)(_components.ModalComponent);
 
-},{"../actions/":1458,"../components":1468,"../reducers":1495,"react-redux":706}],1479:[function(require,module,exports){
+},{"../actions/":1458,"../components":1468,"../reducers":1494,"react-redux":706}],1479:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -105962,7 +105966,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_components.SearchBar);
 
-},{"../actions/":1458,"../components":1468,"../reducers":1495,"react-redux":706}],1482:[function(require,module,exports){
+},{"../actions/":1458,"../components":1468,"../reducers":1494,"react-redux":706}],1482:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -105986,7 +105990,7 @@ var actions = { onTabClick: _actions.selectTab };
 
 exports.default = (0, _reactRedux.connect)(mapState, actions)(_components.TabBar);
 
-},{"../actions/":1458,"../components":1468,"../reducers":1495,"react-redux":706}],1483:[function(require,module,exports){
+},{"../actions/":1458,"../components":1468,"../reducers":1494,"react-redux":706}],1483:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106100,30 +106104,6 @@ var selectFormValues = exports.selectFormValues = (0, _reselect.createSelector)(
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = AssetReducer;
-
-var _ActionTypes = require('../constants/ActionTypes');
-
-function AssetReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-
-  switch (action.type) {
-    case _ActionTypes.ADD_ASSET:
-      return {
-        state: action.payload.results
-      };
-    default:
-      return state;
-  }
-}
-
-},{"../constants/ActionTypes":1469}],1488:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -106132,7 +106112,8 @@ exports.default = FetchAddendums;
 var _ActionTypes = require('../constants/ActionTypes');
 
 var initialstate = {
-  cards: []
+  inprogress: [],
+  finalized: []
 };
 function FetchAddendums() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialstate;
@@ -106143,9 +106124,14 @@ function FetchAddendums() {
       return _extends({}, state, {
         loading: true
       });
-    case _ActionTypes.RECEIVE:
+    case _ActionTypes.INPROGRESS_RECEIVE:
       return _extends({}, state, {
-        cards: action.payload.results,
+        inprogress: action.payload.results,
+        loading: false
+      });
+    case _ActionTypes.FINALIZED_RECEIVE:
+      return _extends({}, state, {
+        finalized: action.payload.results,
         loading: false
       });
     case _ActionTypes.FAILURE:
@@ -106158,7 +106144,7 @@ function FetchAddendums() {
   }
 }
 
-},{"../constants/ActionTypes":1469}],1489:[function(require,module,exports){
+},{"../constants/ActionTypes":1469}],1488:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106184,7 +106170,7 @@ function ToggleModal(state, payload) {
 
 exports.default = (0, _utils.createReducer)(initialState, _defineProperty({}, _ActionTypes.TOGGLE_MODAL, ToggleModal));
 
-},{"../constants/ActionTypes":1469,"../utils/":1496}],1490:[function(require,module,exports){
+},{"../constants/ActionTypes":1469,"../utils/":1495}],1489:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106202,7 +106188,7 @@ var selectModalState = exports.selectModalState = (0, _reselect.createSelector)(
   return modal.modalvisible;
 });
 
-},{"reselect":900}],1491:[function(require,module,exports){
+},{"reselect":900}],1490:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106244,7 +106230,7 @@ function SearchAddendums() {
   }
 }
 
-},{"../constants/ActionTypes":1469}],1492:[function(require,module,exports){
+},{"../constants/ActionTypes":1469}],1491:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106266,7 +106252,7 @@ var getLoading = exports.getLoading = (0, _reselect.createSelector)(selectResult
   return results.searchloading;
 });
 
-},{"reselect":900}],1493:[function(require,module,exports){
+},{"reselect":900}],1492:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106292,7 +106278,7 @@ function selectTab(state, payload) {
 
 exports.default = (0, _utils.createReducer)(initialState, _defineProperty({}, _ActionTypes.TAB_SELECTED, selectTab));
 
-},{"../constants/ActionTypes":1469,"../utils/":1496}],1494:[function(require,module,exports){
+},{"../constants/ActionTypes":1469,"../utils/":1495}],1493:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106310,7 +106296,7 @@ var selectCurrentTab = exports.selectCurrentTab = (0, _reselect.createSelector)(
   return tabs.currentTab;
 });
 
-},{"reselect":900}],1495:[function(require,module,exports){
+},{"reselect":900}],1494:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106411,10 +106397,6 @@ var _ModalReducer = require('./ModalReducer');
 
 var _ModalReducer2 = _interopRequireDefault(_ModalReducer);
 
-var _AssetReducer = require('./AssetReducer');
-
-var _AssetReducer2 = _interopRequireDefault(_AssetReducer);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import { reduceReducers } from '../utils';
@@ -106426,11 +106408,11 @@ var RootReducer = (0, _redux.combineReducers)({ tabs: _TabReducer2.default,
   results: _SearchReducer2.default,
   modal: _ModalReducer2.default,
   database: _AddendumReducer2.default,
-  form: _reduxForm.reducer,
-  assets: _AssetReducer2.default });
+  form: _reduxForm.reducer
+});
 exports.default = RootReducer;
 
-},{"./AddendumReducer":1485,"./AddendumSelector":1486,"./AssetReducer":1487,"./FetchAddendums":1488,"./ModalReducer":1489,"./ModalSelector":1490,"./SearchReducer":1491,"./SearchSelector":1492,"./TabReducer":1493,"./TabSelector":1494,"redux":898,"redux-form":854}],1496:[function(require,module,exports){
+},{"./AddendumReducer":1485,"./AddendumSelector":1486,"./FetchAddendums":1487,"./ModalReducer":1488,"./ModalSelector":1489,"./SearchReducer":1490,"./SearchSelector":1491,"./TabReducer":1492,"./TabSelector":1493,"redux":898,"redux-form":854}],1495:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106449,7 +106431,7 @@ Object.keys(_reducerUtils).forEach(function (key) {
   });
 });
 
-},{"./reducerUtils":1497}],1497:[function(require,module,exports){
+},{"./reducerUtils":1496}],1496:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -106506,7 +106488,7 @@ function createConditionalSliceReducer(sliceName, fnMap) {
   };
 }
 
-},{}],1498:[function(require,module,exports){
+},{}],1497:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106534,7 +106516,7 @@ var Addendums = function Addendums() {
 
 exports.default = Addendums;
 
-},{"../containers/AddendumsContainer":1471,"react":790}],1499:[function(require,module,exports){
+},{"../containers/AddendumsContainer":1471,"react":790}],1498:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106562,7 +106544,7 @@ var FinalizedAddendums = function FinalizedAddendums() {
 
 exports.default = FinalizedAddendums;
 
-},{"../containers/FinalizedContainer":1475,"react":790}],1500:[function(require,module,exports){
+},{"../containers/FinalizedContainer":1475,"react":790}],1499:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106578,6 +106560,14 @@ var _react2 = _interopRequireDefault(_react);
 var _reactRedux = require('react-redux');
 
 var _semanticUiReact = require('semantic-ui-react');
+
+var _reactVirtualizedSelect = require('react-virtualized-select');
+
+var _reactVirtualizedSelect2 = _interopRequireDefault(_reactVirtualizedSelect);
+
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
 
 var _reactRouterDom = require('react-router-dom');
 
@@ -106614,25 +106604,72 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var buttonstyle = { marginLeft: 20 };
 var badge = document.getElementById('badge').value;
 
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    templates: state.cards.finalized.concat(state.cards.inprogress) };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    fetchInprogress: dispatch((0, _actions.fetchAddendums)(badge, 0)),
+    fetchFinalized: dispatch((0, _actions.fetchAddendums)(badge, 1))
+  };
+};
+
 var tabs = [{ name: 'inprogress', label: 'My Addendums In Progress', linkname: '/home/inprogress' }, { name: 'finalized', label: 'My Finalized Addendums', linkname: '/home/finalized' }, { name: 'OOTCNotifications', label: 'Out-of-Tolerance Reports', linkname: '/home/OOTCNotifications' }];
 
-// const style2 = { left: '43%', textAlign: 'center' };
+var style2 = { left: '43%', textAlign: 'center' };
 var style = { textAlign: 'center' };
 
 var MainMenu = function (_PureComponent) {
   _inherits(MainMenu, _PureComponent);
 
-  function MainMenu() {
+  function MainMenu(props) {
     _classCallCheck(this, MainMenu);
 
-    return _possibleConstructorReturn(this, (MainMenu.__proto__ || Object.getPrototypeOf(MainMenu)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (MainMenu.__proto__ || Object.getPrototypeOf(MainMenu)).call(this, props));
+
+    _this.state = {
+      template: null
+    };
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
   }
 
   _createClass(MainMenu, [{
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      var date = new Date();
+      var datestring = date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) + ('0' + date.getHours()).slice(-2) + ('0' + date.getMinutes()).slice(-2) + ('0' + date.getSeconds()).slice(-2) + badge;
+      var newaddendumlink = '#/Addendums/' + datestring;
+      (0, _axios2.default)({
+        method: 'post',
+        url: 'https://agoquality-tmpw.aero.org/secure/TRAASweb/templates.pl',
+        data: {
+          ID: datestring,
+          template: this.state.template.value
+        }
+      }).then(function (response) {
+        console.log(response);
+        window.open(newaddendumlink);
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
+      var options = this.props.templates.map(function (reportinfo) {
+        var ID = reportinfo.ID,
+            name = reportinfo.name;
+
+        return {
+          label: name + ': ' + ID,
+          value: ID
+        };
+      });
       return _react2.default.createElement(
         'div',
         null,
@@ -106682,6 +106719,35 @@ var MainMenu = function (_PureComponent) {
           primary: true,
           content: 'New Addendum'
         }),
+        _react2.default.createElement(
+          _semanticUiReact.Modal,
+          { closeIcon: 'close', trigger: _react2.default.createElement(_semanticUiReact.Button, { color: 'green', content: 'New Addendum from existing' }) },
+          _react2.default.createElement(
+            _semanticUiReact.Modal.Header,
+            { style: style },
+            'Choose an existing addendum to generate a new addendum from.'
+          ),
+          _react2.default.createElement(
+            _semanticUiReact.Modal.Content,
+            null,
+            _react2.default.createElement(
+              _semanticUiReact.Modal.Description,
+              null,
+              _react2.default.createElement(
+                _semanticUiReact.Form,
+                { onSubmit: this.handleSubmit },
+                _react2.default.createElement(
+                  _semanticUiReact.Form.Field,
+                  null,
+                  _react2.default.createElement(_reactVirtualizedSelect2.default, { options: options, onChange: function onChange(template) {
+                      return _this2.setState({ template: template });
+                    }, value: this.state.template })
+                ),
+                _react2.default.createElement(_semanticUiReact.Button, { content: 'Submit', type: 'submit' })
+              )
+            )
+          )
+        ),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
           _semanticUiReact.Divider,
@@ -106712,9 +106778,9 @@ var MainMenu = function (_PureComponent) {
   return MainMenu;
 }(_react.PureComponent);
 
-exports.default = (0, _reactRedux.connect)()(MainMenu);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MainMenu);
 
-},{"../actions":1458,"../containers/SearchAddendums":1481,"../containers/TabBarContainer":1482,"./Addendums":1498,"./FinalizedAddendums":1499,"./OOTCNotifications":1502,"react":790,"react-redux":706,"react-router-dom":723,"semantic-ui-react":1003}],1501:[function(require,module,exports){
+},{"../actions":1458,"../containers/SearchAddendums":1481,"../containers/TabBarContainer":1482,"./Addendums":1497,"./FinalizedAddendums":1498,"./OOTCNotifications":1501,"axios":42,"react":790,"react-redux":706,"react-router-dom":723,"react-virtualized-select":749,"semantic-ui-react":1003}],1500:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -106802,7 +106868,7 @@ var NewAddendum = function (_PureComponent) {
 
 exports.default = (0, _reactRedux.connect)()(NewAddendum);
 
-},{"../actions":1458,"../containers/FormContainer":1476,"axios":42,"moment":479,"react":790,"react-redux":706}],1502:[function(require,module,exports){
+},{"../actions":1458,"../containers/FormContainer":1476,"axios":42,"moment":479,"react":790,"react-redux":706}],1501:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -107241,7 +107307,7 @@ var OOTCNotifications = function (_PureComponent) {
 
 exports.default = OOTCNotifications;
 
-},{"axios":42,"react":790,"react-virtualized-select":749,"semantic-ui-react":1003}],1503:[function(require,module,exports){
+},{"axios":42,"react":790,"react-virtualized-select":749,"semantic-ui-react":1003}],1502:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -107745,7 +107811,7 @@ var OOTCReports = function (_PureComponent) {
 
 exports.default = (0, _reactRedux.connect)()(OOTCReports);
 
-},{"axios":42,"react":790,"react-redux":706,"react-router-dom":723,"semantic-ui-react":1003}],1504:[function(require,module,exports){
+},{"axios":42,"react":790,"react-redux":706,"react-router-dom":723,"semantic-ui-react":1003}],1503:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -107776,4 +107842,4 @@ exports.Addendums = _Addendums2.default;
 exports.NewAddendum = _NewAddendum2.default;
 exports.OOTCReports = _OOTCReports2.default;
 
-},{"./Addendums":1498,"./MainMenu":1500,"./NewAddendum":1501,"./OOTCReports":1503}]},{},[1456,1458,1457,1459,1460,1461,1462,1463,1468,1464,1465,1466,1467,1469,1470,1471,1472,1473,1474,1475,1476,1483,1477,1478,1479,1480,1481,1482,1484,1485,1486,1487,1488,1495,1489,1490,1491,1492,1493,1494,1496,1497,1498,1499,1504,1500,1501,1502,1503]);
+},{"./Addendums":1497,"./MainMenu":1499,"./NewAddendum":1500,"./OOTCReports":1502}]},{},[1456,1458,1457,1459,1460,1461,1462,1463,1468,1464,1465,1466,1467,1469,1470,1471,1472,1473,1474,1475,1476,1483,1477,1478,1479,1480,1481,1482,1484,1485,1486,1487,1494,1488,1489,1490,1491,1492,1493,1495,1496,1497,1498,1503,1499,1500,1501,1502]);

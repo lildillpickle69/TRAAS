@@ -6,7 +6,6 @@ import FetchAddendums from './FetchAddendums';
 import SearchReducer from './SearchReducer';
 import AddendumReducer from './AddendumReducer';
 import modalReducer from './ModalReducer';
-import AssetReducer from './AssetReducer';
 // import { reduceReducers } from '../utils';
 
 
@@ -17,7 +16,7 @@ const RootReducer = combineReducers({ tabs: tabReducer,
   modal: modalReducer,
   database: AddendumReducer,
   form: formReducer,
-  assets: AssetReducer });
+});
 export { FetchAddendums } from './FetchAddendums';
 export { AddendumReducer } from './AddendumReducer';
 export * from './TabSelector';

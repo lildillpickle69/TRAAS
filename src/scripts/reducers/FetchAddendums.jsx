@@ -1,7 +1,8 @@
-import { REQUEST, RECEIVE, FAILURE } from '../constants/ActionTypes';
+import { REQUEST, INPROGRESS_RECEIVE, FINALIZED_RECEIVE, FAILURE } from '../constants/ActionTypes';
 
 const initialstate = {
-  cards: [],
+  inprogress: [],
+  finalized: [],
 };
 export default function FetchAddendums(state = initialstate, action) {
   switch (action.type) {
@@ -10,10 +11,16 @@ export default function FetchAddendums(state = initialstate, action) {
         ...state,
         loading: true,
       };
-    case RECEIVE:
+    case INPROGRESS_RECEIVE:
       return {
         ...state,
-        cards: action.payload.results,
+        inprogress: action.payload.results,
+        loading: false,
+      };
+    case FINALIZED_RECEIVE:
+      return {
+        ...state,
+        finalized: action.payload.results,
         loading: false,
       };
     case FAILURE:

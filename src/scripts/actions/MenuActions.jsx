@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TAB_SELECTED, REQUEST, RECEIVE, FAILURE, SEARCH, RETURN, ERROR } from '../constants/ActionTypes';
+import { TAB_SELECTED, REQUEST, INPROGRESS_RECEIVE, FINALIZED_RECEIVE, FAILURE, SEARCH, RETURN, ERROR } from '../constants/ActionTypes';
 
 
 export function selectTab(tabName) {
@@ -15,9 +15,18 @@ function request() {
   };
 }
 
-function receive(results) {
+function inprogressreceive(results) {
   return {
-    type: RECEIVE,
+    type: INPROGRESS_RECEIVE,
+    payload: {
+      results,
+    },
+  };
+}
+
+function finalizedreceive(results) {
+  return {
+    type: FINALIZED_RECEIVE,
     payload: {
       results,
     },
@@ -64,9 +73,13 @@ export function fetchAddendums(badge, inprogress) { // function called to fetch 
         if (response.status >= 400) {
           dispatch(failure('Bad response from server'));
         }
-        return dispatch(receive(response.data.results));
+        if (inprogress === 0) {
+          return dispatch(inprogressreceive(response.data.results));
+        }
+
+        return dispatch(finalizedreceive(response.data.results));
       })
-      .catch((err) => { console.log(err); }); 
+      .catch((err) => { console.log(err); });
   };
 }
 
