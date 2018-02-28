@@ -1,6 +1,6 @@
 import React from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { MainMenu, NewAddendum, OOTCReports } from '../views';
+import { MainMenu, NewAddendum, OOTCReports, SearchResults } from '../views';
 // import OOTCReports from './OOTCReports';
 
 const Main = () => (
@@ -12,6 +12,7 @@ const Main = () => (
         <Route exact path="/home" render={() => <Redirect to="/home/inprogress" />} />
         <Route path="/Addendums/:number" component={NewAddendum} />
         <Route path="/OOTC/:number" component={OOTCReports} />
+        <Route path="/search/:query" component={SearchResults} />
       </Switch>
     </div>
   </HashRouter>

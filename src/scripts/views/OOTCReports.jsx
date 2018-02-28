@@ -32,14 +32,22 @@ class OOTCReports extends PureComponent {
   }
   componentDidMount() {
     axios
-    .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?query=${this.id}`)
+    .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?query=${this.id}&limit=100`)
     .then((response) => {
       const data = response.data.results[0];
+      const date = new Date(data.startdate);
+      let startdate = `${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}`;
+      console.log(startdate);
+      if (startdate === '1/1/1') {
+        startdate = 'No previous calibration history available.';
+      }
+      const edate = new Date(data.enddate);
+      const enddate = `${edate.getUTCMonth() + 1}/${edate.getUTCDate()}/${edate.getUTCFullYear()}`;
       this.setState({
         ReportedBy: data.ReportedBy,
         Comment: data.Comment,
-        startdate: data.startdate,
-        enddate: data.enddate,
+        startdate,
+        enddate,
         Asset: data.Asset,
         Date: data.Date,
         Description: data.Description,
@@ -92,13 +100,13 @@ class OOTCReports extends PureComponent {
     });
     const parameterstate = (this.state.parameters);
     const parameters = parameterstate.map((parameterinfo) => {
-      const { parameter, value, adjust, accuracy } = parameterinfo;
+      const { parameter, accuracy, value, adjust } = parameterinfo;
       return (
         <Table.Row key={parameter}>
           <Table.Cell key={parameter}>{parameter}</Table.Cell>
-          <Table.Cell key={value}>{value}</Table.Cell>
-          <Table.Cell key={adjust}>{adjust}</Table.Cell>
-          <Table.Cell key={accuracy}>{accuracy}</Table.Cell>
+          <Table.Cell key={value}>{accuracy}</Table.Cell>
+          <Table.Cell key={adjust}>{value}</Table.Cell>
+          <Table.Cell key={accuracy}>{adjust}</Table.Cell>
         </Table.Row>
       );
     });
@@ -133,7 +141,8 @@ class OOTCReports extends PureComponent {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Reported By</Table.HeaderCell>
-              <Table.HeaderCell>Affected Dates</Table.HeaderCell>
+              <Table.HeaderCell>Affected Start Date</Table.HeaderCell>
+              <Table.HeaderCell>Affected End Date</Table.HeaderCell>
               <Table.HeaderCell>Date Reported</Table.HeaderCell>
               <Table.HeaderCell>Asset</Table.HeaderCell>
               <Table.HeaderCell>Manufacturer</Table.HeaderCell>
@@ -145,7 +154,8 @@ class OOTCReports extends PureComponent {
           <Table.Body>
             <Table.Row>
               <Table.Cell>{this.state.ReportedBy}</Table.Cell>
-              <Table.Cell>{this.state.startdate} to {this.state.enddate}</Table.Cell>
+              <Table.Cell>{this.state.startdate}</Table.Cell>
+              <Table.Cell>{this.state.enddate}</Table.Cell>
               <Table.Cell>{this.state.Date}</Table.Cell>
               <Table.Cell>{this.state.Asset}</Table.Cell>
               <Table.Cell>{this.state.Manufacturer}</Table.Cell>
@@ -156,10 +166,10 @@ class OOTCReports extends PureComponent {
           </Table.Body>
           <Table.Footer fullWidth>
             <Table.Row>
-              <Table.HeaderCell colSpan="8" style={style}><strong>Disposition:</strong> {this.state.Disposition}</Table.HeaderCell>
+              <Table.HeaderCell colSpan="9" style={style}><strong>Disposition:</strong> {this.state.Disposition}</Table.HeaderCell>
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell colSpan="8" style={style}><strong>Comment:</strong> {this.state.Comment}</Table.HeaderCell>
+              <Table.HeaderCell colSpan="9" style={style}><strong>Comment:</strong> {this.state.Comment}</Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
         </Table>

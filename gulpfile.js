@@ -46,7 +46,7 @@ gulp.task('styles', function() {
 
 var testFiles = glob.sync('src/scripts/**/*.jsx');
 var browserwatch = watchify(browserify({ entries: testFiles, extensions: ['.jsx'], cache: {}, packageCache: {} }), { delay: 500 });
-browserwatch.transform(babelify, { presets: ['env', 'react', 'stage-0'] });
+browserwatch.transform(babelify, { presets: ['env', 'react', 'stage-0', 'es2015'] });
 
 
 function bundle() {
@@ -77,8 +77,8 @@ function minbundle() {
 
 gulp.task('scripts', bundle);
 gulp.task('minscripts', minbundle);
-browserwatch.on('update', bundle);
-// browserwatch.on('update', minbundle); 
+// browserwatch.on('update', bundle);
+browserwatch.on('update', minbundle); 
 
 // Images
 gulp.task('images', function() {
@@ -96,26 +96,27 @@ gulp.task('apply-prod-environment', function() {
   process.env.NODE_ENV = 'production';
 });
 // Default task
-gulp.task('default', ['clean'/*, 'apply-prod-environment'*/], function() {
-  runSequence('styles', ['scripts', 'watch']);
+// add production environment
+gulp.task('default', ['clean'], function() {
+  runSequence('styles', ['minscripts']);
   // gulp.start(/*'scripts',*/ 'minscripts', 'watch');
 });
 
 // Watch
-gulp.task('watch', function() {
+// gulp.task('watch', function() {
 
-  // Watch .scss files
-  gulp.watch('src/styles/**/*.scss', ['styles']);
+//   // Watch .scss files
+//   gulp.watch('src/styles/**/*.scss', ['styles']);
 
-  // Watch .js files
-  // gulp.watch('src/scripts/**/*.jsx', ['scripts', 'minscripts']);
+//   // Watch .js files
+//   // gulp.watch('src/scripts/**/*.jsx', ['scripts', 'minscripts']);
 
-  // // Watch image files
-  // gulp.watch('src/images/*', ['images']);
+//   // // Watch image files
+//   // gulp.watch('src/images/*', ['images']);
 
-  // Create LiveReload server
-  livereload.listen();
+//   // Create LiveReload server
+//   livereload.listen();
 
-  // Watch any files in dist/, reload on change
-  gulp.watch(['dist/**']).on('change', livereload.changed);
-});
+//   // Watch any files in dist/, reload on change
+//   gulp.watch(['dist/**']).on('change', livereload.changed);
+// });

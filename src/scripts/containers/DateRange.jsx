@@ -28,7 +28,7 @@ class DateRangePickerWrapper extends React.Component {
     }
     if (focusedInput === END_DATE) {
       this.props[this.props.endDateFieldName].input.onFocus();
-      return;
+      return; 
     }
   }
 
@@ -41,6 +41,8 @@ class DateRangePickerWrapper extends React.Component {
     const startDate = startDateMoment.isValid() ? startDateMoment : null;
     return (
       <DateRangePicker
+        showClearDates
+        enableDropdowns
         endDate={endDate}
         endDatePlaceholderText="End Date"
         focusedInput={this.state.focusedInput || null}
@@ -55,35 +57,3 @@ class DateRangePickerWrapper extends React.Component {
   }
 }
 export default DateRangePickerWrapper;
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { connect } from 'react-redux';
-// import { DateComponent } from '../components';
-// import { selectDates, selectFocus } from '../actions/';
-// import { selectStartDate, selectEndDate, selectFocusedInput } from '../reducers';
-
-// const mapStateToProps = (state) => {
-//   const startDate = selectStartDate(state);
-//   const endDate = selectEndDate(state);
-//   const focusedInput = selectFocusedInput(state);
-//   return { startDate, endDate, focusedInput };
-// };
-
-// const actions = {
-//   onFocusChange: selectFocus,
-//   onDatesChange: selectDates,
-// };
-
-// export default connect(mapStateToProps, actions)(DateComponent);
-

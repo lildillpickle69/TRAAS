@@ -18,7 +18,7 @@ const mapStateToProps = (state) => {
   return {
     templates: state.cards.finalized.concat(state.cards.inprogress) };
 };
-
+  
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchInprogress: (
@@ -113,11 +113,23 @@ class MainMenu extends PureComponent {
         </Modal>
         <br />
         <Divider horizontal>Technical Reports Addendum Asset Summary and Out-Of-Tolerance Condition Database</Divider>
-        <Grid centered columns={2}>
-          <Grid.Column>
-            <Message compact positive style={style} header="Beta" content="Please note that this is a beta version. All addendums created here will not be visible once this goes live." />
-          </Grid.Column>
-        </Grid>
+          <Grid centered textAlign="center" columns={2}>
+            <Grid.Row>
+              <Grid.Column>
+                <Message compact positive style={style}>
+                    <Message.Header>What's New</Message.Header>
+                    <Message.List>
+                      <Message.Item>Create addendums from existing ones</Message.Item>
+                      <Message.Item>Add additional authors to addendums</Message.Item>
+                      <Message.Item>Fully dynamic and responsive interface</Message.Item>
+                      <Message.Item>Asset comments removed</Message.Item>
+                      <Message.Item>Search for addendums and OOTCs</Message.Item>
+                    </Message.List>
+                </Message>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          <br />
         <TabBarContainer tabs={tabs} />
         <Switch>
           <Route exact path="/home/inprogress" component={Addendums} />
@@ -127,6 +139,6 @@ class MainMenu extends PureComponent {
       </div>
     );
   }
-}
+}   
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);

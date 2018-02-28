@@ -4,5 +4,6 @@ import SearchBar from './SearchBar';
 import DropdownComponent from './DropdownComponent';
 import ModalComponent from './ModalComponent';
 import AssetTable from './AssetTable';
+import ResultsTable from './ResultsTable';
 
-export { TabBar, AddendumGroup, SearchBar, DropdownComponent, ModalComponent, AssetTable };
+export { TabBar, AddendumGroup, SearchBar, DropdownComponent, ModalComponent, AssetTable, ResultsTable };

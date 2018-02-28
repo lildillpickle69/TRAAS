@@ -7,6 +7,11 @@ export const selectResultsArray = createSelector(
   results => results.results,
 );
 
+export const selectValue = createSelector(
+  selectResults,
+  results => results.value,
+);
+
 export const getLoading = createSelector(
   selectResults,
   results => results.searchloading,

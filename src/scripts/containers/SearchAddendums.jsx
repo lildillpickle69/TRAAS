@@ -1,19 +1,23 @@
 import { connect } from 'react-redux';
 import { SearchBar } from '../components';
-import { searchAddendums } from '../actions/';
-import { selectResultsArray, getLoading } from '../reducers';
+import { searchAddendums, handleSubmit } from '../actions/';
+import { selectResultsArray, getLoading, selectValue } from '../reducers';
 
 const mapStateToProps = (state) => {
   const results = selectResultsArray(state);
   const searchloading = getLoading(state);
+  const value = selectValue(state);
   // console.log(results);
-  return { results, searchloading };
+  return { results, searchloading, value };
 };
 
-const mapDispatchToProps = (dispatch) => { 
+const mapDispatchToProps = (dispatch) => {
   return {
     onSearchChange: (query) => {
       dispatch(searchAddendums(query));
+    },
+    onSearchQuery: (query) => {
+      dispatch(handleSubmit(query));
     },
   };
 };

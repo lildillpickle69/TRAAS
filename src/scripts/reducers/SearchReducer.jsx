@@ -1,10 +1,14 @@
-import { SEARCH, RETURN, ERROR } from '../constants/ActionTypes';
+import { SEARCH, RETURN, ERROR, SUBMIT } from '../constants/ActionTypes';
 
 const initialstate = {
   results: [],
 };
 export default function SearchAddendums(state = initialstate, action) {
   switch (action.type) {
+    case SUBMIT:
+      return {
+        state,
+      };
     case SEARCH:
       return {
         ...state,

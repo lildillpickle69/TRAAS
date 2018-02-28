@@ -2,7 +2,7 @@ import { TAB_SELECTED } from '../constants/ActionTypes';
 import { createReducer } from '../utils/';
 
 const initialState = {
-  currentTab: window.location.href.substring(55),
+  currentTab: window.location.href.substr(window.location.href.lastIndexOf('/') + 1),
 };
 
 export function selectTab(state, payload) {

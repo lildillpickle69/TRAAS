@@ -15,6 +15,7 @@ const DropdownComponent = ({ loadOptions, input, multi, creatable, ...props }) =
         labelKey="label"
         valueKey="value"
         multi={multi}
+        placeholder="Search to narrow results."
         selectComponent={creatable && AsyncCreatable}
         value={input.value || ''}
         {...props}
@@ -32,6 +33,7 @@ const DropdownComponent = ({ loadOptions, input, multi, creatable, ...props }) =
       labelKey="label"
       valueKey="value"
       multi={multi}
+      placeholder="Search to narrow results."
       selectComponent={creatable && AsyncCreatable}
       value={input.value || null}
       {...props}

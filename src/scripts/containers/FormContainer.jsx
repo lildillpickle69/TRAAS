@@ -6,6 +6,7 @@ import { Form, Divider, Grid, Message, Loader, Dimmer, Segment } from 'semantic-
 import moment from 'moment';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { DateRangePicker } from 'react-dates';
 import { Field, Fields, reduxForm, formValueSelector } from 'redux-form';
 import DateRangePickerWrapper from './DateRange';
 import DropdownContainer from './DropdownContainer';
@@ -96,7 +97,7 @@ class FormContainer extends Component {
                     <Field validate={required} name="report_name" type="text" component={renderTextField} label="Report Title" id="title" />
                   </Grid.Column>
                   <Grid.Column width={3}>
-                    <Field validate={required} component={DropdownContainer} query="authors" name="PI" label="PI Name" id="pi" />
+                  <Field validate={required} component={DropdownContainer} query="authors" name="PI" label="First Aerospace Author / PI" id="pi" />
                   </Grid.Column>
                   <Grid.Column width={2}>
                     <Field label="JO" name="JO" type="text" component={renderTextField} id="JO" />
@@ -149,7 +150,7 @@ class FormContainer extends Component {
             </Form.Group>
             <Grid centered stackable>
               <Grid.Column width={6} >
-                <Field validate={required} component={DropdownContainer} label="Assets" id="assets" name="Assets" multi query="assets" />
+                <Field validate={required} component={DropdownContainer} label="Assets" id="assetfield" name="Assets" multi query="assets" />
               </Grid.Column>
             </Grid>
             <br />

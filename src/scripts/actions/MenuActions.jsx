@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TAB_SELECTED, REQUEST, INPROGRESS_RECEIVE, FINALIZED_RECEIVE, FAILURE, SEARCH, RETURN, ERROR } from '../constants/ActionTypes';
+import { TAB_SELECTED, REQUEST, INPROGRESS_RECEIVE, FINALIZED_RECEIVE, FAILURE, SEARCH, RETURN, ERROR, SUBMIT } from '../constants/ActionTypes';
 
 
 export function selectTab(tabName) {
@@ -46,6 +46,11 @@ function search() {
     type: SEARCH,
   };
 }
+function submit() {
+  return {
+    type: SUBMIT,
+  };
+}
 function returnresults(results, value) {
   return {
     type: RETURN,
@@ -88,7 +93,7 @@ export function searchAddendums(query) {
   return function (dispatch) {
     dispatch(search());
     return axios
-      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/search.pl?search=${query}`)
+      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/search.pl?search=${query}&limit=5`)
       .then((response) => {
         if (response.status >= 400) {
           dispatch(error('Bad response from server'));
@@ -98,5 +103,12 @@ export function searchAddendums(query) {
       .then(results =>
         dispatch(returnresults(results, query)))
       .catch((err) => { console.log(err); });
+  };
+}
+
+export function handleSubmit(query) {
+  return function (dispatch) {
+    dispatch(submit());
+    window.open(`https://agoquality-tmpw.aero.org/TRAAS/index.php#/search/${query}`);
   };
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Search, Label } from 'semantic-ui-react';
+import { Search } from 'semantic-ui-react';
 
 const style = { color: 'inherit' };
 const SearchAddendums = (props) => {
-  const { searchloading, results, value, onSearchChange, ...otherProps } = props;
+  const { searchloading, results, value, onSearchChange, onSearchQuery, ...otherProps } = props;
   // const categoryRenderer = ({ name }) =>
   //   (<a href={`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${name}`} target="_blank">
   //     <Label as={'span'} content={name} />
@@ -28,6 +28,7 @@ const SearchAddendums = (props) => {
       results={results}
       onSearchChange={e => setInterval(onSearchChange(e.target.value), 500)}
       resultRenderer={resultRenderer}
+      onKeyPress={e => (e.key === 'Enter' ? onSearchQuery(e.target.value) : null)}
       /*categoryRenderer={categoryRenderer}*/
       {...otherProps}
     />

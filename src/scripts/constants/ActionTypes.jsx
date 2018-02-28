@@ -11,6 +11,7 @@ export const FINALIZED_RECEIVE = 'FINALIZED_RECEIVE';
 export const FAILURE = 'FAILURE';
 export const SEARCH = 'SEARCH';
 export const RETURN = 'RETURN';
+export const SUBMIT = 'SUBMIT';
 export const ERROR = 'ERROR';
 export const SELECT_DATES = 'SELECT_DATES';
 export const SELECT_FOCUS = 'SELECT_FOCUS';

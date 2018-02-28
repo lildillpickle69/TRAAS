@@ -38,6 +38,7 @@ const AssetTable = ({ assets }) => {
           <Table.Cell>Model</Table.Cell>
           <Table.Cell>Description</Table.Cell>
         </Table.Row>
+        <Table.Body />
       </Table.Header>
     </Table>
   );
