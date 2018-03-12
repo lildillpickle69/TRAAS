@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import axios from 'axios';
+import { Loader, Dimmer } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import ResultsTable from '../components/ResultsTable';
+import AddendumPages from '../containers/AddendumPages';
 
 class SearchResults extends PureComponent {
   constructor(props) {
@@ -10,6 +11,7 @@ class SearchResults extends PureComponent {
     this.state = {
       Addendums: [],
       OOTCS: [],
+      loaded: false,
     };
   }
   componentDidMount() {
@@ -21,6 +23,7 @@ class SearchResults extends PureComponent {
         this.setState({
           Addendums,
           OOTCS,
+          loaded: true,
         });
       })
       .catch(err => console.log(err));
@@ -28,7 +31,10 @@ class SearchResults extends PureComponent {
   render() {
     return (
       <div>
-        <ResultsTable results={this.state.Addendums} />
+        <Dimmer active={!this.state.loaded} inverted>
+          <Loader content="loading" />
+        </Dimmer>
+        <AddendumPages addendumresults={this.state.Addendums} ootcresults={this.state.OOTCS} />
       </div>
     );
   }

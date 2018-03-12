@@ -1,23 +1,29 @@
 import _objectWithoutProperties from 'babel-runtime/helpers/objectWithoutProperties';
 import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _createClass from 'babel-runtime/helpers/createClass';
+
+var babelPluginFlowReactPropTypes_proptype_VisibleCellRange = require('../types').babelPluginFlowReactPropTypes_proptype_VisibleCellRange || require('prop-types').any;
+
+var babelPluginFlowReactPropTypes_proptype_CellSizeGetter = require('../types').babelPluginFlowReactPropTypes_proptype_CellSizeGetter || require('prop-types').any;
+
+var babelPluginFlowReactPropTypes_proptype_Alignment = require('../types').babelPluginFlowReactPropTypes_proptype_Alignment || require('prop-types').any;
+
 import CellSizeAndPositionManager from './CellSizeAndPositionManager';
+import { getMaxElementSize } from './maxElementSize.js';
 
 /**
  * Browsers have scroll offset limitations (eg Chrome stops scrolling at ~33.5M pixels where as Edge tops out at ~1.5M pixels).
  * After a certain position, the browser won't allow the user to scroll further (even via JavaScript scroll offset adjustments).
  * This util picks a lower ceiling for max size and artificially adjusts positions within to make it transparent for users.
  */
-export var DEFAULT_MAX_SCROLL_SIZE = 1500000;
 
 /**
  * Extends CellSizeAndPositionManager and adds scaling behavior for lists that are too large to fit within a browser's native limits.
  */
-
 var ScalingCellSizeAndPositionManager = function () {
   function ScalingCellSizeAndPositionManager(_ref) {
     var _ref$maxScrollSize = _ref.maxScrollSize,
-        maxScrollSize = _ref$maxScrollSize === undefined ? DEFAULT_MAX_SCROLL_SIZE : _ref$maxScrollSize,
+        maxScrollSize = _ref$maxScrollSize === undefined ? getMaxElementSize() : _ref$maxScrollSize,
         params = _objectWithoutProperties(_ref, ['maxScrollSize']);
 
     _classCallCheck(this, ScalingCellSizeAndPositionManager);
@@ -102,8 +108,7 @@ var ScalingCellSizeAndPositionManager = function () {
           align = _ref3$align === undefined ? 'auto' : _ref3$align,
           containerSize = _ref3.containerSize,
           currentOffset = _ref3.currentOffset,
-          targetIndex = _ref3.targetIndex,
-          totalSize = _ref3.totalSize;
+          targetIndex = _ref3.targetIndex;
 
       currentOffset = this._safeOffsetToOffset({
         containerSize: containerSize,
@@ -114,8 +119,7 @@ var ScalingCellSizeAndPositionManager = function () {
         align: align,
         containerSize: containerSize,
         currentOffset: currentOffset,
-        targetIndex: targetIndex,
-        totalSize: totalSize
+        targetIndex: targetIndex
       });
 
       return this._offsetToSafeOffset({

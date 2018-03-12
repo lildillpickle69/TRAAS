@@ -4,43 +4,93 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _react = require('react');
 
+var React = _interopRequireWildcard(_react);
+
 var _reactDom = require('react-dom');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _CellMeasurerCache = require('./CellMeasurerCache.js');
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _CellMeasurerCache2 = _interopRequireDefault(_CellMeasurerCache);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Wraps a cell and measures its rendered content.
  * Measurements are stored in a per-cell cache.
  * Cached-content is not be re-measured.
  */
-var CellMeasurer = function (_PureComponent) {
-  _inherits(CellMeasurer, _PureComponent);
+var CellMeasurer = function (_React$PureComponent) {
+  (0, _inherits3.default)(CellMeasurer, _React$PureComponent);
 
-  function CellMeasurer(props, context) {
-    _classCallCheck(this, CellMeasurer);
+  function CellMeasurer() {
+    var _ref;
 
-    var _this = _possibleConstructorReturn(this, (CellMeasurer.__proto__ || Object.getPrototypeOf(CellMeasurer)).call(this, props, context));
+    var _temp, _this, _ret;
 
-    _this._measure = _this._measure.bind(_this);
-    return _this;
+    (0, _classCallCheck3.default)(this, CellMeasurer);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = CellMeasurer.__proto__ || (0, _getPrototypeOf2.default)(CellMeasurer)).call.apply(_ref, [this].concat(args))), _this), _this._measure = function () {
+      var _this$props = _this.props,
+          cache = _this$props.cache,
+          _this$props$columnInd = _this$props.columnIndex,
+          columnIndex = _this$props$columnInd === undefined ? 0 : _this$props$columnInd,
+          parent = _this$props.parent,
+          _this$props$rowIndex = _this$props.rowIndex,
+          rowIndex = _this$props$rowIndex === undefined ? _this.props.index || 0 : _this$props$rowIndex;
+
+      var _this$_getCellMeasure = _this._getCellMeasurements(),
+          height = _this$_getCellMeasure.height,
+          width = _this$_getCellMeasure.width;
+
+      if (height !== cache.getHeight(rowIndex, columnIndex) || width !== cache.getWidth(rowIndex, columnIndex)) {
+        cache.set(rowIndex, columnIndex, width, height);
+
+        if (parent && typeof parent.recomputeGridSize === 'function') {
+          parent.recomputeGridSize({
+            columnIndex: columnIndex,
+            rowIndex: rowIndex
+          });
+        }
+      }
+    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
   }
 
-  _createClass(CellMeasurer, [{
+  (0, _createClass3.default)(CellMeasurer, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       this._maybeMeasureCell();
     }
   }, {
     key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
+    value: function componentDidUpdate() {
       this._maybeMeasureCell();
     }
   }, {
@@ -61,37 +111,41 @@ var CellMeasurer = function (_PureComponent) {
 
       // TODO Check for a bad combination of fixedWidth and missing numeric width or vice versa with height
 
-      var styleWidth = node.style.width;
-      var styleHeight = node.style.height;
+      if (node && node.ownerDocument && node.ownerDocument.defaultView && node instanceof node.ownerDocument.defaultView.HTMLElement) {
+        var styleWidth = node.style.width;
+        var styleHeight = node.style.height;
 
-      // If we are re-measuring a cell that has already been measured,
-      // It will have a hard-coded width/height from the previous measurement.
-      // The fact that we are measuring indicates this measurement is probably stale,
-      // So explicitly clear it out (eg set to "auto") so we can recalculate.
-      // See issue #593 for more info.
-      // Even if we are measuring initially- if we're inside of a MultiGrid component,
-      // Explicitly clear width/height before measuring to avoid being tainted by another Grid.
-      // eg top/left Grid renders before bottom/right Grid
-      // Since the CellMeasurerCache is shared between them this taints derived cell size values.
-      if (!cache.hasFixedWidth()) {
-        node.style.width = 'auto';
-      }
-      if (!cache.hasFixedHeight()) {
-        node.style.height = 'auto';
-      }
+        // If we are re-measuring a cell that has already been measured,
+        // It will have a hard-coded width/height from the previous measurement.
+        // The fact that we are measuring indicates this measurement is probably stale,
+        // So explicitly clear it out (eg set to "auto") so we can recalculate.
+        // See issue #593 for more info.
+        // Even if we are measuring initially- if we're inside of a MultiGrid component,
+        // Explicitly clear width/height before measuring to avoid being tainted by another Grid.
+        // eg top/left Grid renders before bottom/right Grid
+        // Since the CellMeasurerCache is shared between them this taints derived cell size values.
+        if (!cache.hasFixedWidth()) {
+          node.style.width = 'auto';
+        }
+        if (!cache.hasFixedHeight()) {
+          node.style.height = 'auto';
+        }
 
-      var height = Math.ceil(node.offsetHeight);
-      var width = Math.ceil(node.offsetWidth);
+        var height = Math.ceil(node.offsetHeight);
+        var width = Math.ceil(node.offsetWidth);
 
-      // Reset after measuring to avoid breaking styles; see #660
-      if (styleWidth) {
-        node.style.width = styleWidth;
-      }
-      if (styleHeight) {
-        node.style.height = styleHeight;
-      }
+        // Reset after measuring to avoid breaking styles; see #660
+        if (styleWidth) {
+          node.style.width = styleWidth;
+        }
+        if (styleHeight) {
+          node.style.height = styleHeight;
+        }
 
-      return { height: height, styleHeight: styleHeight, styleWidth: styleWidth, width: width };
+        return { height: height, width: width };
+      } else {
+        return { height: 0, width: 0 };
+      }
     }
   }, {
     key: '_maybeMeasureCell',
@@ -102,7 +156,7 @@ var CellMeasurer = function (_PureComponent) {
           columnIndex = _props$columnIndex === undefined ? 0 : _props$columnIndex,
           parent = _props.parent,
           _props$rowIndex = _props.rowIndex,
-          rowIndex = _props$rowIndex === undefined ? this.props.index : _props$rowIndex;
+          rowIndex = _props$rowIndex === undefined ? this.props.index || 0 : _props$rowIndex;
 
 
       if (!cache.has(rowIndex, columnIndex)) {
@@ -121,40 +175,25 @@ var CellMeasurer = function (_PureComponent) {
         }
       }
     }
-  }, {
-    key: '_measure',
-    value: function _measure() {
-      var _props2 = this.props,
-          cache = _props2.cache,
-          _props2$columnIndex = _props2.columnIndex,
-          columnIndex = _props2$columnIndex === undefined ? 0 : _props2$columnIndex,
-          parent = _props2.parent,
-          _props2$rowIndex = _props2.rowIndex,
-          rowIndex = _props2$rowIndex === undefined ? this.props.index : _props2$rowIndex;
-
-      var _getCellMeasurements3 = this._getCellMeasurements(),
-          height = _getCellMeasurements3.height,
-          width = _getCellMeasurements3.width;
-
-      if (height !== cache.getHeight(rowIndex, columnIndex) || width !== cache.getWidth(rowIndex, columnIndex)) {
-        cache.set(rowIndex, columnIndex, width, height);
-
-        if (parent && typeof parent.recomputeGridSize === 'function') {
-          parent.recomputeGridSize({
-            columnIndex: columnIndex,
-            rowIndex: rowIndex
-          });
-        }
-      }
-    }
   }]);
-
   return CellMeasurer;
-}(_react.PureComponent);
+}(React.PureComponent);
 
 // Used for DEV mode warning check
 
 
+CellMeasurer.__internalCellMeasurerFlag = false;
+CellMeasurer.propTypes = process.env.NODE_ENV === 'production' ? null : {
+  cache: typeof _CellMeasurerCache2.default === 'function' ? require('prop-types').instanceOf(_CellMeasurerCache2.default).isRequired : require('prop-types').any.isRequired,
+  children: require('prop-types').oneOfType([require('prop-types').func, require('prop-types').node]).isRequired,
+  columnIndex: require('prop-types').number,
+  index: require('prop-types').number,
+  parent: require('prop-types').shape({
+    invalidateCellSizeAfterRender: require('prop-types').func,
+    recomputeGridSize: require('prop-types').func
+  }).isRequired,
+  rowIndex: require('prop-types').number
+};
 exports.default = CellMeasurer;
 if (process.env.NODE_ENV !== 'production') {
   CellMeasurer.__internalCellMeasurerFlag = true;

@@ -140,7 +140,7 @@ InfiniteLoader.defaultProps = {
   threshold: 15
 };
 export default InfiniteLoader;
-process.env.NODE_ENV !== "production" ? InfiniteLoader.propTypes = {
+InfiniteLoader.propTypes = process.env.NODE_ENV !== "production" ? {
   /**
    * Function responsible for rendering a virtualized component.
    * This function should implement the following signature:
@@ -183,7 +183,7 @@ process.env.NODE_ENV !== "production" ? InfiniteLoader.propTypes = {
    * This value defaults to 15.
    */
   threshold: PropTypes.number.isRequired
-} : void 0;
+} : {};
 export function isRangeVisible(_ref2) {
   var lastRenderedStartIndex = _ref2.lastRenderedStartIndex,
       lastRenderedStopIndex = _ref2.lastRenderedStopIndex,

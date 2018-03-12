@@ -4,9 +4,29 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends2 = require('babel-runtime/helpers/extends');
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _classnames = require('classnames');
 
@@ -26,9 +46,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = require('react-dom');
 
-var _Grid = require('../Grid');
+var _Grid2 = require('../Grid');
 
-var _Grid2 = _interopRequireDefault(_Grid);
+var _Grid3 = _interopRequireDefault(_Grid2);
 
 var _defaultRowRenderer = require('./defaultRowRenderer');
 
@@ -44,23 +64,19 @@ var _SortDirection2 = _interopRequireDefault(_SortDirection);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var babelPluginFlowReactPropTypes_proptype_CellPosition = require('../Grid').babelPluginFlowReactPropTypes_proptype_CellPosition || require('prop-types').any;
 
 /**
  * Table component with fixed headers and virtualized rows for improved performance with large data sets.
  * This component expects explicit width, height, and padding parameters.
  */
 var Table = function (_PureComponent) {
-  _inherits(Table, _PureComponent);
+  (0, _inherits3.default)(Table, _PureComponent);
 
   function Table(props) {
-    _classCallCheck(this, Table);
+    (0, _classCallCheck3.default)(this, Table);
 
-    var _this = _possibleConstructorReturn(this, (Table.__proto__ || Object.getPrototypeOf(Table)).call(this, props));
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Table.__proto__ || (0, _getPrototypeOf2.default)(Table)).call(this, props));
 
     _this.state = {
       scrollbarWidth: 0
@@ -74,10 +90,12 @@ var Table = function (_PureComponent) {
     return _this;
   }
 
-  _createClass(Table, [{
+  (0, _createClass3.default)(Table, [{
     key: 'forceUpdateGrid',
     value: function forceUpdateGrid() {
-      this.Grid.forceUpdate();
+      if (this.Grid) {
+        this.Grid.forceUpdate();
+      }
     }
 
     /** See Grid#getOffsetForCell */
@@ -88,13 +106,32 @@ var Table = function (_PureComponent) {
       var alignment = _ref.alignment,
           index = _ref.index;
 
-      var _Grid$getOffsetForCel = this.Grid.getOffsetForCell({
-        alignment: alignment,
-        rowIndex: index
-      }),
-          scrollTop = _Grid$getOffsetForCel.scrollTop;
+      if (this.Grid) {
+        var _Grid$getOffsetForCel = this.Grid.getOffsetForCell({
+          alignment: alignment,
+          rowIndex: index
+        }),
+            scrollTop = _Grid$getOffsetForCel.scrollTop;
 
-      return scrollTop;
+        return scrollTop;
+      }
+      return 0;
+    }
+
+    /** CellMeasurer compatibility */
+
+  }, {
+    key: 'invalidateCellSizeAfterRender',
+    value: function invalidateCellSizeAfterRender(_ref2) {
+      var columnIndex = _ref2.columnIndex,
+          rowIndex = _ref2.rowIndex;
+
+      if (this.Grid) {
+        this.Grid.invalidateCellSizeAfterRender({
+          rowIndex: rowIndex,
+          columnIndex: columnIndex
+        });
+      }
     }
 
     /** See Grid#measureAllCells */
@@ -102,7 +139,28 @@ var Table = function (_PureComponent) {
   }, {
     key: 'measureAllRows',
     value: function measureAllRows() {
-      this.Grid.measureAllCells();
+      if (this.Grid) {
+        this.Grid.measureAllCells();
+      }
+    }
+
+    /** CellMeasurer compatibility */
+
+  }, {
+    key: 'recomputeGridSize',
+    value: function recomputeGridSize() {
+      var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref3$columnIndex = _ref3.columnIndex,
+          columnIndex = _ref3$columnIndex === undefined ? 0 : _ref3$columnIndex,
+          _ref3$rowIndex = _ref3.rowIndex,
+          rowIndex = _ref3$rowIndex === undefined ? 0 : _ref3$rowIndex;
+
+      if (this.Grid) {
+        this.Grid.recomputeGridSize({
+          rowIndex: rowIndex,
+          columnIndex: columnIndex
+        });
+      }
     }
 
     /** See Grid#recomputeGridSize */
@@ -112,9 +170,11 @@ var Table = function (_PureComponent) {
     value: function recomputeRowHeights() {
       var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
-      this.Grid.recomputeGridSize({
-        rowIndex: index
-      });
+      if (this.Grid) {
+        this.Grid.recomputeGridSize({
+          rowIndex: index
+        });
+      }
     }
 
     /** See Grid#scrollToPosition */
@@ -124,7 +184,9 @@ var Table = function (_PureComponent) {
     value: function scrollToPosition() {
       var scrollTop = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
-      this.Grid.scrollToPosition({ scrollTop: scrollTop });
+      if (this.Grid) {
+        this.Grid.scrollToPosition({ scrollTop: scrollTop });
+      }
     }
 
     /** See Grid#scrollToCell */
@@ -134,10 +196,12 @@ var Table = function (_PureComponent) {
     value: function scrollToRow() {
       var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
-      this.Grid.scrollToCell({
-        columnIndex: 0,
-        rowIndex: index
-      });
+      if (this.Grid) {
+        this.Grid.scrollToCell({
+          columnIndex: 0,
+          rowIndex: index
+        });
+      }
     }
   }, {
     key: 'componentDidMount',
@@ -183,7 +247,7 @@ var Table = function (_PureComponent) {
       _react2.default.Children.toArray(children).forEach(function (column, index) {
         var flexStyles = _this2._getFlexStyleForColumn(column, column.props.style);
 
-        _this2._cachedColumnStyles[index] = _extends({}, flexStyles, {
+        _this2._cachedColumnStyles[index] = (0, _extends3.default)({}, flexStyles, {
           overflow: 'hidden'
         });
       });
@@ -197,19 +261,18 @@ var Table = function (_PureComponent) {
           className: (0, _classnames2.default)('ReactVirtualized__Table', className),
           id: id,
           role: 'grid',
-          style: style
-        },
+          style: style },
         !disableHeader && headerRowRenderer({
           className: (0, _classnames2.default)('ReactVirtualized__Table__headerRow', rowClass),
           columns: this._getHeaderColumns(),
-          style: _extends({}, rowStyleObject, {
+          style: (0, _extends3.default)({}, rowStyleObject, {
             height: headerHeight,
             overflow: 'hidden',
             paddingRight: scrollbarWidth,
             width: width
           })
         }),
-        _react2.default.createElement(_Grid2.default, _extends({}, this.props, {
+        _react2.default.createElement(_Grid3.default, (0, _extends3.default)({}, this.props, {
           autoContainerWidth: true,
           className: (0, _classnames2.default)('ReactVirtualized__Table__Grid', gridClassName),
           cellRenderer: this._createRow,
@@ -224,7 +287,7 @@ var Table = function (_PureComponent) {
           role: 'rowgroup',
           scrollbarWidth: scrollbarWidth,
           scrollToRow: scrollToIndex,
-          style: _extends({}, gridStyle, {
+          style: (0, _extends3.default)({}, gridStyle, {
             overflowX: 'hidden'
           })
         }))
@@ -232,13 +295,13 @@ var Table = function (_PureComponent) {
     }
   }, {
     key: '_createColumn',
-    value: function _createColumn(_ref2) {
-      var column = _ref2.column,
-          columnIndex = _ref2.columnIndex,
-          isScrolling = _ref2.isScrolling,
-          parent = _ref2.parent,
-          rowData = _ref2.rowData,
-          rowIndex = _ref2.rowIndex;
+    value: function _createColumn(_ref4) {
+      var column = _ref4.column,
+          columnIndex = _ref4.columnIndex,
+          isScrolling = _ref4.isScrolling,
+          parent = _ref4.parent,
+          rowData = _ref4.rowData,
+          rowIndex = _ref4.rowIndex;
       var _column$props = column.props,
           cellDataGetter = _column$props.cellDataGetter,
           cellRenderer = _column$props.cellRenderer,
@@ -249,36 +312,41 @@ var Table = function (_PureComponent) {
 
 
       var cellData = cellDataGetter({ columnData: columnData, dataKey: dataKey, rowData: rowData });
-      var renderedCell = cellRenderer({ cellData: cellData, columnData: columnData, columnIndex: columnIndex, dataKey: dataKey, isScrolling: isScrolling, parent: parent, rowData: rowData, rowIndex: rowIndex });
+      var renderedCell = cellRenderer({
+        cellData: cellData,
+        columnData: columnData,
+        columnIndex: columnIndex,
+        dataKey: dataKey,
+        isScrolling: isScrolling,
+        parent: parent,
+        rowData: rowData,
+        rowIndex: rowIndex
+      });
 
       var style = this._cachedColumnStyles[columnIndex];
 
       var title = typeof renderedCell === 'string' ? renderedCell : null;
 
-      var a11yProps = {
-        role: 'gridcell'
-      };
-
-      if (id) {
-        a11yProps['aria-describedby'] = id;
-      }
-
+      // Avoid using object-spread syntax with multiple objects here,
+      // Since it results in an extra method call to 'babel-runtime/helpers/extends'
+      // See PR https://github.com/bvaughn/react-virtualized/pull/942
       return _react2.default.createElement(
         'div',
-        _extends({}, a11yProps, {
-          key: 'Row' + rowIndex + '-Col' + columnIndex,
+        {
+          'aria-describedby': id,
           className: (0, _classnames2.default)('ReactVirtualized__Table__rowColumn', className),
+          key: 'Row' + rowIndex + '-' + 'Col' + columnIndex,
+          role: 'gridcell',
           style: style,
-          title: title
-        }),
+          title: title },
         renderedCell
       );
     }
   }, {
     key: '_createHeader',
-    value: function _createHeader(_ref3) {
-      var column = _ref3.column,
-          index = _ref3.index;
+    value: function _createHeader(_ref5) {
+      var column = _ref5.column,
+          index = _ref5.index;
       var _props2 = this.props,
           headerClassName = _props2.headerClassName,
           headerStyle = _props2.headerStyle,
@@ -287,19 +355,20 @@ var Table = function (_PureComponent) {
           sortBy = _props2.sortBy,
           sortDirection = _props2.sortDirection;
       var _column$props2 = column.props,
+          columnData = _column$props2.columnData,
           dataKey = _column$props2.dataKey,
+          defaultSortDirection = _column$props2.defaultSortDirection,
           disableSort = _column$props2.disableSort,
           headerRenderer = _column$props2.headerRenderer,
           id = _column$props2.id,
-          label = _column$props2.label,
-          columnData = _column$props2.columnData;
+          label = _column$props2.label;
 
       var sortEnabled = !disableSort && sort;
 
       var classNames = (0, _classnames2.default)('ReactVirtualized__Table__headerColumn', headerClassName, column.props.headerClassName, {
-        'ReactVirtualized__Table__sortableHeaderColumn': sortEnabled
+        ReactVirtualized__Table__sortableHeaderColumn: sortEnabled
       });
-      var style = this._getFlexStyleForColumn(column, headerStyle);
+      var style = this._getFlexStyleForColumn(column, (0, _extends3.default)({}, headerStyle, column.props.headerStyle));
 
       var renderedHeader = headerRenderer({
         columnData: columnData,
@@ -310,68 +379,80 @@ var Table = function (_PureComponent) {
         sortDirection: sortDirection
       });
 
-      var a11yProps = {
-        role: 'columnheader'
-      };
+      var headerOnClick = void 0,
+          headerOnKeyDown = void 0,
+          headerTabIndex = void 0,
+          headerAriaSort = void 0,
+          headerAriaLabel = void 0;
 
       if (sortEnabled || onHeaderClick) {
-        (function () {
-          // If this is a sortable header, clicking it should update the table data's sorting.
-          var newSortDirection = sortBy !== dataKey || sortDirection === _SortDirection2.default.DESC ? _SortDirection2.default.ASC : _SortDirection2.default.DESC;
+        // If this is a sortable header, clicking it should update the table data's sorting.
+        var isFirstTimeSort = sortBy !== dataKey;
 
-          var onClick = function onClick(event) {
-            sortEnabled && sort({
-              sortBy: dataKey,
-              sortDirection: newSortDirection
-            });
-            onHeaderClick && onHeaderClick({ columnData: columnData, dataKey: dataKey, event: event });
-          };
+        // If this is the firstTime sort of this column, use the column default sort order.
+        // Otherwise, invert the direction of the sort.
+        var newSortDirection = isFirstTimeSort ? defaultSortDirection : sortDirection === _SortDirection2.default.DESC ? _SortDirection2.default.ASC : _SortDirection2.default.DESC;
 
-          var onKeyDown = function onKeyDown(event) {
-            if (event.key === 'Enter' || event.key === ' ') {
-              onClick(event);
-            }
-          };
+        var onClick = function onClick(event) {
+          sortEnabled && sort({
+            defaultSortDirection: defaultSortDirection,
+            event: event,
+            sortBy: dataKey,
+            sortDirection: newSortDirection
+          });
+          onHeaderClick && onHeaderClick({ columnData: columnData, dataKey: dataKey, event: event });
+        };
 
-          a11yProps['aria-label'] = column.props['aria-label'] || label || dataKey;
-          a11yProps.tabIndex = 0;
-          a11yProps.onClick = onClick;
-          a11yProps.onKeyDown = onKeyDown;
-        })();
+        var onKeyDown = function onKeyDown(event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            onClick(event);
+          }
+        };
+
+        headerAriaLabel = column.props['aria-label'] || label || dataKey;
+        headerTabIndex = 0;
+        headerOnClick = onClick;
+        headerOnKeyDown = onKeyDown;
       }
 
       if (sortBy === dataKey) {
-        a11yProps['aria-sort'] = sortDirection === _SortDirection2.default.ASC ? 'ascending' : 'descending';
+        headerAriaSort = sortDirection === _SortDirection2.default.ASC ? 'ascending' : 'descending';
       }
 
-      if (id) {
-        a11yProps.id = id;
-      }
-
+      // Avoid using object-spread syntax with multiple objects here,
+      // Since it results in an extra method call to 'babel-runtime/helpers/extends'
+      // See PR https://github.com/bvaughn/react-virtualized/pull/942
       return _react2.default.createElement(
         'div',
-        _extends({}, a11yProps, {
-          key: 'Header-Col' + index,
+        {
+          'aria-label': headerAriaLabel,
+          'aria-sort': headerAriaSort,
           className: classNames,
-          style: style
-        }),
+          id: id,
+          key: 'Header-Col' + index,
+          onClick: headerOnClick,
+          onKeyDown: headerOnKeyDown,
+          role: 'columnheader',
+          style: style,
+          tabIndex: headerTabIndex },
         renderedHeader
       );
     }
   }, {
     key: '_createRow',
-    value: function _createRow(_ref4) {
+    value: function _createRow(_ref6) {
       var _this3 = this;
 
-      var index = _ref4.rowIndex,
-          isScrolling = _ref4.isScrolling,
-          key = _ref4.key,
-          parent = _ref4.parent,
-          style = _ref4.style;
+      var index = _ref6.rowIndex,
+          isScrolling = _ref6.isScrolling,
+          key = _ref6.key,
+          parent = _ref6.parent,
+          style = _ref6.style;
       var _props3 = this.props,
           children = _props3.children,
           onRowClick = _props3.onRowClick,
           onRowDoubleClick = _props3.onRowDoubleClick,
+          onRowRightClick = _props3.onRowRightClick,
           onRowMouseOver = _props3.onRowMouseOver,
           onRowMouseOut = _props3.onRowMouseOut,
           rowClassName = _props3.rowClassName,
@@ -398,7 +479,7 @@ var Table = function (_PureComponent) {
       });
 
       var className = (0, _classnames2.default)('ReactVirtualized__Table__row', rowClass);
-      var flattenedStyle = _extends({}, style, rowStyleObject, {
+      var flattenedStyle = (0, _extends3.default)({}, style, rowStyleObject, {
         height: this._getRowHeight(index),
         overflow: 'hidden',
         paddingRight: scrollbarWidth
@@ -412,6 +493,7 @@ var Table = function (_PureComponent) {
         key: key,
         onRowClick: onRowClick,
         onRowDoubleClick: onRowDoubleClick,
+        onRowRightClick: onRowRightClick,
         onRowMouseOver: onRowMouseOver,
         onRowMouseOut: onRowMouseOut,
         rowData: rowData,
@@ -430,7 +512,7 @@ var Table = function (_PureComponent) {
 
       var flexValue = column.props.flexGrow + ' ' + column.props.flexShrink + ' ' + column.props.width + 'px';
 
-      var style = _extends({}, customStyle, {
+      var style = (0, _extends3.default)({}, customStyle, {
         flex: flexValue,
         msFlex: flexValue,
         WebkitFlex: flexValue
@@ -471,10 +553,10 @@ var Table = function (_PureComponent) {
     }
   }, {
     key: '_onScroll',
-    value: function _onScroll(_ref5) {
-      var clientHeight = _ref5.clientHeight,
-          scrollHeight = _ref5.scrollHeight,
-          scrollTop = _ref5.scrollTop;
+    value: function _onScroll(_ref7) {
+      var clientHeight = _ref7.clientHeight,
+          scrollHeight = _ref7.scrollHeight,
+          scrollTop = _ref7.scrollTop;
       var onScroll = this.props.onScroll;
 
 
@@ -482,11 +564,11 @@ var Table = function (_PureComponent) {
     }
   }, {
     key: '_onSectionRendered',
-    value: function _onSectionRendered(_ref6) {
-      var rowOverscanStartIndex = _ref6.rowOverscanStartIndex,
-          rowOverscanStopIndex = _ref6.rowOverscanStopIndex,
-          rowStartIndex = _ref6.rowStartIndex,
-          rowStopIndex = _ref6.rowStopIndex;
+    value: function _onSectionRendered(_ref8) {
+      var rowOverscanStartIndex = _ref8.rowOverscanStartIndex,
+          rowOverscanStopIndex = _ref8.rowOverscanStopIndex,
+          rowStartIndex = _ref8.rowStartIndex,
+          rowStopIndex = _ref8.rowStopIndex;
       var onRowsRendered = this.props.onRowsRendered;
 
 
@@ -505,15 +587,16 @@ var Table = function (_PureComponent) {
   }, {
     key: '_setScrollbarWidth',
     value: function _setScrollbarWidth() {
-      var Grid = (0, _reactDom.findDOMNode)(this.Grid);
-      var clientWidth = Grid.clientWidth || 0;
-      var offsetWidth = Grid.offsetWidth || 0;
-      var scrollbarWidth = offsetWidth - clientWidth;
+      if (this.Grid) {
+        var _Grid = (0, _reactDom.findDOMNode)(this.Grid);
+        var clientWidth = _Grid.clientWidth || 0;
+        var offsetWidth = _Grid.offsetWidth || 0;
+        var scrollbarWidth = offsetWidth - clientWidth;
 
-      this.setState({ scrollbarWidth: scrollbarWidth });
+        this.setState({ scrollbarWidth: scrollbarWidth });
+      }
     }
   }]);
-
   return Table;
 }(_react.PureComponent);
 
@@ -531,7 +614,7 @@ Table.defaultProps = {
   onScroll: function onScroll() {
     return null;
   },
-  overscanIndicesGetter: _Grid.accessibilityOverscanIndicesGetter,
+  overscanIndicesGetter: _Grid2.accessibilityOverscanIndicesGetter,
   overscanRowCount: 10,
   rowRenderer: _defaultRowRenderer2.default,
   headerRowRenderer: _defaultHeaderRowRenderer2.default,
@@ -541,7 +624,7 @@ Table.defaultProps = {
   style: {}
 };
 exports.default = Table;
-process.env.NODE_ENV !== "production" ? Table.propTypes = {
+Table.propTypes = process.env.NODE_ENV !== "production" ? {
   'aria-label': _propTypes2.default.string,
 
   /**
@@ -551,10 +634,11 @@ process.env.NODE_ENV !== "production" ? Table.propTypes = {
   autoHeight: _propTypes2.default.bool,
 
   /** One or more Columns describing the data displayed in this row */
-  children: function children(props, propName, componentName) {
+  children: function children(props) {
     var children = _react2.default.Children.toArray(props.children);
     for (var i = 0; i < children.length; i++) {
-      if (children[i].type !== _Column2.default) {
+      var childType = children[i].type;
+      if (childType !== _Column2.default && !(childType.prototype instanceof _Column2.default)) {
         return new Error('Table only accepts children of type Column');
       }
     }
@@ -607,9 +691,9 @@ process.env.NODE_ENV !== "production" ? Table.propTypes = {
   noRowsRenderer: _propTypes2.default.func,
 
   /**
-  * Optional callback when a column's header is clicked.
-  * ({ columnData: any, dataKey: string }): void
-  */
+   * Optional callback when a column's header is clicked.
+   * ({ columnData: any, dataKey: string }): void
+   */
   onHeaderClick: _propTypes2.default.func,
 
   /**
@@ -635,6 +719,12 @@ process.env.NODE_ENV !== "production" ? Table.propTypes = {
    * ({ index: number }): void
    */
   onRowMouseOver: _propTypes2.default.func,
+
+  /**
+   * Callback invoked when a user right-clicks on a table row.
+   * ({ index: number }): void
+   */
+  onRowRightClick: _propTypes2.default.func,
 
   /**
    * Callback invoked with information about the slice of rows that were just rendered.
@@ -711,7 +801,12 @@ process.env.NODE_ENV !== "production" ? Table.propTypes = {
 
   /**
    * Sort function to be called if a sortable header is clicked.
-   * ({ sortBy: string, sortDirection: SortDirection }): void
+   * Should implement the following interface: ({
+   *   defaultSortDirection: 'ASC' | 'DESC',
+   *   event: MouseEvent,
+   *   sortBy: string,
+   *   sortDirection: SortDirection
+   * }): void
    */
   sort: _propTypes2.default.func,
 
@@ -729,4 +824,4 @@ process.env.NODE_ENV !== "production" ? Table.propTypes = {
 
   /** Width of list */
   width: _propTypes2.default.number.isRequired
-} : void 0;
+} : {};

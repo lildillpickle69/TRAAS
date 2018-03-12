@@ -4,21 +4,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = updateScrollIndexHelper;
+
+var _ScalingCellSizeAndPositionManager = require('./ScalingCellSizeAndPositionManager.js');
+
+var _ScalingCellSizeAndPositionManager2 = _interopRequireDefault(_ScalingCellSizeAndPositionManager);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var babelPluginFlowReactPropTypes_proptype_CellSize = require('../types').babelPluginFlowReactPropTypes_proptype_CellSize || require('prop-types').any;
+
+var babelPluginFlowReactPropTypes_proptype_Alignment = require('../types').babelPluginFlowReactPropTypes_proptype_Alignment || require('prop-types').any;
+
 /**
  * Helper function that determines when to update scroll offsets to ensure that a scroll-to-index remains visible.
  * This function also ensures that the scroll ofset isn't past the last column/row of cells.
- *
- * @param cellsSize Width or height of cells for the current axis
- * @param cellSizeAndPositionManager Manages size and position metadata of cells
- * @param previousCellsCount Previous number of rows or columns
- * @param previousCellsSize Previous width or height of cells
- * @param previousScrollToIndex Previous scroll-to-index
- * @param previousSize Previous width or height of the virtualized container
- * @param scrollOffset Current scrollLeft or scrollTop
- * @param scrollToIndex Scroll-to-index
- * @param size Width or height of the virtualized container
- * @param updateScrollIndexCallback Callback to invoke with an scroll-to-index value
  */
+
 function updateScrollIndexHelper(_ref) {
   var cellSize = _ref.cellSize,
       cellSizeAndPositionManager = _ref.cellSizeAndPositionManager,

@@ -7,6 +7,9 @@ import _inherits from 'babel-runtime/helpers/inherits';
 import React, { PureComponent } from 'react';
 import cn from 'classnames';
 import PositionCache from './PositionCache';
+import { requestAnimationTimeout, cancelAnimationTimeout } from '../utils/requestAnimationTimeout';
+
+var babelPluginFlowReactPropTypes_proptype_AnimationTimeoutId = require('../utils/requestAnimationTimeout').babelPluginFlowReactPropTypes_proptype_AnimationTimeoutId || require('prop-types').any;
 
 var emptyObject = {};
 
@@ -114,7 +117,7 @@ var Masonry = function (_PureComponent) {
     }
   }, {
     key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
+    value: function componentDidUpdate() {
       this._checkInvalidateOnUpdate();
       this._invokeOnScrollCallback();
       this._invokeOnCellsRenderedCallback();
@@ -123,7 +126,7 @@ var Masonry = function (_PureComponent) {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       if (this._debounceResetIsScrollingId) {
-        clearTimeout(this._debounceResetIsScrollingId);
+        cancelAnimationTimeout(this._debounceResetIsScrollingId);
       }
     }
   }, {
@@ -172,11 +175,40 @@ var Masonry = function (_PureComponent) {
       var shortestColumnSize = this._positionCache.shortestColumnSize;
       var measuredCellCount = this._positionCache.count;
 
-      // We need to measure more cells before layout
+      var startIndex = 0;
+      var stopIndex = void 0;
+
+      this._positionCache.range(Math.max(0, scrollTop - overscanByPixels), height + overscanByPixels * 2, function (index, left, top) {
+        if (typeof stopIndex === 'undefined') {
+          startIndex = index;
+          stopIndex = index;
+        } else {
+          startIndex = Math.min(startIndex, index);
+          stopIndex = Math.max(stopIndex, index);
+        }
+
+        children.push(cellRenderer({
+          index: index,
+          isScrolling: isScrolling,
+          key: keyMapper(index),
+          parent: _this2,
+          style: {
+            height: cellMeasurerCache.getHeight(index),
+            left: left,
+            position: 'absolute',
+            top: top,
+            width: cellMeasurerCache.getWidth(index)
+          }
+        }));
+      });
+
+      // We need to measure additional cells for this layout
       if (shortestColumnSize < scrollTop + height + overscanByPixels && measuredCellCount < cellCount) {
         var batchSize = Math.min(cellCount - measuredCellCount, Math.ceil((scrollTop + height + overscanByPixels - shortestColumnSize) / cellMeasurerCache.defaultHeight * width / cellMeasurerCache.defaultWidth));
 
         for (var _index = measuredCellCount; _index < measuredCellCount + batchSize; _index++) {
+          stopIndex = _index;
+
           children.push(cellRenderer({
             index: _index,
             isScrolling: isScrolling,
@@ -187,39 +219,10 @@ var Masonry = function (_PureComponent) {
             }
           }));
         }
-      } else {
-        (function () {
-          var stopIndex = void 0;
-          var startIndex = void 0;
-
-          _this2._positionCache.range(scrollTop - overscanByPixels, height + overscanByPixels, function (index, left, top) {
-            if (typeof startIndex === 'undefined') {
-              startIndex = index;
-              stopIndex = index;
-            } else {
-              startIndex = Math.min(startIndex, index);
-              stopIndex = Math.max(stopIndex, index);
-            }
-
-            children.push(cellRenderer({
-              index: index,
-              isScrolling: isScrolling,
-              key: keyMapper(index),
-              parent: _this2,
-              style: {
-                height: cellMeasurerCache.getHeight(index),
-                left: left,
-                position: 'absolute',
-                top: top,
-                width: cellMeasurerCache.getWidth(index)
-              }
-            }));
-
-            _this2._startIndex = startIndex;
-            _this2._stopIndex = stopIndex;
-          });
-        })();
       }
+
+      this._startIndex = startIndex;
+      this._stopIndex = stopIndex;
 
       return React.createElement(
         'div',
@@ -241,8 +244,7 @@ var Masonry = function (_PureComponent) {
             WebkitOverflowScrolling: 'touch',
             willChange: 'transform'
           }, style),
-          tabIndex: tabIndex
-        },
+          tabIndex: tabIndex },
         React.createElement(
           'div',
           {
@@ -255,8 +257,7 @@ var Masonry = function (_PureComponent) {
               overflow: 'hidden',
               pointerEvents: isScrolling ? 'none' : '',
               position: 'relative'
-            }
-          },
+            } },
           children
         )
       );
@@ -284,10 +285,10 @@ var Masonry = function (_PureComponent) {
 
 
       if (this._debounceResetIsScrollingId) {
-        clearTimeout(this._debounceResetIsScrollingId);
+        cancelAnimationTimeout(this._debounceResetIsScrollingId);
       }
 
-      this._debounceResetIsScrollingId = setTimeout(this._debounceResetIsScrollingCallback, scrollingResetTimeInterval);
+      this._debounceResetIsScrollingId = requestAnimationTimeout(this._debounceResetIsScrollingCallback, scrollingResetTimeInterval);
     }
   }, {
     key: '_debounceResetIsScrollingCallback',
@@ -305,7 +306,7 @@ var Masonry = function (_PureComponent) {
           width = _props2.width;
 
 
-      var estimatedColumnCount = Math.floor(width / cellMeasurerCache.defaultWidth);
+      var estimatedColumnCount = Math.max(1, Math.floor(width / cellMeasurerCache.defaultWidth));
 
       return this._positionCache.estimateTotalHeight(cellCount, estimatedColumnCount, cellMeasurerCache.defaultHeight);
     }
@@ -415,6 +416,29 @@ Masonry.defaultProps = {
   style: emptyObject,
   tabIndex: 0
 };
+Masonry.propTypes = process.env.NODE_ENV === 'production' ? null : {
+  autoHeight: require('prop-types').bool.isRequired,
+  cellCount: require('prop-types').number.isRequired,
+  cellMeasurerCache: typeof CellMeasurerCache === 'function' ? require('prop-types').instanceOf(CellMeasurerCache).isRequired : require('prop-types').any.isRequired,
+  cellPositioner: typeof Positioner === 'function' ? require('prop-types').instanceOf(Positioner).isRequired : require('prop-types').any.isRequired,
+  cellRenderer: typeof CellRenderer === 'function' ? require('prop-types').instanceOf(CellRenderer).isRequired : require('prop-types').any.isRequired,
+  className: require('prop-types').string,
+  height: require('prop-types').number.isRequired,
+  id: require('prop-types').string,
+  keyMapper: typeof KeyMapper === 'function' ? require('prop-types').instanceOf(KeyMapper).isRequired : require('prop-types').any.isRequired,
+  onCellsRendered: typeof OnCellsRenderedCallback === 'function' ? require('prop-types').instanceOf(OnCellsRenderedCallback) : require('prop-types').any,
+  onScroll: typeof OnScrollCallback === 'function' ? require('prop-types').instanceOf(OnScrollCallback) : require('prop-types').any,
+  overscanByPixels: require('prop-types').number.isRequired,
+  role: require('prop-types').string.isRequired,
+  scrollingResetTimeInterval: require('prop-types').number.isRequired,
+  style: function style(props, propName, componentName) {
+    if (!Object.prototype.hasOwnProperty.call(props, propName)) {
+      throw new Error('Prop `' + propName + '` has type \'any\' or \'mixed\', but was not provided to `' + componentName + '`. Pass undefined or any other value.');
+    }
+  },
+  tabIndex: require('prop-types').number.isRequired,
+  width: require('prop-types').number.isRequired
+};
 export default Masonry;
 
 
@@ -423,3 +447,19 @@ function identity(value) {
 }
 
 function noop() {}
+
+var babelPluginFlowReactPropTypes_proptype_CellMeasurerCache = process.env.NODE_ENV === 'production' ? null : {
+  defaultHeight: require('prop-types').number.isRequired,
+  defaultWidth: require('prop-types').number.isRequired,
+  getHeight: require('prop-types').func.isRequired,
+  getWidth: require('prop-types').func.isRequired
+};
+if (!(process.env.NODE_ENV === 'production') && typeof exports !== 'undefined') Object.defineProperty(exports, 'babelPluginFlowReactPropTypes_proptype_CellMeasurerCache', {
+  value: babelPluginFlowReactPropTypes_proptype_CellMeasurerCache,
+  configurable: true
+});
+var babelPluginFlowReactPropTypes_proptype_Positioner = process.env.NODE_ENV === 'production' ? null : require('prop-types').func;
+if (!(process.env.NODE_ENV === 'production') && typeof exports !== 'undefined') Object.defineProperty(exports, 'babelPluginFlowReactPropTypes_proptype_Positioner', {
+  value: babelPluginFlowReactPropTypes_proptype_Positioner,
+  configurable: true
+});

@@ -9,6 +9,9 @@ exports.default = defaultCellRangeRenderer;
  * Default implementation of cellRangeRenderer used by Grid.
  * This renderer supports cell-caching while the user is scrolling.
  */
+
+var babelPluginFlowReactPropTypes_proptype_CellRangeRendererParams = require('./types').babelPluginFlowReactPropTypes_proptype_CellRangeRendererParams || require('prop-types').any;
+
 function defaultCellRangeRenderer(_ref) {
   var cellCache = _ref.cellCache,
       cellRenderer = _ref.cellRenderer,
@@ -22,14 +25,10 @@ function defaultCellRangeRenderer(_ref) {
       rowSizeAndPositionManager = _ref.rowSizeAndPositionManager,
       rowStartIndex = _ref.rowStartIndex,
       rowStopIndex = _ref.rowStopIndex,
-      scrollLeft = _ref.scrollLeft,
-      scrollTop = _ref.scrollTop,
       styleCache = _ref.styleCache,
       verticalOffsetAdjustment = _ref.verticalOffsetAdjustment,
       visibleColumnIndices = _ref.visibleColumnIndices,
       visibleRowIndices = _ref.visibleRowIndices;
-
-  var deferredMode = typeof deferredMeasurementCache !== 'undefined';
 
   var renderedCells = [];
 
@@ -57,7 +56,7 @@ function defaultCellRangeRenderer(_ref) {
       } else {
         // In deferred mode, cells will be initially rendered before we know their size.
         // Don't interfere with CellMeasurer's measurements by setting an invalid size.
-        if (deferredMode && !deferredMeasurementCache.has(rowIndex, columnIndex)) {
+        if (deferredMeasurementCache && !deferredMeasurementCache.has(rowIndex, columnIndex)) {
           // Position not-yet-measured cells at top/left 0,0,
           // And give them width/height of 'auto' so they can grow larger than the parent Grid if necessary.
           // Positioning them further to the right/bottom influences their measured size.

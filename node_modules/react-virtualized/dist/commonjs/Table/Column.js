@@ -4,6 +4,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
 var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -22,24 +38,21 @@ var _defaultCellDataGetter = require('./defaultCellDataGetter');
 
 var _defaultCellDataGetter2 = _interopRequireDefault(_defaultCellDataGetter);
 
+var _SortDirection = require('./SortDirection');
+
+var _SortDirection2 = _interopRequireDefault(_SortDirection);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
  * Describes the header and cell contents of a table column.
  */
 var Column = function (_Component) {
-  _inherits(Column, _Component);
+  (0, _inherits3.default)(Column, _Component);
 
   function Column() {
-    _classCallCheck(this, Column);
-
-    return _possibleConstructorReturn(this, (Column.__proto__ || Object.getPrototypeOf(Column)).apply(this, arguments));
+    (0, _classCallCheck3.default)(this, Column);
+    return (0, _possibleConstructorReturn3.default)(this, (Column.__proto__ || (0, _getPrototypeOf2.default)(Column)).apply(this, arguments));
   }
 
   return Column;
@@ -48,13 +61,14 @@ var Column = function (_Component) {
 Column.defaultProps = {
   cellDataGetter: _defaultCellDataGetter2.default,
   cellRenderer: _defaultCellRenderer2.default,
+  defaultSortDirection: _SortDirection2.default.ASC,
   flexGrow: 0,
   flexShrink: 1,
   headerRenderer: _defaultHeaderRenderer2.default,
   style: {}
 };
 exports.default = Column;
-process.env.NODE_ENV !== "production" ? Column.propTypes = {
+Column.propTypes = process.env.NODE_ENV !== "production" ? {
   /** Optional aria-label value to set on the column header */
   'aria-label': _propTypes2.default.string,
 
@@ -76,8 +90,11 @@ process.env.NODE_ENV !== "production" ? Column.propTypes = {
   /** Optional additional data passed to this column's :cellDataGetter */
   columnData: _propTypes2.default.object,
 
-  /** Uniquely identifies the row-data attribute correspnding to this cell */
+  /** Uniquely identifies the row-data attribute corresponding to this cell */
   dataKey: _propTypes2.default.any.isRequired,
+
+  /** Optional direction to be used when clicked the first time */
+  defaultSortDirection: _propTypes2.default.oneOf([_SortDirection2.default.ASC, _SortDirection2.default.DESC]),
 
   /** If sort is enabled for the table at large, disable it for this column */
   disableSort: _propTypes2.default.bool,
@@ -97,6 +114,9 @@ process.env.NODE_ENV !== "production" ? Column.propTypes = {
    */
   headerRenderer: _propTypes2.default.func.isRequired,
 
+  /** Optional inline style to apply to this column's header */
+  headerStyle: _propTypes2.default.object,
+
   /** Optional id to set on the column header */
   id: _propTypes2.default.string,
 
@@ -114,4 +134,4 @@ process.env.NODE_ENV !== "production" ? Column.propTypes = {
 
   /** Flex basis (width) for this column; This value can grow or shrink based on :flexGrow and :flexShrink properties. */
   width: _propTypes2.default.number.isRequired
-} : void 0;
+} : {};

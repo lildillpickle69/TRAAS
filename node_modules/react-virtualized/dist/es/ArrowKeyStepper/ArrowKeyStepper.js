@@ -3,33 +3,92 @@ import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _createClass from 'babel-runtime/helpers/createClass';
 import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 import _inherits from 'babel-runtime/helpers/inherits';
-import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
+
+var babelPluginFlowReactPropTypes_proptype_RenderedSection = require('../Grid').babelPluginFlowReactPropTypes_proptype_RenderedSection || require('prop-types').any;
+
+var babelPluginFlowReactPropTypes_proptype_ScrollIndices = require('./types').babelPluginFlowReactPropTypes_proptype_ScrollIndices || require('prop-types').any;
+
+import * as React from 'react';
 
 /**
  * This HOC decorates a virtualized component and responds to arrow-key events by scrolling one row or column at a time.
  */
 
-var ArrowKeyStepper = function (_PureComponent) {
-  _inherits(ArrowKeyStepper, _PureComponent);
+var ArrowKeyStepper = function (_React$PureComponent) {
+  _inherits(ArrowKeyStepper, _React$PureComponent);
 
-  function ArrowKeyStepper(props, context) {
+  function ArrowKeyStepper(props) {
     _classCallCheck(this, ArrowKeyStepper);
 
-    var _this = _possibleConstructorReturn(this, (ArrowKeyStepper.__proto__ || _Object$getPrototypeOf(ArrowKeyStepper)).call(this, props, context));
-
-    _this.state = {
-      scrollToColumn: props.scrollToColumn,
-      scrollToRow: props.scrollToRow
-    };
+    var _this = _possibleConstructorReturn(this, (ArrowKeyStepper.__proto__ || _Object$getPrototypeOf(ArrowKeyStepper)).call(this, props));
 
     _this._columnStartIndex = 0;
     _this._columnStopIndex = 0;
     _this._rowStartIndex = 0;
     _this._rowStopIndex = 0;
 
-    _this._onKeyDown = _this._onKeyDown.bind(_this);
-    _this._onSectionRendered = _this._onSectionRendered.bind(_this);
+    _this._onKeyDown = function (event) {
+      var _this$props = _this.props,
+          columnCount = _this$props.columnCount,
+          disabled = _this$props.disabled,
+          mode = _this$props.mode,
+          rowCount = _this$props.rowCount;
+
+
+      if (disabled) {
+        return;
+      }
+
+      var _this$_getScrollState = _this._getScrollState(),
+          scrollToColumnPrevious = _this$_getScrollState.scrollToColumn,
+          scrollToRowPrevious = _this$_getScrollState.scrollToRow;
+
+      var _this$_getScrollState2 = _this._getScrollState(),
+          scrollToColumn = _this$_getScrollState2.scrollToColumn,
+          scrollToRow = _this$_getScrollState2.scrollToRow;
+
+      // The above cases all prevent default event event behavior.
+      // This is to keep the grid from scrolling after the snap-to update.
+
+
+      switch (event.key) {
+        case 'ArrowDown':
+          scrollToRow = mode === 'cells' ? Math.min(scrollToRow + 1, rowCount - 1) : Math.min(_this._rowStopIndex + 1, rowCount - 1);
+          break;
+        case 'ArrowLeft':
+          scrollToColumn = mode === 'cells' ? Math.max(scrollToColumn - 1, 0) : Math.max(_this._columnStartIndex - 1, 0);
+          break;
+        case 'ArrowRight':
+          scrollToColumn = mode === 'cells' ? Math.min(scrollToColumn + 1, columnCount - 1) : Math.min(_this._columnStopIndex + 1, columnCount - 1);
+          break;
+        case 'ArrowUp':
+          scrollToRow = mode === 'cells' ? Math.max(scrollToRow - 1, 0) : Math.max(_this._rowStartIndex - 1, 0);
+          break;
+      }
+
+      if (scrollToColumn !== scrollToColumnPrevious || scrollToRow !== scrollToRowPrevious) {
+        event.preventDefault();
+
+        _this._updateScrollState({ scrollToColumn: scrollToColumn, scrollToRow: scrollToRow });
+      }
+    };
+
+    _this._onSectionRendered = function (_ref) {
+      var columnStartIndex = _ref.columnStartIndex,
+          columnStopIndex = _ref.columnStopIndex,
+          rowStartIndex = _ref.rowStartIndex,
+          rowStopIndex = _ref.rowStopIndex;
+
+      _this._columnStartIndex = columnStartIndex;
+      _this._columnStopIndex = columnStopIndex;
+      _this._rowStartIndex = rowStartIndex;
+      _this._rowStopIndex = rowStopIndex;
+    };
+
+    _this.state = {
+      scrollToColumn: props.scrollToColumn,
+      scrollToRow: props.scrollToRow
+    };
     return _this;
   }
 
@@ -60,9 +119,9 @@ var ArrowKeyStepper = function (_PureComponent) {
     }
   }, {
     key: 'setScrollIndexes',
-    value: function setScrollIndexes(_ref) {
-      var scrollToColumn = _ref.scrollToColumn,
-          scrollToRow = _ref.scrollToRow;
+    value: function setScrollIndexes(_ref2) {
+      var scrollToColumn = _ref2.scrollToColumn,
+          scrollToRow = _ref2.scrollToRow;
 
       this.setState({
         scrollToRow: scrollToRow,
@@ -82,76 +141,13 @@ var ArrowKeyStepper = function (_PureComponent) {
 
       return React.createElement(
         'div',
-        {
-          className: className,
-          onKeyDown: this._onKeyDown
-        },
+        { className: className, onKeyDown: this._onKeyDown },
         children({
           onSectionRendered: this._onSectionRendered,
           scrollToColumn: scrollToColumn,
           scrollToRow: scrollToRow
         })
       );
-    }
-  }, {
-    key: '_onKeyDown',
-    value: function _onKeyDown(event) {
-      var _props3 = this.props,
-          columnCount = _props3.columnCount,
-          disabled = _props3.disabled,
-          mode = _props3.mode,
-          rowCount = _props3.rowCount;
-
-
-      if (disabled) {
-        return;
-      }
-
-      var _getScrollState3 = this._getScrollState(),
-          scrollToColumnPrevious = _getScrollState3.scrollToColumn,
-          scrollToRowPrevious = _getScrollState3.scrollToRow;
-
-      var _getScrollState4 = this._getScrollState(),
-          scrollToColumn = _getScrollState4.scrollToColumn,
-          scrollToRow = _getScrollState4.scrollToRow;
-
-      // The above cases all prevent default event event behavior.
-      // This is to keep the grid from scrolling after the snap-to update.
-
-
-      switch (event.key) {
-        case 'ArrowDown':
-          scrollToRow = mode === 'cells' ? Math.min(scrollToRow + 1, rowCount - 1) : Math.min(this._rowStopIndex + 1, rowCount - 1);
-          break;
-        case 'ArrowLeft':
-          scrollToColumn = mode === 'cells' ? Math.max(scrollToColumn - 1, 0) : Math.max(this._columnStartIndex - 1, 0);
-          break;
-        case 'ArrowRight':
-          scrollToColumn = mode === 'cells' ? Math.min(scrollToColumn + 1, columnCount - 1) : Math.min(this._columnStopIndex + 1, columnCount - 1);
-          break;
-        case 'ArrowUp':
-          scrollToRow = mode === 'cells' ? Math.max(scrollToRow - 1, 0) : Math.max(this._rowStartIndex - 1, 0);
-          break;
-      }
-
-      if (scrollToColumn !== scrollToColumnPrevious || scrollToRow !== scrollToRowPrevious) {
-        event.preventDefault();
-
-        this._updateScrollState({ scrollToColumn: scrollToColumn, scrollToRow: scrollToRow });
-      }
-    }
-  }, {
-    key: '_onSectionRendered',
-    value: function _onSectionRendered(_ref2) {
-      var columnStartIndex = _ref2.columnStartIndex,
-          columnStopIndex = _ref2.columnStopIndex,
-          rowStartIndex = _ref2.rowStartIndex,
-          rowStopIndex = _ref2.rowStopIndex;
-
-      this._columnStartIndex = columnStartIndex;
-      this._columnStopIndex = columnStopIndex;
-      this._rowStartIndex = rowStartIndex;
-      this._rowStopIndex = rowStopIndex;
     }
   }, {
     key: '_getScrollState',
@@ -163,9 +159,9 @@ var ArrowKeyStepper = function (_PureComponent) {
     value: function _updateScrollState(_ref3) {
       var scrollToColumn = _ref3.scrollToColumn,
           scrollToRow = _ref3.scrollToRow;
-      var _props4 = this.props,
-          isControlled = _props4.isControlled,
-          onScrollToChange = _props4.onScrollToChange;
+      var _props3 = this.props,
+          isControlled = _props3.isControlled,
+          onScrollToChange = _props3.onScrollToChange;
 
 
       if (typeof onScrollToChange === 'function') {
@@ -179,7 +175,7 @@ var ArrowKeyStepper = function (_PureComponent) {
   }]);
 
   return ArrowKeyStepper;
-}(PureComponent);
+}(React.PureComponent);
 
 ArrowKeyStepper.defaultProps = {
   disabled: false,
@@ -188,16 +184,16 @@ ArrowKeyStepper.defaultProps = {
   scrollToColumn: 0,
   scrollToRow: 0
 };
+ArrowKeyStepper.propTypes = process.env.NODE_ENV === 'production' ? null : {
+  children: require('prop-types').func.isRequired,
+  className: require('prop-types').string,
+  columnCount: require('prop-types').number.isRequired,
+  disabled: require('prop-types').bool.isRequired,
+  isControlled: require('prop-types').bool.isRequired,
+  mode: require('prop-types').oneOf(['cells', 'edges']).isRequired,
+  onScrollToChange: require('prop-types').func,
+  rowCount: require('prop-types').number.isRequired,
+  scrollToColumn: require('prop-types').number.isRequired,
+  scrollToRow: require('prop-types').number.isRequired
+};
 export default ArrowKeyStepper;
-process.env.NODE_ENV !== "production" ? ArrowKeyStepper.propTypes = {
-  children: PropTypes.func.isRequired,
-  className: PropTypes.string,
-  columnCount: PropTypes.number.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  isControlled: PropTypes.bool.isRequired,
-  mode: PropTypes.oneOf(['cells', 'edges']),
-  onScrollToChange: PropTypes.func,
-  rowCount: PropTypes.number.isRequired,
-  scrollToColumn: PropTypes.number.isRequired,
-  scrollToRow: PropTypes.number.isRequired
-} : void 0;

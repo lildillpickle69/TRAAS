@@ -3,10 +3,17 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.DEFAULT_WIDTH = exports.DEFAULT_HEIGHT = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var DEFAULT_HEIGHT = exports.DEFAULT_HEIGHT = 30;
 var DEFAULT_WIDTH = exports.DEFAULT_WIDTH = 100;
@@ -22,8 +29,13 @@ var CellMeasurerCache = function () {
     var _this = this;
 
     var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _classCallCheck(this, CellMeasurerCache);
+    (0, _classCallCheck3.default)(this, CellMeasurerCache);
+    this._cellHeightCache = {};
+    this._cellWidthCache = {};
+    this._columnWidthCache = {};
+    this._rowHeightCache = {};
+    this._columnCount = 0;
+    this._rowCount = 0;
 
     this.columnWidth = function (_ref) {
       var index = _ref.index;
@@ -61,7 +73,7 @@ var CellMeasurerCache = function () {
 
     if (process.env.NODE_ENV !== 'production') {
       if (this._hasFixedHeight === false && this._hasFixedWidth === false) {
-        console.warn('CellMeasurerCache should only measure a cell\'s width or height. ' + 'You have configured CellMeasurerCache to measure both. ' + 'This will result in poor performance.');
+        console.warn("CellMeasurerCache should only measure a cell's width or height. " + 'You have configured CellMeasurerCache to measure both. ' + 'This will result in poor performance.');
       }
 
       if (this._hasFixedHeight === false && this._defaultHeight === 0) {
@@ -72,19 +84,13 @@ var CellMeasurerCache = function () {
         console.warn('Fixed width CellMeasurerCache should specify a :defaultWidth greater than 0. ' + 'Failing to do so will lead to unnecessary layout and poor performance.');
       }
     }
-
-    this._columnCount = 0;
-    this._rowCount = 0;
-
-    this._cellHeightCache = {};
-    this._cellWidthCache = {};
-    this._columnWidthCache = {};
-    this._rowHeightCache = {};
   }
 
-  _createClass(CellMeasurerCache, [{
+  (0, _createClass3.default)(CellMeasurerCache, [{
     key: 'clear',
-    value: function clear(rowIndex, columnIndex) {
+    value: function clear(rowIndex) {
+      var columnIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
       var key = this._keyMapper(rowIndex, columnIndex);
 
       delete this._cellHeightCache[key];
@@ -99,6 +105,8 @@ var CellMeasurerCache = function () {
       this._cellWidthCache = {};
       this._columnWidthCache = {};
       this._rowHeightCache = {};
+      this._rowCount = 0;
+      this._columnCount = 0;
     }
   }, {
     key: 'hasFixedHeight',
@@ -198,7 +206,6 @@ var CellMeasurerCache = function () {
       return this._defaultWidth;
     }
   }]);
-
   return CellMeasurerCache;
 }();
 

@@ -19,10 +19,10 @@ var gulp = require('gulp'),
   babelify = require('babelify'),
   source = require('vinyl-source-stream'),
   buffer = require('vinyl-buffer'),
-  gutil = require('gulp-util'),
   glob = require('glob'),
   embedlr = require("gulp-embedlr"),
-  runSequence = require("run-sequence");
+  runSequence = require("run-sequence"),
+  log = require('fancy-log');
 
 //html
 // gulp.src('src/html/**/*.html')
@@ -46,13 +46,13 @@ gulp.task('styles', function() {
 
 var testFiles = glob.sync('src/scripts/**/*.jsx');
 var browserwatch = watchify(browserify({ entries: testFiles, extensions: ['.jsx'], cache: {}, packageCache: {} }), { delay: 500 });
-browserwatch.transform(babelify, { presets: ['env', 'react', 'stage-0', 'es2015'] });
+browserwatch.transform(babelify, { presets: ['env', 'react', 'stage-0'] });
 
 
 function bundle() {
   return browserwatch.bundle()
     .on('error', function (e) {
-      gutil.log(gutil.colors.red('Bundle error:', e.message));
+      log('Bundle error:', e.message);
       this.emit('end');
     })
     .pipe(source('bundle.js'))
@@ -64,7 +64,7 @@ function bundle() {
 function minbundle() {
   return browserwatch.bundle()
     .on('error', function (e) {
-      gutil.log(gutil.colors.red('Bundle error:', e.message));
+      log('Bundle error:', e.message);
       this.emit('end');
     })
     .pipe(source('bundle.min.js'))
@@ -96,27 +96,28 @@ gulp.task('apply-prod-environment', function() {
   process.env.NODE_ENV = 'production';
 });
 // Default task
+
+
 // add production environment
 gulp.task('default', ['clean'], function() {
-  runSequence('styles', ['minscripts']);
+  runSequence('styles', ['apply-prod-environment', 'minscripts', 'watch']);
   // gulp.start(/*'scripts',*/ 'minscripts', 'watch');
 });
 
 // Watch
-// gulp.task('watch', function() {
+gulp.task('watch', function() {
+  // Watch .scss files
+  gulp.watch('src/styles/**/*.scss', ['styles']);
 
-//   // Watch .scss files
-//   gulp.watch('src/styles/**/*.scss', ['styles']);
+  // Watch .js files
+  // gulp.watch('src/scripts/**/*.jsx', ['scripts', 'minscripts']);
 
-//   // Watch .js files
-//   // gulp.watch('src/scripts/**/*.jsx', ['scripts', 'minscripts']);
+  // // Watch image files
+  // gulp.watch('src/images/*', ['images']);
 
-//   // // Watch image files
-//   // gulp.watch('src/images/*', ['images']);
+  // Create LiveReload server
+  livereload.listen();
 
-//   // Create LiveReload server
-//   livereload.listen();
-
-//   // Watch any files in dist/, reload on change
-//   gulp.watch(['dist/**']).on('change', livereload.changed);
-// });
+  // Watch any files in dist/, reload on change
+  gulp.watch(['dist/**']).on('change', livereload.changed);
+});

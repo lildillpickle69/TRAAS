@@ -4,9 +4,33 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends2 = require('babel-runtime/helpers/extends');
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _objectWithoutProperties2 = require('babel-runtime/helpers/objectWithoutProperties');
+
+var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _propTypes = require('prop-types');
 
@@ -26,14 +50,6 @@ var _Grid2 = _interopRequireDefault(_Grid);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var SCROLLBAR_SIZE_BUFFER = 20;
 
 /**
@@ -45,12 +61,12 @@ var SCROLLBAR_SIZE_BUFFER = 20;
  */
 
 var MultiGrid = function (_PureComponent) {
-  _inherits(MultiGrid, _PureComponent);
+  (0, _inherits3.default)(MultiGrid, _PureComponent);
 
   function MultiGrid(props, context) {
-    _classCallCheck(this, MultiGrid);
+    (0, _classCallCheck3.default)(this, MultiGrid);
 
-    var _this = _possibleConstructorReturn(this, (MultiGrid.__proto__ || Object.getPrototypeOf(MultiGrid)).call(this, props, context));
+    var _this = (0, _possibleConstructorReturn3.default)(this, (MultiGrid.__proto__ || (0, _getPrototypeOf2.default)(MultiGrid)).call(this, props, context));
 
     _this.state = {
       scrollLeft: 0,
@@ -79,7 +95,7 @@ var MultiGrid = function (_PureComponent) {
     return _this;
   }
 
-  _createClass(MultiGrid, [{
+  (0, _createClass3.default)(MultiGrid, [{
     key: 'forceUpdateGrids',
     value: function forceUpdateGrids() {
       this._bottomLeftGrid && this._bottomLeftGrid.forceUpdate();
@@ -179,7 +195,7 @@ var MultiGrid = function (_PureComponent) {
     }
   }, {
     key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
+    value: function componentDidUpdate() {
       this._handleInvalidatedGridSize();
     }
   }, {
@@ -253,16 +269,16 @@ var MultiGrid = function (_PureComponent) {
       var _props5 = this.props,
           onScroll = _props5.onScroll,
           onSectionRendered = _props5.onSectionRendered,
+          onScrollbarPresenceChange = _props5.onScrollbarPresenceChange,
           scrollLeftProp = _props5.scrollLeft,
           scrollToColumn = _props5.scrollToColumn,
           scrollTopProp = _props5.scrollTop,
           scrollToRow = _props5.scrollToRow,
-          rest = _objectWithoutProperties(_props5, ['onScroll', 'onSectionRendered', 'scrollLeft', 'scrollToColumn', 'scrollTop', 'scrollToRow']);
+          rest = (0, _objectWithoutProperties3.default)(_props5, ['onScroll', 'onSectionRendered', 'onScrollbarPresenceChange', 'scrollLeft', 'scrollToColumn', 'scrollTop', 'scrollToRow']);
 
       // Don't render any of our Grids if there are no cells.
       // This mirrors what Grid does,
       // And prevents us from recording inaccurage measurements when used with CellMeasurer.
-
 
       if (this.props.width === 0 || this.props.height === 0) {
         return null;
@@ -282,7 +298,7 @@ var MultiGrid = function (_PureComponent) {
           'div',
           { style: this._containerTopStyle },
           this._renderTopLeftGrid(rest),
-          this._renderTopRightGrid(_extends({}, rest, {
+          this._renderTopRightGrid((0, _extends3.default)({}, rest, {
             onScroll: onScroll,
             scrollLeft: scrollLeft
           }))
@@ -290,11 +306,11 @@ var MultiGrid = function (_PureComponent) {
         _react2.default.createElement(
           'div',
           { style: this._containerBottomStyle },
-          this._renderBottomLeftGrid(_extends({}, rest, {
+          this._renderBottomLeftGrid((0, _extends3.default)({}, rest, {
             onScroll: onScroll,
             scrollTop: scrollTop
           })),
-          this._renderBottomRightGrid(_extends({}, rest, {
+          this._renderBottomRightGrid((0, _extends3.default)({}, rest, {
             onScroll: onScroll,
             onSectionRendered: onSectionRendered,
             scrollLeft: scrollLeft,
@@ -319,8 +335,7 @@ var MultiGrid = function (_PureComponent) {
     key: '_cellRendererBottomLeftGrid',
     value: function _cellRendererBottomLeftGrid(_ref3) {
       var rowIndex = _ref3.rowIndex,
-          rest = _objectWithoutProperties(_ref3, ['rowIndex']);
-
+          rest = (0, _objectWithoutProperties3.default)(_ref3, ['rowIndex']);
       var _props6 = this.props,
           cellRenderer = _props6.cellRenderer,
           fixedRowCount = _props6.fixedRowCount,
@@ -330,12 +345,12 @@ var MultiGrid = function (_PureComponent) {
       if (rowIndex === rowCount - fixedRowCount) {
         return _react2.default.createElement('div', {
           key: rest.key,
-          style: _extends({}, rest.style, {
+          style: (0, _extends3.default)({}, rest.style, {
             height: SCROLLBAR_SIZE_BUFFER
           })
         });
       } else {
-        return cellRenderer(_extends({}, rest, {
+        return cellRenderer((0, _extends3.default)({}, rest, {
           parent: this,
           rowIndex: rowIndex + fixedRowCount
         }));
@@ -346,15 +361,14 @@ var MultiGrid = function (_PureComponent) {
     value: function _cellRendererBottomRightGrid(_ref4) {
       var columnIndex = _ref4.columnIndex,
           rowIndex = _ref4.rowIndex,
-          rest = _objectWithoutProperties(_ref4, ['columnIndex', 'rowIndex']);
-
+          rest = (0, _objectWithoutProperties3.default)(_ref4, ['columnIndex', 'rowIndex']);
       var _props7 = this.props,
           cellRenderer = _props7.cellRenderer,
           fixedColumnCount = _props7.fixedColumnCount,
           fixedRowCount = _props7.fixedRowCount;
 
 
-      return cellRenderer(_extends({}, rest, {
+      return cellRenderer((0, _extends3.default)({}, rest, {
         columnIndex: columnIndex + fixedColumnCount,
         parent: this,
         rowIndex: rowIndex + fixedRowCount
@@ -364,8 +378,7 @@ var MultiGrid = function (_PureComponent) {
     key: '_cellRendererTopRightGrid',
     value: function _cellRendererTopRightGrid(_ref5) {
       var columnIndex = _ref5.columnIndex,
-          rest = _objectWithoutProperties(_ref5, ['columnIndex']);
-
+          rest = (0, _objectWithoutProperties3.default)(_ref5, ['columnIndex']);
       var _props8 = this.props,
           cellRenderer = _props8.cellRenderer,
           columnCount = _props8.columnCount,
@@ -375,12 +388,12 @@ var MultiGrid = function (_PureComponent) {
       if (columnIndex === columnCount - fixedColumnCount) {
         return _react2.default.createElement('div', {
           key: rest.key,
-          style: _extends({}, rest.style, {
+          style: (0, _extends3.default)({}, rest.style, {
             width: SCROLLBAR_SIZE_BUFFER
           })
         });
       } else {
-        return cellRenderer(_extends({}, rest, {
+        return cellRenderer((0, _extends3.default)({}, rest, {
           columnIndex: columnIndex + fixedColumnCount,
           parent: this
         }));
@@ -500,7 +513,7 @@ var MultiGrid = function (_PureComponent) {
 
   }, {
     key: '_maybeCalculateCachedStyles',
-    value: function _maybeCalculateCachedStyles(prevProps, props, prevState, state) {
+    value: function _maybeCalculateCachedStyles(prevProps, props) {
       var columnWidth = props.columnWidth,
           enableFixedColumnScroll = props.enableFixedColumnScroll,
           enableFixedRowScroll = props.enableFixedRowScroll,
@@ -522,7 +535,7 @@ var MultiGrid = function (_PureComponent) {
       var topSizeChange = firstRender || fixedRowCount !== prevProps.fixedRowCount || rowHeight !== prevProps.rowHeight;
 
       if (firstRender || sizeChange || style !== prevProps.style) {
-        this._containerOuterStyle = _extends({
+        this._containerOuterStyle = (0, _extends3.default)({
           height: height,
           overflow: 'visible', // Let :focus outline show through
           width: width
@@ -545,7 +558,7 @@ var MultiGrid = function (_PureComponent) {
       }
 
       if (firstRender || styleBottomLeftGrid !== prevProps.styleBottomLeftGrid) {
-        this._bottomLeftGridStyle = _extends({
+        this._bottomLeftGridStyle = (0, _extends3.default)({
           left: 0,
           overflowX: 'hidden',
           overflowY: enableFixedColumnScroll ? 'auto' : 'hidden',
@@ -554,14 +567,14 @@ var MultiGrid = function (_PureComponent) {
       }
 
       if (firstRender || leftSizeChange || styleBottomRightGrid !== prevProps.styleBottomRightGrid) {
-        this._bottomRightGridStyle = _extends({
+        this._bottomRightGridStyle = (0, _extends3.default)({
           left: this._getLeftGridWidth(props),
           position: 'absolute'
         }, styleBottomRightGrid);
       }
 
       if (firstRender || styleTopLeftGrid !== prevProps.styleTopLeftGrid) {
-        this._topLeftGridStyle = _extends({
+        this._topLeftGridStyle = (0, _extends3.default)({
           left: 0,
           overflowX: 'hidden',
           overflowY: 'hidden',
@@ -571,7 +584,7 @@ var MultiGrid = function (_PureComponent) {
       }
 
       if (firstRender || leftSizeChange || styleTopRightGrid !== prevProps.styleTopRightGrid) {
-        this._topRightGridStyle = _extends({
+        this._topRightGridStyle = (0, _extends3.default)({
           left: this._getLeftGridWidth(props),
           overflowX: enableFixedRowScroll ? 'auto' : 'hidden',
           overflowY: 'hidden',
@@ -612,6 +625,16 @@ var MultiGrid = function (_PureComponent) {
           showHorizontalScrollbar: horizontal,
           showVerticalScrollbar: vertical
         });
+
+        var onScrollbarPresenceChange = this.props.onScrollbarPresenceChange;
+
+        if (typeof onScrollbarPresenceChange === 'function') {
+          onScrollbarPresenceChange({
+            horizontal: horizontal,
+            size: size,
+            vertical: vertical
+          });
+        }
       }
     }
   }, {
@@ -651,8 +674,9 @@ var MultiGrid = function (_PureComponent) {
 
       var additionalRowCount = showVerticalScrollbar ? 1 : 0;
 
-      return _react2.default.createElement(_Grid2.default, _extends({}, props, {
+      return _react2.default.createElement(_Grid2.default, (0, _extends3.default)({}, props, {
         cellRenderer: this._cellRendererBottomLeftGrid,
+        className: this.props.classNameBottomLeftGrid,
         columnCount: fixedColumnCount,
         deferredMeasurementCache: this._deferredMeasurementCacheBottomLeftGrid,
         height: this._getBottomGridHeight(props),
@@ -677,8 +701,9 @@ var MultiGrid = function (_PureComponent) {
           scrollToRow = props.scrollToRow;
 
 
-      return _react2.default.createElement(_Grid2.default, _extends({}, props, {
+      return _react2.default.createElement(_Grid2.default, (0, _extends3.default)({}, props, {
         cellRenderer: this._cellRendererBottomRightGrid,
+        className: this.props.classNameBottomRightGrid,
         columnCount: Math.max(0, columnCount - fixedColumnCount),
         columnWidth: this._columnWidthRightGrid,
         deferredMeasurementCache: this._deferredMeasurementCacheBottomRightGrid,
@@ -705,7 +730,8 @@ var MultiGrid = function (_PureComponent) {
         return null;
       }
 
-      return _react2.default.createElement(_Grid2.default, _extends({}, props, {
+      return _react2.default.createElement(_Grid2.default, (0, _extends3.default)({}, props, {
+        className: this.props.classNameTopLeftGrid,
         columnCount: fixedColumnCount,
         height: this._getTopGridHeight(props),
         ref: this._topLeftGridRef,
@@ -732,8 +758,9 @@ var MultiGrid = function (_PureComponent) {
 
       var additionalColumnCount = showHorizontalScrollbar ? 1 : 0;
 
-      return _react2.default.createElement(_Grid2.default, _extends({}, props, {
+      return _react2.default.createElement(_Grid2.default, (0, _extends3.default)({}, props, {
         cellRenderer: this._cellRendererTopRightGrid,
+        className: this.props.classNameTopRightGrid,
         columnCount: Math.max(0, columnCount - fixedColumnCount) + additionalColumnCount,
         columnWidth: this._columnWidthRightGrid,
         deferredMeasurementCache: this._deferredMeasurementCacheTopRightGrid,
@@ -781,15 +808,20 @@ var MultiGrid = function (_PureComponent) {
       this._topRightGrid = ref;
     }
   }]);
-
   return MultiGrid;
 }(_react.PureComponent);
 
 MultiGrid.defaultProps = {
+  classNameBottomLeftGrid: '',
+  classNameBottomRightGrid: '',
+  classNameTopLeftGrid: '',
+  classNameTopRightGrid: '',
   enableFixedColumnScroll: false,
   enableFixedRowScroll: false,
   fixedColumnCount: 0,
   fixedRowCount: 0,
+  scrollToColumn: -1,
+  scrollToRow: -1,
   style: {},
   styleBottomLeftGrid: {},
   styleBottomRightGrid: {},
@@ -797,14 +829,19 @@ MultiGrid.defaultProps = {
   styleTopRightGrid: {}
 };
 exports.default = MultiGrid;
-process.env.NODE_ENV !== "production" ? MultiGrid.propTypes = {
+MultiGrid.propTypes = process.env.NODE_ENV !== "production" ? {
+  classNameBottomLeftGrid: _propTypes2.default.string.isRequired,
+  classNameBottomRightGrid: _propTypes2.default.string.isRequired,
+  classNameTopLeftGrid: _propTypes2.default.string.isRequired,
+  classNameTopRightGrid: _propTypes2.default.string.isRequired,
   enableFixedColumnScroll: _propTypes2.default.bool.isRequired,
   enableFixedRowScroll: _propTypes2.default.bool.isRequired,
   fixedColumnCount: _propTypes2.default.number.isRequired,
   fixedRowCount: _propTypes2.default.number.isRequired,
+  onScrollbarPresenceChange: _propTypes2.default.func,
   style: _propTypes2.default.object.isRequired,
   styleBottomLeftGrid: _propTypes2.default.object.isRequired,
   styleBottomRightGrid: _propTypes2.default.object.isRequired,
   styleTopLeftGrid: _propTypes2.default.object.isRequired,
   styleTopRightGrid: _propTypes2.default.object.isRequired
-} : void 0;
+} : {};

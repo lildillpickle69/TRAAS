@@ -5,6 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.registerScrollListener = registerScrollListener;
 exports.unregisterScrollListener = unregisterScrollListener;
+
+var _requestAnimationTimeout = require('../../utils/requestAnimationTimeout');
+
+var _WindowScroller = require('../WindowScroller.js');
+
+var _WindowScroller2 = _interopRequireDefault(_WindowScroller);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var mountedInstances = [];
 var originalBodyPointerEvents = null;
 var disablePointerEventsTimeoutId = null;
@@ -13,7 +22,9 @@ function enablePointerEventsIfDisabled() {
   if (disablePointerEventsTimeoutId) {
     disablePointerEventsTimeoutId = null;
 
-    document.body.style.pointerEvents = originalBodyPointerEvents;
+    if (document.body && originalBodyPointerEvents != null) {
+      document.body.style.pointerEvents = originalBodyPointerEvents;
+    }
 
     originalBodyPointerEvents = null;
   }
@@ -28,7 +39,7 @@ function enablePointerEventsAfterDelayCallback() {
 
 function enablePointerEventsAfterDelay() {
   if (disablePointerEventsTimeoutId) {
-    clearTimeout(disablePointerEventsTimeoutId);
+    (0, _requestAnimationTimeout.cancelAnimationTimeout)(disablePointerEventsTimeoutId);
   }
 
   var maximumTimeout = 0;
@@ -36,26 +47,26 @@ function enablePointerEventsAfterDelay() {
     maximumTimeout = Math.max(maximumTimeout, instance.props.scrollingResetTimeInterval);
   });
 
-  disablePointerEventsTimeoutId = setTimeout(enablePointerEventsAfterDelayCallback, maximumTimeout);
+  disablePointerEventsTimeoutId = (0, _requestAnimationTimeout.requestAnimationTimeout)(enablePointerEventsAfterDelayCallback, maximumTimeout);
 }
 
 function onScrollWindow(event) {
-  if (event.currentTarget === window && originalBodyPointerEvents == null) {
+  if (event.currentTarget === window && originalBodyPointerEvents == null && document.body) {
     originalBodyPointerEvents = document.body.style.pointerEvents;
 
     document.body.style.pointerEvents = 'none';
   }
   enablePointerEventsAfterDelay();
   mountedInstances.forEach(function (instance) {
-    if (instance.scrollElement === event.currentTarget) {
-      instance.__handleWindowScrollEvent(event);
+    if (instance.props.scrollElement === event.currentTarget) {
+      instance.__handleWindowScrollEvent();
     }
   });
 }
 
 function registerScrollListener(component, element) {
   if (!mountedInstances.some(function (instance) {
-    return instance.scrollElement === element;
+    return instance.props.scrollElement === element;
   })) {
     element.addEventListener('scroll', onScrollWindow);
   }
@@ -69,7 +80,7 @@ function unregisterScrollListener(component, element) {
   if (!mountedInstances.length) {
     element.removeEventListener('scroll', onScrollWindow);
     if (disablePointerEventsTimeoutId) {
-      clearTimeout(disablePointerEventsTimeoutId);
+      (0, _requestAnimationTimeout.cancelAnimationTimeout)(disablePointerEventsTimeoutId);
       enablePointerEventsIfDisabled();
     }
   }

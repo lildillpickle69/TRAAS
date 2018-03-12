@@ -155,7 +155,7 @@ var MultiGrid = function (_PureComponent) {
     }
   }, {
     key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
+    value: function componentDidUpdate() {
       this._handleInvalidatedGridSize();
     }
   }, {
@@ -229,11 +229,12 @@ var MultiGrid = function (_PureComponent) {
       var _props5 = this.props,
           onScroll = _props5.onScroll,
           onSectionRendered = _props5.onSectionRendered,
+          onScrollbarPresenceChange = _props5.onScrollbarPresenceChange,
           scrollLeftProp = _props5.scrollLeft,
           scrollToColumn = _props5.scrollToColumn,
           scrollTopProp = _props5.scrollTop,
           scrollToRow = _props5.scrollToRow,
-          rest = _objectWithoutProperties(_props5, ['onScroll', 'onSectionRendered', 'scrollLeft', 'scrollToColumn', 'scrollTop', 'scrollToRow']);
+          rest = _objectWithoutProperties(_props5, ['onScroll', 'onSectionRendered', 'onScrollbarPresenceChange', 'scrollLeft', 'scrollToColumn', 'scrollTop', 'scrollToRow']);
 
       // Don't render any of our Grids if there are no cells.
       // This mirrors what Grid does,
@@ -476,7 +477,7 @@ var MultiGrid = function (_PureComponent) {
 
   }, {
     key: '_maybeCalculateCachedStyles',
-    value: function _maybeCalculateCachedStyles(prevProps, props, prevState, state) {
+    value: function _maybeCalculateCachedStyles(prevProps, props) {
       var columnWidth = props.columnWidth,
           enableFixedColumnScroll = props.enableFixedColumnScroll,
           enableFixedRowScroll = props.enableFixedRowScroll,
@@ -588,6 +589,16 @@ var MultiGrid = function (_PureComponent) {
           showHorizontalScrollbar: horizontal,
           showVerticalScrollbar: vertical
         });
+
+        var onScrollbarPresenceChange = this.props.onScrollbarPresenceChange;
+
+        if (typeof onScrollbarPresenceChange === 'function') {
+          onScrollbarPresenceChange({
+            horizontal: horizontal,
+            size: size,
+            vertical: vertical
+          });
+        }
       }
     }
   }, {
@@ -629,6 +640,7 @@ var MultiGrid = function (_PureComponent) {
 
       return React.createElement(Grid, _extends({}, props, {
         cellRenderer: this._cellRendererBottomLeftGrid,
+        className: this.props.classNameBottomLeftGrid,
         columnCount: fixedColumnCount,
         deferredMeasurementCache: this._deferredMeasurementCacheBottomLeftGrid,
         height: this._getBottomGridHeight(props),
@@ -655,6 +667,7 @@ var MultiGrid = function (_PureComponent) {
 
       return React.createElement(Grid, _extends({}, props, {
         cellRenderer: this._cellRendererBottomRightGrid,
+        className: this.props.classNameBottomRightGrid,
         columnCount: Math.max(0, columnCount - fixedColumnCount),
         columnWidth: this._columnWidthRightGrid,
         deferredMeasurementCache: this._deferredMeasurementCacheBottomRightGrid,
@@ -682,6 +695,7 @@ var MultiGrid = function (_PureComponent) {
       }
 
       return React.createElement(Grid, _extends({}, props, {
+        className: this.props.classNameTopLeftGrid,
         columnCount: fixedColumnCount,
         height: this._getTopGridHeight(props),
         ref: this._topLeftGridRef,
@@ -710,6 +724,7 @@ var MultiGrid = function (_PureComponent) {
 
       return React.createElement(Grid, _extends({}, props, {
         cellRenderer: this._cellRendererTopRightGrid,
+        className: this.props.classNameTopRightGrid,
         columnCount: Math.max(0, columnCount - fixedColumnCount) + additionalColumnCount,
         columnWidth: this._columnWidthRightGrid,
         deferredMeasurementCache: this._deferredMeasurementCacheTopRightGrid,
@@ -762,10 +777,16 @@ var MultiGrid = function (_PureComponent) {
 }(PureComponent);
 
 MultiGrid.defaultProps = {
+  classNameBottomLeftGrid: '',
+  classNameBottomRightGrid: '',
+  classNameTopLeftGrid: '',
+  classNameTopRightGrid: '',
   enableFixedColumnScroll: false,
   enableFixedRowScroll: false,
   fixedColumnCount: 0,
   fixedRowCount: 0,
+  scrollToColumn: -1,
+  scrollToRow: -1,
   style: {},
   styleBottomLeftGrid: {},
   styleBottomRightGrid: {},
@@ -773,14 +794,19 @@ MultiGrid.defaultProps = {
   styleTopRightGrid: {}
 };
 export default MultiGrid;
-process.env.NODE_ENV !== "production" ? MultiGrid.propTypes = {
+MultiGrid.propTypes = process.env.NODE_ENV !== "production" ? {
+  classNameBottomLeftGrid: PropTypes.string.isRequired,
+  classNameBottomRightGrid: PropTypes.string.isRequired,
+  classNameTopLeftGrid: PropTypes.string.isRequired,
+  classNameTopRightGrid: PropTypes.string.isRequired,
   enableFixedColumnScroll: PropTypes.bool.isRequired,
   enableFixedRowScroll: PropTypes.bool.isRequired,
   fixedColumnCount: PropTypes.number.isRequired,
   fixedRowCount: PropTypes.number.isRequired,
+  onScrollbarPresenceChange: PropTypes.func,
   style: PropTypes.object.isRequired,
   styleBottomLeftGrid: PropTypes.object.isRequired,
   styleBottomRightGrid: PropTypes.object.isRequired,
   styleTopLeftGrid: PropTypes.object.isRequired,
   styleTopRightGrid: PropTypes.object.isRequired
-} : void 0;
+} : {};

@@ -18,32 +18,11 @@ const ResultsTable = ({ results }) => {
       );
     });
     return (
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.Cell>Addendum ID</Table.Cell>
-            <Table.Cell>Title</Table.Cell>
-            <Table.Cell>Dates</Table.Cell>
-            <Table.Cell>PI Name</Table.Cell>
-            <Table.Cell>Assets</Table.Cell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>{table}</Table.Body>
-      </Table>
-    );
+      <Table.Body>
+        {table}
+      </Table.Body>);
   } return (
-    <Table celled>
-      <Table.Header>
-        <Table.Row>
-          <Table.Cell>Addendum ID</Table.Cell>
-          <Table.Cell>Title</Table.Cell>
-          <Table.Cell>Dates</Table.Cell>
-          <Table.Cell>PI Name</Table.Cell>
-          <Table.Cell>Assets</Table.Cell>
-        </Table.Row>
-        <Table.Body />
-      </Table.Header>
-    </Table>
+    <Table.Body />
   );
 };
 
