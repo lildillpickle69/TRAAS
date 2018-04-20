@@ -2,7 +2,7 @@ import React from 'react';
 import VirtualizedSelect from 'react-virtualized-select';
 import { AsyncCreatable } from 'react-select';
 
-const DropdownComponent = ({ loadOptions, input, multi, creatable, ...props }) => {
+const DropdownComponent = ({ loadOptions, input, multi, meta, creatable, ...props }) => {
   if (multi) {
     return (
       <VirtualizedSelect
@@ -22,6 +22,7 @@ const DropdownComponent = ({ loadOptions, input, multi, creatable, ...props }) =
       />
     );
   }
+  console.log(meta);
   return (
     <VirtualizedSelect
       async

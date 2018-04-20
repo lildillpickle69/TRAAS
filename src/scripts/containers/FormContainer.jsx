@@ -12,40 +12,11 @@ import { Field, Fields, reduxForm, formValueSelector } from 'redux-form';
 import DateRangePickerWrapper from './DateRange';
 import DropdownContainer from './DropdownContainer';
 import ModalContainer from './ModalContainer';
-import Dates from './Dates';
 import { loadData } from '../actions';
+import { Dates } from '../components';
 
 const required = value => (value ? undefined : true);
-const renderDates = ({ interval_start, interval_end }, ...fields) => {
-  return (
-  <DateRangeInput
-    allowSingleDayRange
-    placeholder
-    contiguousCalendarMonths="false"
-    value={[interval_start.input.value,interval_end.input.value]}
-    formatDate={ (date) => {(date == null ? '' : formatDates(date))}}
-    parseDate={ (date) => {new Date(date)}}
-    {...fields}
-    placeholder="custom"
-    onChange={(e) => {interval_start.input.onChange(e[0]); interval_end.input.onChange(e[1]);}}
-    />
-  );
-};
-// const renderDates = fields => (
-//   <DateRangeInput value=([this.])
-//   // <Form.Field
-//   //   {...fields}
-//   //   control={DateRangePickerWrapper}
-//   //   startDateFieldName="interval_start"
-//   //   endDateFieldName="interval_end"
-//   // />
-// );
-const formatDates = (value, name) => (
-  moment(value).format('MM-DD-YYYY')
-);
-const normalizeDates = (name, value) => (
-  value.format()
-);
+
 const renderCheckbox = ({ input, label, meta: { touched, error }, ...custom }) =>
 (
   <Form.Checkbox defaultChecked={!!input.value} value={1} {...input} {...custom} label={label} onChange={(e, data) => input.onChange(data.checked)} />
@@ -67,14 +38,6 @@ const renderTextArea = ({ input, required, label, meta: { touched, error }, ...c
   <Form.TextArea rows={4} label={label} {...input} {...custom} error={touched && error} />
 );
 
-const datebox = () => (
-  <Fields
-  validate={required}
-  names={['interval_start', 'interval_end']}
-  component={renderDates}
-  formatDate={formatDates}
-  />
-);
 class FormContainer extends Component {
   constructor(props) {
     super(props);
@@ -96,7 +59,7 @@ class FormContainer extends Component {
   }
 
   render() {
-    const { onSubmit, number, ID, isfinalized } = this.props;
+    const { onSubmit, number, ID, isfinalized, initialValues, handleSubmit } = this.props;
     if (this.state.exists === null || this.state.exists === false || (this.state.exists && this.state.permission)) {
       return (
         <Segment>
@@ -104,24 +67,27 @@ class FormContainer extends Component {
             <Loader />
           </Dimmer>
           <h1><Link to="/home/inprogress">TRAAS</Link></h1>
-          <Form onSubmit={onSubmit} >
+          <Form onSubmit={handleSubmit} >
             <Divider horizontal>Addendum {number}</Divider>
             <br /> 
             <Form.Group width="equal">
               <Grid celled="internally" verticalAlign="middle" stackable centered>
                 <Grid.Row>
                   <Grid.Column width={4}>
-                  <Fields
-                    validate={required}
-                    names={['interval_start', 'interval_end']}
-                    component={Dates}
-                  />
+                    <Fields
+                      id="Select or type the dates."
+                      label="Select or type the dates."
+                      validate={required}
+                      names={['interval_start', 'interval_end']}
+                      component={Dates}
+                      format={(value) => (value === '' ? null : value)}
+                    />
                   </Grid.Column>
                   <Grid.Column width={5}>
-                    <Field validate={required} name="report_name" type="text" component={renderTextField} label="Report Title" id="title" />
+                    <Field validate={required} name="report_name" type="text" component={renderTextField} label="Report Title" id="title" required />
                   </Grid.Column>
                   <Grid.Column width={3}>
-                  <Field validate={required} component={DropdownContainer} query="authors" name="PI" label="First Aerospace Author / PI" id="pi" />
+                  <Field validate={required} component={DropdownContainer} query="authors" name="PI" label="First Aerospace Author / PI" id="pi" required />
                   </Grid.Column>
                   <Grid.Column width={2}>
                     <Field label="JO" name="JO" type="text" component={renderTextField} id="JO" />
@@ -174,7 +140,7 @@ class FormContainer extends Component {
             </Form.Group>
             <Grid centered stackable>
               <Grid.Column width={6} >
-                <Field validate={required} component={DropdownContainer} label="Assets" id="assetfield" name="Assets" multi query="assets" />
+                <Field validate={required} component={DropdownContainer} label="Assets" id="assetfield" name="Assets" multi query="assets" required/>
               </Grid.Column>
             </Grid>
             <br />
@@ -190,7 +156,7 @@ class FormContainer extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <ModalContainer isfinalized={isfinalized} handleSubmit={onSubmit} />
+            <ModalContainer isfinalized={isfinalized} handleSubmit={handleSubmit} />
           </Form>
         </Segment>
       );
@@ -203,6 +169,7 @@ class FormContainer extends Component {
 
 const reduxFormDecorator = reduxForm({
   form: 'addendumform',
+  enableReinitialize: true,
   //validate,
 });
 const selector = formValueSelector('addendumform');
