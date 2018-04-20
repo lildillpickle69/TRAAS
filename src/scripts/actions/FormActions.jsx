@@ -61,7 +61,10 @@ export function loadData(id) { // Function called to load addendum data from dat
         if (response.status >= 400) {
           dispatch(loadFailure('Bad response from server'));
         }
-        return response.data.results[0];
+        let data = response.data.results[0];
+        data.interval_start = !('interval_start' in data) ? null : new Date(data.interval_start);
+        data.interval_end = !('interval_end' in data) ? null : new Date(data.interval_end);
+        return data; 
       })
       .then(results =>
         dispatch(loadReceive(results)))

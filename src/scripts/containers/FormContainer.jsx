@@ -7,24 +7,41 @@ import moment from 'moment';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { DateRangePicker } from 'react-dates';
+import { DateRangeInput } from '@blueprintjs/datetime';
 import { Field, Fields, reduxForm, formValueSelector } from 'redux-form';
 import DateRangePickerWrapper from './DateRange';
 import DropdownContainer from './DropdownContainer';
 import ModalContainer from './ModalContainer';
+import Dates from './Dates';
 import { loadData } from '../actions';
 
 const required = value => (value ? undefined : true);
-
-const renderDates = fields => (
-  <Form.Field
+const renderDates = ({ interval_start, interval_end }, ...fields) => {
+  return (
+  <DateRangeInput
+    allowSingleDayRange
+    placeholder
+    contiguousCalendarMonths="false"
+    value={[interval_start.input.value,interval_end.input.value]}
+    formatDate={ (date) => {(date == null ? '' : formatDates(date))}}
+    parseDate={ (date) => {new Date(date)}}
     {...fields}
-    control={DateRangePickerWrapper}
-    startDateFieldName="interval_start"
-    endDateFieldName="interval_end"
-  />
-);
+    placeholder="custom"
+    onChange={(e) => {interval_start.input.onChange(e[0]); interval_end.input.onChange(e[1]);}}
+    />
+  );
+};
+// const renderDates = fields => (
+//   <DateRangeInput value=([this.])
+//   // <Form.Field
+//   //   {...fields}
+//   //   control={DateRangePickerWrapper}
+//   //   startDateFieldName="interval_start"
+//   //   endDateFieldName="interval_end"
+//   // />
+// );
 const formatDates = (value, name) => (
-  moment(value)
+  moment(value).format('MM-DD-YYYY')
 );
 const normalizeDates = (name, value) => (
   value.format()
@@ -49,6 +66,15 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
 const renderTextArea = ({ input, required, label, meta: { touched, error }, ...custom }) => (
   <Form.TextArea rows={4} label={label} {...input} {...custom} error={touched && error} />
 );
+
+const datebox = () => (
+  <Fields
+  validate={required}
+  names={['interval_start', 'interval_end']}
+  component={renderDates}
+  formatDate={formatDates}
+  />
+);
 class FormContainer extends Component {
   constructor(props) {
     super(props);
@@ -70,7 +96,7 @@ class FormContainer extends Component {
   }
 
   render() {
-    const { handleSubmit, number, ID, isfinalized } = this.props;
+    const { onSubmit, number, ID, isfinalized } = this.props;
     if (this.state.exists === null || this.state.exists === false || (this.state.exists && this.state.permission)) {
       return (
         <Segment>
@@ -78,20 +104,18 @@ class FormContainer extends Component {
             <Loader />
           </Dimmer>
           <h1><Link to="/home/inprogress">TRAAS</Link></h1>
-          <Form onSubmit={handleSubmit} >
+          <Form onSubmit={onSubmit} >
             <Divider horizontal>Addendum {number}</Divider>
-            <br />
+            <br /> 
             <Form.Group width="equal">
               <Grid celled="internally" verticalAlign="middle" stackable centered>
                 <Grid.Row>
                   <Grid.Column width={4}>
-                    <Fields
-                      names={['interval_start', 'interval_end']}
-                      component={renderDates}
-                      normalize={normalizeDates}
-                      format={formatDates}
-                      label="Select or type the dates in the format MM/DD/YYYY."
-                    />
+                  <Fields
+                    validate={required}
+                    names={['interval_start', 'interval_end']}
+                    component={Dates}
+                  />
                   </Grid.Column>
                   <Grid.Column width={5}>
                     <Field validate={required} name="report_name" type="text" component={renderTextField} label="Report Title" id="title" />
@@ -166,7 +190,7 @@ class FormContainer extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <ModalContainer isfinalized={isfinalized} handleSubmit={handleSubmit} />
+            <ModalContainer isfinalized={isfinalized} handleSubmit={onSubmit} />
           </Form>
         </Segment>
       );

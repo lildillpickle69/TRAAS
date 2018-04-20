@@ -78,7 +78,7 @@ function minbundle() {
 gulp.task('scripts', bundle);
 gulp.task('minscripts', minbundle);
 // browserwatch.on('update', bundle);
-browserwatch.on('update', minbundle); 
+browserwatch.on('update', bundle); 
 
 // Images
 gulp.task('images', function() {
@@ -100,7 +100,7 @@ gulp.task('apply-prod-environment', function() {
 
 // add production environment
 gulp.task('default', ['clean'], function() {
-  runSequence('styles', ['apply-prod-environment', 'minscripts', 'watch']);
+  runSequence('styles', ['scripts'/*['apply-prod-environment', 'minscripts'*/, 'watch']);
   // gulp.start(/*'scripts',*/ 'minscripts', 'watch');
 });
 
