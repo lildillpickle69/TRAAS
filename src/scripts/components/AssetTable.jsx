@@ -20,10 +20,10 @@ const AssetTable = ({ assets }) => {
       <Table celled>
         <Table.Header>
           <Table.Row>
-            <Table.Cell>Name</Table.Cell>
-            <Table.Cell>Manufacturer</Table.Cell>
-            <Table.Cell>Model</Table.Cell>
-            <Table.Cell>Description</Table.Cell>
+            <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell>Manufacturer</Table.HeaderCell>
+            <Table.HeaderCell>Model</Table.HeaderCell>
+            <Table.HeaderCell>Description</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>{table}</Table.Body>

@@ -88,17 +88,19 @@ export default class DropdownContainer extends PureComponent {
           const findAsset = assetname => (assetname.value === value);
           return (this.state.options.find(findAsset));
         });
+      } else {
+        this.assets = [];
       }
     }
     return (
       <div>
-          <Form.Field
-            error={this.props.meta.error && this.props.meta.touched} 
-            loadOptions={this.getOptions}
-            {...this.props}
-            control={DropdownComponent}
-          />
-          <Message error visible={this.props.meta.error && this.props.meta.touched} header="Field Required" content="Please fill out this field." />
+        <Form.Field
+          error={this.props.meta.error && this.props.meta.touched} 
+          loadOptions={this.getOptions}
+          {...this.props}
+          control={DropdownComponent}
+        />
+        <Message error visible={this.props.meta.error && this.props.meta.touched} header="Field Required" content="Please fill out this field." />
         {this.query === 'assets' && <AssetTable assets={this.assets} />}
       </div>
     );
