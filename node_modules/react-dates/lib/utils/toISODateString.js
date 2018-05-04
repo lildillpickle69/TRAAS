@@ -11,7 +11,7 @@ var _toMomentObject = require('./toMomentObject');
 
 var _toMomentObject2 = _interopRequireDefault(_toMomentObject);
 
-var _constants = require('../../constants');
+var _constants = require('../constants');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 

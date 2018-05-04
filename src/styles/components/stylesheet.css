@@ -1,0 +1,27 @@
+Form h1 {
+    text-align: center;
+    line-height: 2em;
+    font: 40px Quicksand;
+}
+
+/* DateRange {
+  margin {
+    left: 20px;
+  }
+} */
+
+div h1 {
+  font: 40px Quicksand;
+    height: 100%;
+    margin-left: 20px;
+    margin-top: 0px;
+    
+    padding: 0px;
+    display: inline-block;  
+}
+a {
+  color: inherit;
+}
+
+
+
