@@ -5,5 +5,6 @@ import FinalizedContainer from './FinalizedContainer';
 import AddendumsContainer from './AddendumsContainer';
 import AddendumPages from './AddendumPages';
 
-export { App, NotificationPopup, TabBarContainer, FinalizedContainer, AddendumsContainer, AddendumPages };
+export { App, NotificationPopup, TabBarContainer,
+  FinalizedContainer, AddendumsContainer, AddendumPages };
 

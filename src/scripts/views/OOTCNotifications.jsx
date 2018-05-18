@@ -13,7 +13,6 @@ class OOTCNotifications extends PureComponent {
       pending: [],
       past: [],
       loading: true,
-      active: false,
       selectValue: null,
       explanation: null,
     };
@@ -22,15 +21,14 @@ class OOTCNotifications extends PureComponent {
   }
   componentDidMount() {
     axios.get('https://agoquality-tmpw.aero.org/secure/TRAASweb/Notifications.pl?')
-    .then((response) => {
-      console.log(response);
-      this.setState({
-        loading: false,
-        pending: response.data.pending,
-        past: response.data.past,
-      });
-    })
-    .catch(err => console.log(err));
+      .then((response) => {
+        this.setState({
+          loading: false,
+          pending: response.data.pending,
+          past: response.data.past,
+        });
+      })
+      .catch(err => console.log(err));
   }
   handleSubmit(ID, report) {
     axios({
@@ -110,10 +108,12 @@ class OOTCNotifications extends PureComponent {
           <Loader />
         </Dimmer>
         <Divider horizontal>Pending Notifications</Divider>
-        {this.state.pending.length === 0 && <Message compact positive style={style2}>
+        {this.state.pending.length === 0 &&
+        <Message compact positive style={style2}>
           <Message.Header style={style}>No Pending Notifications</Message.Header>
         </Message>}
-        {this.state.pending.length > 0 && <Table celled padded color="pink">
+        {this.state.pending.length > 0 &&
+        <Table celled padded color="pink">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Asset</Table.HeaderCell>
@@ -132,7 +132,8 @@ class OOTCNotifications extends PureComponent {
           </Table.Body>
         </Table>}
         <Divider horizontal>Past Notifications</Divider>
-        {this.state.past.length === 0 && <Message compact positive style={style2}>
+        {this.state.past.length === 0 &&
+        <Message compact positive style={style2}>
           <Message.Header style={style}>No Past Notifications</Message.Header>
         </Message>}
         {this.state.past.length > 0 && <Table celled padded color="yellow" >

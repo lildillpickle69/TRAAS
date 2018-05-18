@@ -32,37 +32,36 @@ class OOTCReports extends PureComponent {
   }
   componentDidMount() {
     axios
-    .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?query=${this.id}&limit=100`)
-    .then((response) => {
-      const data = response.data.results[0];
-      const date = new Date(data.startdate);
-      let startdate = `${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}`;
-      console.log(startdate);
-      if (startdate === '1/1/1') {
-        startdate = 'No previous calibration history available.';
-      }
-      const edate = new Date(data.enddate);
-      const enddate = `${edate.getUTCMonth() + 1}/${edate.getUTCDate()}/${edate.getUTCFullYear()}`;
-      this.setState({
-        ReportedBy: data.ReportedBy,
-        Comment: data.Comment,
-        startdate,
-        enddate,
-        Asset: data.Asset,
-        Date: data.Date,
-        Description: data.Description,
-        Manufacturer: data.Manufacturer,
-        Serial: data.Serial,
-        Model: data.Model,
-        Disposition: data.Disposition,
-        emaildata: response.data.emails,
-        loading: false,
-        attachments: response.data.attachments,
-        parameters: response.data.parameters,
-        reports: response.data.reports,
-      });
-    })
-    .catch(err => console.log(err));
+      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?query=${this.id}&limit=100`)
+      .then((response) => {
+        const data = response.data.results[0];
+        const date = new Date(data.startdate);
+        let startdate = `${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}`;
+        if (startdate === '1/1/1') {
+          startdate = 'No previous calibration history available.';
+        }
+        const edate = new Date(data.enddate);
+        const enddate = `${edate.getUTCMonth() + 1}/${edate.getUTCDate()}/${edate.getUTCFullYear()}`;
+        this.setState({
+          ReportedBy: data.ReportedBy,
+          Comment: data.Comment,
+          startdate,
+          enddate,
+          Asset: data.Asset,
+          Date: data.Date,
+          Description: data.Description,
+          Manufacturer: data.Manufacturer,
+          Serial: data.Serial,
+          Model: data.Model,
+          Disposition: data.Disposition,
+          emaildata: response.data.emails,
+          loading: false,
+          attachments: response.data.attachments,
+          parameters: response.data.parameters,
+          reports: response.data.reports,
+        });
+      })
+      .catch(err => console.log(err));
   }
   render() {
     const emailstate = (this.state.emaildata);

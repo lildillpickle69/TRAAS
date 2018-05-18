@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 const OOTCResults = ({ ID, asset, date, daterange }) => (
   <Table.Row>
@@ -9,5 +10,12 @@ const OOTCResults = ({ ID, asset, date, daterange }) => (
     <Table.Cell>{daterange}</Table.Cell>
   </Table.Row>
 );
+
+OOTCResults.propTypes = {
+  ID: PropTypes.string.isRequired,
+  asset: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  daterange: PropTypes.string.isRequired
+};
 
 export default OOTCResults;

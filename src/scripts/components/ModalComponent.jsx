@@ -3,6 +3,7 @@
 import React, { PureComponent } from 'react';
 import { Modal, Button, Form, Grid } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class ModalComponent extends PureComponent {
   constructor(props) {
@@ -41,5 +42,14 @@ class ModalComponent extends PureComponent {
     );
   }
 }
+ModalComponent.defaultProps = {
+  isfinalized: false
+};
 
+ModalComponent.propTypes = {
+  modalvisible: PropTypes.bool.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
+  isfinalized: PropTypes.bool
+};
 export default ModalComponent;

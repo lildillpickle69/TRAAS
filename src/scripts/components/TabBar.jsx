@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
-
+import PropTypes from 'prop-types';
 import Tab from './Tab';
 
 const TabBar = (props) => {
@@ -23,12 +23,19 @@ const TabBar = (props) => {
       <Menu tabular fluid {...otherProps}>
         {tabItems}
         <Menu.Item
-          href="https://aerolink.aero.org/cs/llisapi.dll?func=ll&objaction=overview&objid=39516303" 
+          href="https://aerolink.aero.org/cs/llisapi.dll?func=ll&objaction=overview&objid=39516303"
           target="_blank"
-        >User Guide</Menu.Item>
+        >User Guide
+        </Menu.Item>
       </Menu>
     </div>
   );
+};
+
+TabBar.propTypes = {
+  tabs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  currentTab: PropTypes.string.isRequired,
+  onTabClick: PropTypes.func.isRequired
 };
 
 export default TabBar;

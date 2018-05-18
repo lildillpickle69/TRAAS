@@ -1,9 +1,10 @@
 import React from 'react';
 import VirtualizedSelect from 'react-virtualized-select';
 import { AsyncCreatable } from 'react-select';
+import PropTypes from 'prop-types';
 
 const DropdownComponent = ({ loadOptions, input, multi, meta: { touched, error }, creatable, ...props }) => {
-  if (multi) {  
+  if (multi) {
     return (
       <VirtualizedSelect
         async
@@ -39,6 +40,16 @@ const DropdownComponent = ({ loadOptions, input, multi, meta: { touched, error }
       {...props}
     />
   );
+};
+
+DropdownComponent.defaultProps = {
+  creatable: false,
+  multi: false,
+};
+
+DropdownComponent.propTypes = {
+  creatable: PropTypes.bool,
+  multi: PropTypes.bool
 };
 
 export default DropdownComponent;

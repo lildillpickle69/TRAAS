@@ -12,9 +12,9 @@ class OOTCContainer extends PureComponent {
   }
   componentDidMount() {
     axios
-    .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC?query=${this.id}`)
-    .then((response) => console.log(response))
-    .catch(err => console.log(err));
+      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC?query=${this.id}`)
+      .then((response) => console.log(response))
+      .catch(err => console.log(err));
   }
   render() {
     return (

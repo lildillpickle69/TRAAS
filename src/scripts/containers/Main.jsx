@@ -1,7 +1,6 @@
 import React from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { MainMenu, NewAddendum, OOTCReports, SearchResults } from '../views';
-// import OOTCReports from './OOTCReports';
 
 const Main = () => (
   <HashRouter basename="/">

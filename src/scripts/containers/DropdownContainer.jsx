@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import axios from 'axios';
 import { Form, Message } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import { DropdownComponent, AssetTable } from '../components';
 
 if (!Array.prototype.find) {
@@ -70,9 +71,9 @@ export default class DropdownContainer extends PureComponent {
   getOptions(input) {
     return axios
       .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/${this.query}.pl?limit=1&query=${input}`)
-      .then((response) => {
-        return { options: response.data.results };
-      })
+      .then(response => ({
+        options: response.data.results
+      }))
       .catch((err) => { console.log(err); });
   }
   render() {
@@ -107,3 +108,6 @@ export default class DropdownContainer extends PureComponent {
   }
 }
 
+DropdownContainer.propTypes = {
+  query: PropTypes.string.isRequired
+};

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 const AssetRow = ({ value, manufacturer, model, description }) => (
   <Table.Row>
@@ -10,4 +11,10 @@ const AssetRow = ({ value, manufacturer, model, description }) => (
   </Table.Row>
 );
 
+AssetRow.propTypes = {
+  value: PropTypes.string.isRequired,
+  model: PropTypes.string.isRequired,
+  manufacturer: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired
+};
 export default AssetRow;

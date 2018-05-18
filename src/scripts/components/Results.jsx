@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 const Results = ({ ID, title, dates, pi, assets }) => (
   <Table.Row>
@@ -10,5 +11,18 @@ const Results = ({ ID, title, dates, pi, assets }) => (
     <Table.Cell>{assets}</Table.Cell>
   </Table.Row>
 );
+Results.defaultProps = {
+  title: '',
+  dates: '',
+  pi: '',
+  assets: ''
+};
 
+Results.propTypes = {
+  ID: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  dates: PropTypes.string,
+  pi: PropTypes.string,
+  assets: PropTypes.string
+};
 export default Results;

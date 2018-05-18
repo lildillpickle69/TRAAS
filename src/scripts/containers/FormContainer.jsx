@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { Form, Divider, Grid, Message, Loader, Dimmer, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Field, Fields, reduxForm, formValueSelector } from 'redux-form'; 
+import { Field, Fields, reduxForm, formValueSelector } from 'redux-form';
+import PropTypes from 'prop-types';
 import DropdownContainer from './DropdownContainer';
 import ModalContainer from './ModalContainer';
 import { loadData } from '../actions';
@@ -26,9 +27,22 @@ const validate = (values) => {
 
 
 const renderCheckbox = ({ input, label, meta: { touched, error }, ...custom }) =>
-(
-  <Form.Checkbox defaultChecked={!!input.value} value={1} {...input} {...custom} label={label} onChange={(e, data) => input.onChange(data.checked)} />
-);
+  (
+    <Form.Checkbox
+      defaultChecked={!!input.value}
+      value={1}
+      {...input}
+      {...custom}
+      label={label}
+      onChange={(e, data) => input.onChange(data.checked)}
+    />
+  );
+
+renderCheckbox.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  meta: PropTypes.object,
+};
 
 const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => {
   return (
@@ -63,7 +77,7 @@ class FormContainer extends Component {
   }
 
   render() {
-    const { onSubmit, number, ID, isfinalized, initialValues, handleSubmit } = this.props;
+    const { onSubmit, ID, isfinalized, handleSubmit } = this.props;
     if (this.state.exists === null || this.state.exists === false || (this.state.exists && this.state.permission)) {
       return (
         <Segment>
@@ -72,7 +86,7 @@ class FormContainer extends Component {
           </Dimmer>
           <h1><Link to="/home/inprogress">TRAAS</Link></h1>
           <Form onSubmit={handleSubmit} >
-            <Divider horizontal>Addendum {number}</Divider>
+            <Divider horizontal>Addendum {ID}</Divider>
             <br />
             <Form.Group width="equal">
               <Grid celled="internally" verticalAlign="middle" stackable centered>
@@ -170,6 +184,17 @@ class FormContainer extends Component {
     );
   }
 }
+FormContainer.defaultProps = {
+  isfinalized: false,
+};
+
+FormContainer.propTypes = {
+  url: PropTypes.string.isRequired,
+  ID: PropTypes.string.isRequired,
+  isfinalized: PropTypes.bool,
+  onSubmit: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired
+};
 
 const reduxFormDecorator = reduxForm({
   form: 'addendumform',
@@ -187,6 +212,7 @@ const reduxConnector = connect(
   },
   dispatch => ({
     load: (dispatch(loadData(window.location.hash.substring(12)))),
-  }));
+  })
+);
 
 export default reduxConnector(reduxFormDecorator(FormContainer));

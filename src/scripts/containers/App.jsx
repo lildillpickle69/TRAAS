@@ -8,9 +8,13 @@ import RootReducer from '../reducers';
 
 require('es6-promise').polyfill();
 
-const store = createStore(RootReducer,
-  compose(applyMiddleware(apiMiddleware, thunk),
-    window.devToolsExtension ? window.devToolsExtension() : f => f));
+const store = createStore(
+  RootReducer,
+  compose(
+    applyMiddleware(apiMiddleware, thunk),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )
+);
 
 const App = () => (
   <div>
