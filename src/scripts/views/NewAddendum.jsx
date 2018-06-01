@@ -7,14 +7,15 @@ import moment from 'moment';
 import FormContainer from '../containers/FormContainer';
 import { toggleModal } from '../actions';
 
+// Component that renders the addendum form view.
 class NewAddendum extends PureComponent {
   constructor(props) {
     super(props);
     this.id = (this.props.location.pathname).substring(11);
     this.submit = this.submit.bind(this);
   }
+  // Posts addendum form data to server
   submit(values) {
-    console.log(values);
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
     let create = (this.props.location.pathname).substring(11, 25);
     create = create.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
@@ -28,16 +29,15 @@ class NewAddendum extends PureComponent {
         Create_Date: create,
       },
     })
-      .then((response) => {
+      .then(() => {
         this.props.dispatch(toggleModal(true));
-        console.log(response);
-        window.open(`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS_New.php?ID=${this.id}`); 
+        window.open(`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS_New.php?ID=${this.id}`);
       })
       .catch((err) => { console.log(err); });
   }
   render() {
     return (
-      <FormContainer onSubmit={this.submit} number={this.id} ID={this.id} url={this.props.location.pathname} />
+      <FormContainer onSubmit={this.submit} ID={this.id} url={this.props.location.pathname} />
     );
   }
 }

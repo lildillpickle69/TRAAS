@@ -1,15 +1,13 @@
 import { connect } from 'react-redux';
 import { AddendumGroup } from '../components';
-import { fetchAddendums } from '../actions/';
 
-const badge = document.getElementById('badge').value;
-// const badge = 28479;
-
-const mapStateToProps = (state) => {
-  return {
+//Container to render each addendumm square in the tabs
+const mapStateToProps = state => (
+  {
     loading: state.cards.loading,
-    cards: state.cards.inprogress };
-};
+    cards: state.cards.inprogress
+  }
+);
 
 export default connect(mapStateToProps)(AddendumGroup);
 

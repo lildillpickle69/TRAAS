@@ -4,15 +4,15 @@ export const selectResults = state => state.results;
 
 export const selectResultsArray = createSelector(
   selectResults,
-  results => results.results,
+  results => results.results
 );
 
 export const selectValue = createSelector(
   selectResults,
-  results => results.value,
+  results => results.value
 );
 
 export const getLoading = createSelector(
   selectResults,
-  results => results.searchloading,
+  results => results.searchloading
 );

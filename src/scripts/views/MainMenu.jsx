@@ -14,21 +14,18 @@ import OOTCNotifications from './OOTCNotifications';
 const buttonstyle = { marginLeft: 20 };
 const badge = document.getElementById('badge').value;
 
-const mapStateToProps = (state) => {
-  return {
-    templates: state.cards.finalized.concat(state.cards.inprogress) };
-};
-  
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchInprogress: (
-      dispatch(fetchAddendums(badge, 0))
-    ),
-    fetchFinalized: (
-      dispatch(fetchAddendums(badge, 1))
-    ),
-  };
-};
+const mapStateToProps = state => ({
+  templates: state.cards.finalized.concat(state.cards.inprogress)
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchInprogress: (
+    dispatch(fetchAddendums(badge, 0))
+  ),
+  fetchFinalized: (
+    dispatch(fetchAddendums(badge, 1))
+  )
+});
 
 const tabs = [
   { name: 'inprogress', label: 'My Addendums In Progress', linkname: '/home/inprogress' },
@@ -36,7 +33,6 @@ const tabs = [
   { name: 'OOTCNotifications', label: 'Out-of-Tolerance Reports', linkname: '/home/OOTCNotifications' },
 ];
 
-const style2 = { left: '43%', textAlign: 'center' };
 const style = { textAlign: 'center' };
 class MainMenu extends PureComponent {
   constructor(props) {
@@ -58,8 +54,7 @@ class MainMenu extends PureComponent {
         template: this.state.template.value,
       },
     })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         window.open(newaddendumlink);
       })
       .catch((err) => { console.log(err); });
@@ -113,23 +108,23 @@ class MainMenu extends PureComponent {
         </Modal>
         <br />
         <Divider horizontal>Technical Reports Addendum Asset Summary and Out-Of-Tolerance Condition Database</Divider>
-          <Grid centered textAlign="center" columns={2}>
-            <Grid.Row>
-              <Grid.Column>
-                <Message compact positive style={style}>
-                    <Message.Header>What's New</Message.Header>
-                    <Message.List>
-                      <Message.Item>Create addendums from existing ones</Message.Item>
-                      <Message.Item>Add additional authors to addendums</Message.Item>
-                      <Message.Item>Fully dynamic and responsive interface</Message.Item>
-                      <Message.Item>Asset comments removed</Message.Item>
-                      <Message.Item>Search for addendums and OOTCs</Message.Item>
-                    </Message.List>
-                </Message>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <br />
+        <Grid centered textAlign="center" columns={2}>
+          <Grid.Row>
+            <Grid.Column>
+              <Message compact positive style={style}>
+                <Message.Header>What's New</Message.Header>
+                <Message.List>
+                  <Message.Item>Create addendums from existing ones</Message.Item>
+                  <Message.Item>Add additional authors to addendums</Message.Item>
+                  <Message.Item>Fully dynamic and responsive interface</Message.Item>
+                  <Message.Item>Asset comments removed</Message.Item>
+                  <Message.Item>Search for addendums and OOTCs</Message.Item>
+                </Message.List>
+              </Message>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <br />
         <TabBarContainer tabs={tabs} />
         <Switch>
           <Route exact path="/home/inprogress" component={Addendums} />
@@ -139,6 +134,6 @@ class MainMenu extends PureComponent {
       </div>
     );
   }
-}   
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);

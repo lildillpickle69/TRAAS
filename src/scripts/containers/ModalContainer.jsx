@@ -8,13 +8,13 @@ const mapState = (state) => {
   return { modalvisible };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = dispatch => (
+  {
     onClick: () => {
       dispatch(toggleModal(false));
     },
-  };
-};
+  }
+);
 
 export default connect(mapState, mapDispatchToProps)(ModalComponent);
 

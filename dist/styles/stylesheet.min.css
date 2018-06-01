@@ -1,0 +1,21 @@
+Form h1 {
+  text-align: center;
+  line-height: 2em;
+}
+
+div h1,
+Form h1 {
+  font: 40px Quicksand;
+}
+
+div h1 {
+  height: 100%;
+  margin-left: 20px;
+  margin-top: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+a {
+  color: inherit;
+}

@@ -7,19 +7,18 @@ const mapStateToProps = (state) => {
   const results = selectResultsArray(state);
   const searchloading = getLoading(state);
   const value = selectValue(state);
-  // console.log(results);
   return { results, searchloading, value };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = dispatch => (
+  {
     onSearchChange: (query) => {
       dispatch(searchAddendums(query));
     },
     onSearchQuery: (query) => {
       dispatch(handleSubmit(query));
     },
-  };
-};
+  }
+);
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
 

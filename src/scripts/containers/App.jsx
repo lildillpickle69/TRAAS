@@ -6,11 +6,17 @@ import thunk from 'redux-thunk';
 import Main from './Main';
 import RootReducer from '../reducers';
 
+
+// Main file for TRAAS, DO NOT MODIFY!!
 require('es6-promise').polyfill();
 
-const store = createStore(RootReducer,
-  compose(applyMiddleware(apiMiddleware, thunk),
-    window.devToolsExtension ? window.devToolsExtension() : f => f));
+const store = createStore(
+  RootReducer,
+  compose(
+    applyMiddleware(apiMiddleware, thunk),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )
+);
 
 const App = () => (
   <div>
