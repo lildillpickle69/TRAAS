@@ -47,7 +47,8 @@ DropdownComponent.defaultProps = {
 };
 
 DropdownComponent.propTypes = {
-  multi: PropTypes.bool
+  multi: PropTypes.bool,
+  loadOptions: PropTypes.func.isRequired
 };
 
 export default DropdownComponent;
