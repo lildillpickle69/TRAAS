@@ -7,12 +7,14 @@ import moment from 'moment';
 import FormContainer from '../containers/FormContainer';
 import { toggleModal } from '../actions';
 
+// Component that renders the addendum form view.
 class NewAddendum extends PureComponent {
   constructor(props) {
     super(props);
     this.id = (this.props.location.pathname).substring(11);
     this.submit = this.submit.bind(this);
   }
+  // Posts addendum form data to server
   submit(values) {
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
     let create = (this.props.location.pathname).substring(11, 25);

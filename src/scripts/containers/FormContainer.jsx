@@ -12,8 +12,12 @@ import ModalContainer from './ModalContainer';
 import { loadData } from '../actions';
 import { Dates } from '../components';
 
+
+// File that renders the addendum editor
+
 const required = value => (value ? undefined : true);
 
+// Validation component that checks if certain fields are empty, and returns the errors.
 const validate = (values) => {
   const errors = {};
   if (!values.interval_start) {
@@ -25,7 +29,7 @@ const validate = (values) => {
   return errors;
 };
 
-
+// Component that renders checkboxes
 const renderCheckbox = ({ input, label, meta: { touched, error }, ...custom }) =>
   (
     <Form.Checkbox
@@ -44,6 +48,7 @@ renderCheckbox.propTypes = {
   meta: PropTypes.object,
 };
 
+// Component that renders input boxes
 const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => {
   return (
     <div>
@@ -52,20 +57,22 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
     </div>
   );
 };
+// Component that renders text areas
 const renderTextArea = ({ input, required, label, meta: { touched, error }, ...custom }) => (
   <Form.TextArea rows={4} label={label} {...input} {...custom} error={touched && error} />
 );
 
+// Clas file
 class FormContainer extends Component {
   constructor(props) {
     super(props);
-    this.id = (this.props.url).substring(11);
+    this.id = (this.props.url).substring(11); // Gets addendum ID from url prop passed from parent component (NewAddendum.jsx)
     this.state = {
-      exists: null,
-      permission: this.id.length === 19,
+      exists: null, // State for whether or not the addendum already exists
+      permission: this.id.length === 19 // Restricts addendum ids to 19 character ids
     };
   }
-  componentDidMount() {
+  componentDidMount() { // Gets data from server once the form initially mounts
     axios.get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/data.pl?query=${this.id}`)
       .then((response) => {
         this.setState({
@@ -78,7 +85,7 @@ class FormContainer extends Component {
 
   render() {
     const { onSubmit, ID, isfinalized, handleSubmit } = this.props;
-    if (this.state.exists === null || this.state.exists === false || (this.state.exists && this.state.permission)) {
+    if (this.state.exists === null || this.state.exists === false || (this.state.exists && this.state.permission)) { //Basic permissions
       return (
         <Segment>
           <Dimmer active={this.state.exists === null}>
@@ -90,7 +97,7 @@ class FormContainer extends Component {
             <br />
             <Form.Group width="equal">
               <Grid celled="internally" verticalAlign="middle" stackable centered>
-                <Grid.Row>
+                <Grid.Row> 
                   <Grid.Column width={4}>
                     <Fields
                       id="Select or type the dates."

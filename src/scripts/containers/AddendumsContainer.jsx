@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { AddendumGroup } from '../components';
 
+//Container to render each addendumm square in the tabs
 const mapStateToProps = state => (
   {
     loading: state.cards.loading,

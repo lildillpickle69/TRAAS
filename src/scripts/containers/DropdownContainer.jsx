@@ -4,6 +4,7 @@ import { Form, Message } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { DropdownComponent, AssetTable } from '../components';
 
+// Magical function that allows you to find stuff in arrays, don't modify
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, 'find', {
     value: function(predicate) {
@@ -48,11 +49,12 @@ if (!Array.prototype.find) {
   });
 }
 
+// Container for the DropdownComponent
 export default class DropdownContainer extends PureComponent {
   constructor(props) {
     super(props);
     this.getOptions = this.getOptions.bind(this);
-    this.query = this.props.query;
+    this.query = this.props.query; //which kind of dropdown? keywords, PI's, etc.
     this.state = {
       options: [],
     };
@@ -60,7 +62,7 @@ export default class DropdownContainer extends PureComponent {
   }
   componentDidMount() {
     axios
-      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/${this.query}.pl?limit=0`)
+      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/${this.query}.pl?limit=0`) // get appropriate data for the dropdown
       .then((response) => {
         this.setState({
           options: response.data.results,
@@ -68,7 +70,7 @@ export default class DropdownContainer extends PureComponent {
       })
       .catch((err) => { console.log(err); });
   }
-  getOptions(input) {
+  getOptions(input) { //async way of getting data for searchable dropdowns
     return axios
       .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/${this.query}.pl?limit=1&query=${input}`)
       .then(response => ({
@@ -77,7 +79,7 @@ export default class DropdownContainer extends PureComponent {
       .catch((err) => { console.log(err); });
   }
   render() {
-    if (this.query === 'assets') {
+    if (this.query === 'assets') { // renders table of assets
       const val = this.props.input.value;
       if (val !== null && val !== undefined && val instanceof Array) {
         this.assets = val.filter((asset) => {

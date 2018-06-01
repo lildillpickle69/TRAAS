@@ -2,6 +2,8 @@ import React from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { MainMenu, NewAddendum, OOTCReports, SearchResults } from '../views';
 
+
+// File to render various routes/suburls of TRAAS. Only modify if you plan on adding more routes, DO NOT MODIFY OTHERWISE!
 const Main = () => (
   <HashRouter basename="/">
     <div>

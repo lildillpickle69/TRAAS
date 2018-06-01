@@ -5,6 +5,8 @@ import { Modal, Button, Form, Grid } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+// Component to render submit confirmation for addendums
+
 class ModalComponent extends PureComponent {
   constructor(props) {
     super(props);

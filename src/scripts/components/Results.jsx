@@ -2,6 +2,7 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
+// Renders each row of the search results for Addendums page
 const Results = ({ ID, title, dates, pi, assets }) => (
   <Table.Row>
     <Table.Cell><a href={`https://agoquality-tmpw.aero.org/tcpdf/examples/TRAAS.php?ID=${ID}`} target="_blank">{ID}</a></Table.Cell>

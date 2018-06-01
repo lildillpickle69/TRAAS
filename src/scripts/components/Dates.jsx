@@ -2,6 +2,9 @@ import React from 'react';
 import moment from 'moment';
 import { DateRangeInput } from '@blueprintjs/datetime';
 import { Form, Message } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+
+//Component that renders the date field on the addendum form.
 
 const formatDates = value => (
   moment(value).format('MM-DD-YYYY')
@@ -31,6 +34,11 @@ const Dates = ({ interval_start, interval_end }) => {
       <Message error visible={error} header="Field Required" content="Please fill out this field." />
     </div>
   );
+};
+
+Dates.propTypes = {
+  interval_start: PropTypes.objectOf(PropTypes.object).isRequired,
+  interval_end: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 export default Dates;

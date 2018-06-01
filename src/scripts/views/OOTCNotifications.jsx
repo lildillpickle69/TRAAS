@@ -42,7 +42,6 @@ class OOTCNotifications extends PureComponent {
       },
     })
       .then((response) => {
-        console.log(response);
         window.location.reload();
       })
       .catch((err) => { console.log(err); });
