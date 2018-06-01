@@ -43,12 +43,10 @@ const DropdownComponent = ({ loadOptions, input, multi, meta: { touched, error }
 };
 
 DropdownComponent.defaultProps = {
-  creatable: false,
   multi: false,
 };
 
 DropdownComponent.propTypes = {
-  creatable: PropTypes.bool,
   multi: PropTypes.bool
 };
 
