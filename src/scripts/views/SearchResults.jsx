@@ -4,6 +4,7 @@ import { Loader, Dimmer } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import AddendumPages from '../containers/AddendumPages';
 
+//Page of all search results when you press enter on the search bar.
 class SearchResults extends PureComponent {
   constructor(props) {
     super(props);

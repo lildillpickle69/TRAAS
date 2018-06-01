@@ -3,6 +3,7 @@ import { Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import Results from './Results';
 
+//Table of all the search results.
 const ResultsTable = ({ results }) => {
   const table = results.map((resultInfo) => {
     const { ID, title, dates, pi, assets } = resultInfo;

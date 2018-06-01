@@ -3,6 +3,7 @@ import { ModalComponent } from '../components';
 import { selectModalState } from '../reducers';
 import { toggleModal } from '../actions/';
 
+//Container for the Addendum successfully saved/submitted popup. 
 const mapState = (state) => {
   const modalvisible = selectModalState(state);
   return { modalvisible };

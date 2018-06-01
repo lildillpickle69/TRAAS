@@ -3,6 +3,7 @@ import { Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import OOTCResults from './OOTCResults';
 
+//Putting all of the OOTC Search Results into a table
 const OOTCResultsTable = ({ results }) => {
   const table = results.map((resultInfo) => {
     const { ID, asset, date, daterange } = resultInfo;

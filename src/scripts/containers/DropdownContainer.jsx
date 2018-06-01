@@ -4,7 +4,7 @@ import { Form, Message } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { DropdownComponent, AssetTable } from '../components';
 
-// Magical function that allows you to find stuff in arrays, don't modify
+// Magical function that allows you to find stuff in arrays, don't modify, even I don't know how this really works
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, 'find', {
     value: function(predicate) {

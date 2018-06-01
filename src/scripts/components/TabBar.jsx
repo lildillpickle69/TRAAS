@@ -3,6 +3,7 @@ import { Menu } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
 
+//Tab Menu on home page
 const TabBar = (props) => {
   const { tabs, currentTab, onTabClick, ...otherProps } = props;
   const tabItems = tabs.map((tabInfo) => {

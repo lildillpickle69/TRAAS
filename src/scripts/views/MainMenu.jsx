@@ -14,10 +14,12 @@ import OOTCNotifications from './OOTCNotifications';
 const buttonstyle = { marginLeft: 20 };
 const badge = document.getElementById('badge').value;
 
+// Combines all finalized and in progress addendums, so the user can create templated addendums based off of them.
 const mapStateToProps = state => ({
   templates: state.cards.finalized.concat(state.cards.inprogress)
 });
 
+//Fetch in progress and finalized addendums for the user
 const mapDispatchToProps = dispatch => ({
   fetchInprogress: (
     dispatch(fetchAddendums(badge, 0))
@@ -42,7 +44,7 @@ class MainMenu extends PureComponent {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleSubmit() {
+  handleSubmit() { // Handles creation of templated addendum
     const date = new Date();
     const datestring = date.getFullYear() + (`0${date.getMonth() + 1}`).slice(-2) + (`0${date.getDate()}`).slice(-2) + (`0${date.getHours()}`).slice(-2) + (`0${date.getMinutes()}`).slice(-2) + (`0${date.getSeconds()}`).slice(-2) + badge;
     const newaddendumlink = `#/Addendums/${datestring}`;
@@ -60,7 +62,7 @@ class MainMenu extends PureComponent {
       .catch((err) => { console.log(err); });
   }
   render() {
-    const options = this.props.templates.map((reportinfo) => {
+    const options = this.props.templates.map((reportinfo) => { // Renders all dropdown options for the templates
       const { ID, name } = reportinfo;
       return ({
         label: `${name}: ${ID}`,
@@ -83,7 +85,7 @@ class MainMenu extends PureComponent {
         </Grid>
         <br />
         <Button
-          onClick={() => {
+          onClick={() => { // Creation of basic empty new addendum
             const date = new Date();
             const datestring = date.getFullYear() + (`0${date.getMonth() + 1}`).slice(-2) + (`0${date.getDate()}`).slice(-2) + (`0${date.getHours()}`).slice(-2) + (`0${date.getMinutes()}`).slice(-2) + (`0${date.getSeconds()}`).slice(-2) + badge;
             const newaddendumlink = `#/Addendums/${datestring}`;

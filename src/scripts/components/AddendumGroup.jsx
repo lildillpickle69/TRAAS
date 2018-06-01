@@ -5,7 +5,7 @@ import AddendumCard from './AddendumCard';
 
 const style2 = { left: '43%', textAlign: 'center' };
 const style = { textAlign: 'center' };
-
+//Grouping all the addendum cards so that there is 6 per row.
 const AddendumGroup = ({ cards, loading }) => {
   const cardItems = cards.map((cardInfo) => {
     const { link, name, program, ID, modified, description } = cardInfo;
