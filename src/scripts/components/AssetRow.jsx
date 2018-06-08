@@ -2,6 +2,7 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
+//Each row of the asset table
 const AssetRow = ({ value, manufacturer, model, description }) => (
   <Table.Row>
     <Table.Cell>{value}</Table.Cell>

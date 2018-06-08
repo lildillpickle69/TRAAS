@@ -3,6 +3,7 @@ import { Table } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import AssetRow from './AssetRow';
 
+//Table of all assets
 const AssetTable = ({ assets }) => {
   const table = assets.map((assetInfo) => {
     const { value, Description, Manufacturer, Model } = assetInfo;

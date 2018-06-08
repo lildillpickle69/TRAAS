@@ -5,7 +5,11 @@ import AddendumCard from './AddendumCard';
 
 const style2 = { left: '43%', textAlign: 'center' };
 const style = { textAlign: 'center' };
+<<<<<<< HEAD
 // Renders each group of Addendum "cards"
+=======
+//Grouping all the addendum cards so that there is 6 per row.
+>>>>>>> ae258bf581ec4570271430db7480cb0da134de51
 const AddendumGroup = ({ cards, loading }) => {
   const cardItems = cards.map((cardInfo) => {
     const { link, name, program, ID, modified, description } = cardInfo;

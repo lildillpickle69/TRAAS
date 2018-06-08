@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Table, Divider, Segment, Loader, Dimmer, Button, Message } from 'semantic-ui-react';
 
+//Component for rendering each OOTC Report
 const style = { textAlign: 'center' };
 const style1 = { left: '45%', textAlign: 'center' };
 const style2 = { left: '43%', textAlign: 'center' };
@@ -32,7 +33,7 @@ class OOTCReports extends PureComponent {
   }
   componentDidMount() {
     axios
-      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?query=${this.id}&limit=100`)
+      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/OOTC.pl?query=${this.id}&limit=100`) // Ajax request to get OOTC data
       .then((response) => {
         const data = response.data.results[0];
         const date = new Date(data.startdate);
@@ -63,7 +64,8 @@ class OOTCReports extends PureComponent {
       })
       .catch(err => console.log(err));
   }
-  render() {
+  render() { 
+    // Populate table of emails
     const emailstate = (this.state.emaildata);
     const emails = emailstate.map((emailInfo) => {
       const { badge, email, username, comment, reason, disposition } = emailInfo;
@@ -78,6 +80,7 @@ class OOTCReports extends PureComponent {
         </Table.Row>
       );
     });
+    //Download button
     const reportstate = this.state.reports;
     const reports = reportstate.map((reportInfo) => {
       const { link, name } = reportInfo;
@@ -97,6 +100,7 @@ class OOTCReports extends PureComponent {
         </div>
       );
     });
+    // Populate table parameters
     const parameterstate = (this.state.parameters);
     const parameters = parameterstate.map((parameterinfo) => {
       const { parameter, accuracy, value, adjust } = parameterinfo;
@@ -109,6 +113,7 @@ class OOTCReports extends PureComponent {
         </Table.Row>
       );
     });
+    // Populate all downloadable attacdhments
     const attachstate = this.state.attachments;
     const attachments = attachstate.map((attachInfo) => {
       const { link, filename } = attachInfo;
