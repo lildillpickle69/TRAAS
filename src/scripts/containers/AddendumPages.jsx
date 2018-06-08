@@ -3,7 +3,7 @@ import { Pagination, Grid, Table, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { ResultsTable, OOTCResultsTable } from '../components';
 
-//File to render search results after pressing enter. Shouldn't need to modify this unless something breaks.
+// File to render search results after pressing enter. Shouldn't need to modify this unless something breaks.
 class AddendumPages extends React.PureComponent {
   constructor(props) {
     super(props);

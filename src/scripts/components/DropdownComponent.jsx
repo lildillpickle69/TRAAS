@@ -3,6 +3,7 @@ import VirtualizedSelect from 'react-virtualized-select';
 import { AsyncCreatable } from 'react-select';
 import PropTypes from 'prop-types';
 
+// Renders all of the dropdown menus. The onChange/onBlur functions can be buggy, it's a good place to start if a dropdown breaks.
 const DropdownComponent = ({ loadOptions, input, multi, meta: { touched, error }, creatable, ...props }) => {
   if (multi) {
     return (
@@ -47,7 +48,8 @@ DropdownComponent.defaultProps = {
 };
 
 DropdownComponent.propTypes = {
-  multi: PropTypes.bool
+  multi: PropTypes.bool,
+  loadOptions: PropTypes.func.isRequired,
 };
 
 export default DropdownComponent;

@@ -6,10 +6,8 @@ import FetchAddendums from './FetchAddendums';
 import SearchReducer from './SearchReducer';
 import AddendumReducer from './AddendumReducer';
 import modalReducer from './ModalReducer';
-// import { reduceReducers } from '../utils';
 
 
-// const reducedform = reduceReducers(formReducer, combineReducers({ addendumform: combineReducers({ values: AddendumReducer }) }));
 const RootReducer = combineReducers({ tabs: tabReducer,
   cards: FetchAddendums,
   results: SearchReducer,

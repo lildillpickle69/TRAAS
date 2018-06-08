@@ -6,15 +6,6 @@ export function createReducer(initialState, fnMap) {
   };
 }
 
-export function reduceReducers(...reducers) {
-  return (previous, current) =>
-    reducers.reduce(
-      (p, r) => r(p, current),
-      previous,
-    );
-}
-
-
 export function createConditionalSliceReducer(sliceName, fnMap) {
   // Create a reducer that knows how to handle one slice of state, with these action types
   const sliceReducer = createReducer({}, fnMap);

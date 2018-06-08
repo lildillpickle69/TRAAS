@@ -1,5 +1,6 @@
 import { LOAD_REQUEST, LOAD_RECEIVE, LOAD_FAILURE } from '../constants/ActionTypes';
 
+/* Populates addendum data */
 export default function AddendumReducer(state = {
   data: {
     interval_start: new Date(null),

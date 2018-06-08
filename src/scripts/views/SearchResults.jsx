@@ -4,6 +4,7 @@ import { Loader, Dimmer } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import AddendumPages from '../containers/AddendumPages';
 
+// View of search results after pressing enter on the search bar
 class SearchResults extends PureComponent {
   constructor(props) {
     super(props);
@@ -14,7 +15,7 @@ class SearchResults extends PureComponent {
       loaded: false,
     };
   }
-  componentDidMount() {
+  componentDidMount() { // load search data once component mounts
     axios
       .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/search.pl?search=${this.query}`)
       .then((response) => {

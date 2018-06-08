@@ -88,12 +88,13 @@ export function fetchAddendums(badge, inprogress) { // function called to fetch 
   };
 }
 
+/* Function that handles the search bar */
 export function searchAddendums(query) {
   // console.log(query);
   return function (dispatch) {
-    dispatch(search());
+    dispatch(search()); // Call search function
     return axios
-      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/search.pl?search=${query}&limit=5`)
+      .get(`https://agoquality-tmpw.aero.org/secure/TRAASweb/search.pl?search=${query}&limit=5`) // ajax request
       .then((response) => {
         if (response.status >= 400) {
           dispatch(error('Bad response from server'));
@@ -101,11 +102,12 @@ export function searchAddendums(query) {
         return response.data.results;
       })
       .then(results =>
-        dispatch(returnresults(results, query)))
+        dispatch(returnresults(results, query))) // Call returnresults function when Ajax succeeds.
       .catch((err) => { console.log(err); });
   };
 }
 
+/* Function that handles submission of form data */
 export function handleSubmit(query) {
   return function (dispatch) {
     dispatch(submit());

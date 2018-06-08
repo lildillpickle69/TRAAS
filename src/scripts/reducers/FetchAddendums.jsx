@@ -1,5 +1,6 @@
 import { REQUEST, INPROGRESS_RECEIVE, FINALIZED_RECEIVE, FAILURE } from '../constants/ActionTypes';
 
+// Sets redux state of the inprogress/finalized addendums
 const initialstate = {
   inprogress: [],
   finalized: [],

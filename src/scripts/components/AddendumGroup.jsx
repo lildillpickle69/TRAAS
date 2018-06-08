@@ -5,7 +5,7 @@ import AddendumCard from './AddendumCard';
 
 const style2 = { left: '43%', textAlign: 'center' };
 const style = { textAlign: 'center' };
-
+// Renders each group of Addendum "cards"
 const AddendumGroup = ({ cards, loading }) => {
   const cardItems = cards.map((cardInfo) => {
     const { link, name, program, ID, modified, description } = cardInfo;

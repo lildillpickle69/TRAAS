@@ -202,7 +202,7 @@ FormContainer.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired
 };
-
+// Decorates Form with validation function and allows reinitialization of values.
 const reduxFormDecorator = reduxForm({
   form: 'addendumform',
   enableReinitialize: true,

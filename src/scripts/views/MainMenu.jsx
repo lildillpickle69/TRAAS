@@ -14,6 +14,7 @@ import OOTCNotifications from './OOTCNotifications';
 const buttonstyle = { marginLeft: 20 };
 const badge = document.getElementById('badge').value;
 
+/* Combines all finalized and inprogress addendums, for templating */
 const mapStateToProps = state => ({
   templates: state.cards.finalized.concat(state.cards.inprogress)
 });
@@ -42,7 +43,7 @@ class MainMenu extends PureComponent {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleSubmit() {
+  handleSubmit() { // Function to generate a new addendum from a template
     const date = new Date();
     const datestring = date.getFullYear() + (`0${date.getMonth() + 1}`).slice(-2) + (`0${date.getDate()}`).slice(-2) + (`0${date.getHours()}`).slice(-2) + (`0${date.getMinutes()}`).slice(-2) + (`0${date.getSeconds()}`).slice(-2) + badge;
     const newaddendumlink = `#/Addendums/${datestring}`;
@@ -87,7 +88,7 @@ class MainMenu extends PureComponent {
             const date = new Date();
             const datestring = date.getFullYear() + (`0${date.getMonth() + 1}`).slice(-2) + (`0${date.getDate()}`).slice(-2) + (`0${date.getHours()}`).slice(-2) + (`0${date.getMinutes()}`).slice(-2) + (`0${date.getSeconds()}`).slice(-2) + badge;
             const newaddendumlink = `#/Addendums/${datestring}`;
-            window.open(newaddendumlink);
+            window.open(newaddendumlink); // Creates blank new addendum
           }}
           style={buttonstyle}
           primary
